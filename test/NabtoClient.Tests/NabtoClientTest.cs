@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Nabto.Edge.Client.Tests;
@@ -22,7 +23,62 @@ public class NabtoClientTest {
     public void createDestroyConnection()
     {
         var client = NabtoClient.Create();
-        var connection = client.CreateConnection();
-        connection.SetOptions("malformed json");
+        for (int i = 0; i < 100; i++) {
+            var connection = client.CreateConnection();
+        }
     }
+    [Fact]
+    public void InvalidFormattedJsonToConnectOptionsThrowsArgumentException() {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        Assert.Throws<ArgumentException>(() => connection.SetOptions("Invalid json"));
+    }
+
+    [Fact]
+    public async void ConnectFails() {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        var exception = await Assert.ThrowsAsync<Exception>(() => connection.ConnectAsync());
+        Assert.Equal(exception.Message, "Invalid state");
+    }
+
+    [Fact]
+    public async void ConnectOk() {
+        var client = NabtoClient.Create();
+
+        //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
+        //var logger = loggerFactory.CreateLogger<NabtoClient>();
+        //client.SetLogger(logger);
+
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        await connection.ConnectAsync();
+        var deviceFingerprint = connection.GetDeviceFingerprint();
+        Assert.Equal(deviceFingerprint, device.Fingerprint);
+    }
+
+    [Fact]
+    public async void GetCoapHelloWorld() {
+        var client = NabtoClient.Create();
+
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        await connection.ConnectAsync();
+
+        var coapRequest = connection.CreateCoapRequest("GET", "/hello-world");
+        var response = await coapRequest.ExecuteAsync();
+
+        ushort statusCode = response.GetResponseStatusCode();
+        ushort contentFormat = response.GetResponseContentFormat();
+        byte[] payload = response.GetResponsePayload();
+
+        Assert.Equal(statusCode, 205);
+        Assert.Equal(contentFormat, 0);
+        Assert.True(payload.Length > 4);
+    }
+
 }

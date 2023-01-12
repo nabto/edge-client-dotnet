@@ -1,5 +1,6 @@
 using Nabto.Edge.Client;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Nabto.Edge.Client;
 
@@ -7,13 +8,13 @@ namespace Nabto.Edge.Client;
 
 public interface NabtoClient {
     public static NabtoClient Create() {
-        IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
-        if (ptr == IntPtr.Zero) {
-            throw new NullReferenceException();
-        }
-        return new Impl.NabtoClient(ptr);
+        return Impl.NabtoClient.Create();
     }
     public string GetVersion();
 
+    public string CreatePrivateKey();
+
     public Connection CreateConnection();
+
+    public void SetLogger(ILogger logger);
 }

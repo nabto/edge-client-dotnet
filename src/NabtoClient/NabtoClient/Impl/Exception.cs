@@ -13,7 +13,7 @@ public class NabtoException
             return new ArgumentException();
         else
         {
-            return new Exception("unknown nabto error code " + ec);
+            return new Exception(NabtoClientNative.GetErrorMessage(ec));
         }
     }
 }
