@@ -1,8 +1,7 @@
 namespace Nabto.Edge.Client.Impl;
 
-public class CoapResponse : Nabto.Edge.Client.CoapResponse {
-
-    private IntPtr _handle;
+public class CoapResponse : Nabto.Edge.Client.CoapResponse
+{
     private CoapRequest _request;
 
     public CoapResponse(CoapRequest request) {

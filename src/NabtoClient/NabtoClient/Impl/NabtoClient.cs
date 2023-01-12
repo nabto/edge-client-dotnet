@@ -6,7 +6,7 @@ namespace Nabto.Edge.Client.Impl;
 
 public class NabtoClient : Nabto.Edge.Client.NabtoClient {
     private IntPtr _handle;
-    private NabtoClientNative.LogCallbackFunc _logCallback;
+    private NabtoClientNative.LogCallbackFunc? _logCallback;
 
     public static NabtoClient Create() {
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();

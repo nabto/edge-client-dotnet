@@ -2,8 +2,8 @@ namespace Nabto.Edge.Client.Impl;
 
 class Future {
 
-    IntPtr handle_;
-    Nabto.Edge.Client.Impl.NabtoClient client_;
+    private IntPtr _handle;
+    private Nabto.Edge.Client.Impl.NabtoClient client_;
 
     public static Future Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
@@ -18,23 +18,23 @@ class Future {
 
     public Future(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle) {
         client_ = client;
-        handle_ = handle;
+        _handle = handle;
     }
 
     ~Future()
     {
-        NabtoClientNative.nabto_client_future_free(handle_);
+        NabtoClientNative.nabto_client_future_free(_handle);
     }
 
     public IntPtr GetHandle()
     {
-        return handle_;
+        return _handle;
     }
 
     public delegate void WaitCallbackHandler(int ec);
     public void Wait(WaitCallbackHandler cb)
     {
         // TODO: Can the lambda go out of scope?
-        NabtoClientNative.nabto_client_future_set_callback(handle_, (ptr, ec, userData) => cb(ec), IntPtr.Zero);
+        NabtoClientNative.nabto_client_future_set_callback(_handle, (ptr, ec, userData) => cb(ec), IntPtr.Zero);
     }
 }

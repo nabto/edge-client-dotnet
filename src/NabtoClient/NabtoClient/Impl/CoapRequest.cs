@@ -2,8 +2,8 @@ namespace Nabto.Edge.Client.Impl;
 
 public class CoapRequest : Nabto.Edge.Client.CoapRequest {
 
-    IntPtr _handle;
-    NabtoClient _client;
+    private IntPtr _handle;
+    private NabtoClient _client;
 
     public static CoapRequest Create(Nabto.Edge.Client.Impl.NabtoClient client, Nabto.Edge.Client.Impl.Connection connection, string method, string path)
     {

@@ -5,112 +5,112 @@ namespace Nabto.Edge.Client.Impl;
 
 public unsafe class NabtoClientNative
 {
-    const string DllName = "nabto_client";
+    const string _dllName = "nabto_client";
 
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     // not simply using a string as .net then deallocates the non heap allocated const char*.
     static extern byte* nabto_client_version();
 
     // Nabto Client
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern IntPtr nabto_client_new();
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_free(IntPtr context);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_stop(IntPtr context);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_create_private_key(IntPtr context, out byte* privateKey);
 
     public delegate void LogCallbackFunc(IntPtr logMessage, IntPtr userData);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_set_log_callback(IntPtr context, [MarshalAs(UnmanagedType.FunctionPtr)] LogCallbackFunc cb, IntPtr userData);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_set_log_level(IntPtr context, [MarshalAs(UnmanagedType.LPUTF8Str)] string logLevel);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_log_message_get_severity(IntPtr logMessage);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern byte* nabto_client_log_message_get_message(IntPtr logMessage);
 
 
 
     // Connection
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern IntPtr nabto_client_connection_new(IntPtr client);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_connection_free(IntPtr connection);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_connection_set_options(IntPtr connection, [MarshalAs(UnmanagedType.LPUTF8Str)] string options);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_connection_get_client_fingerprint(IntPtr connection, out byte* fingerprint);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_connection_get_device_fingerprint(IntPtr connection, out byte* fingerprint);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_connection_connect(IntPtr connection, IntPtr future);
 
 
     // futures
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern IntPtr nabto_client_future_new(IntPtr client);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_future_free(IntPtr future);
 
     public delegate void FutureCallbackFunc(IntPtr future, int ec, IntPtr userData);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_future_set_callback(IntPtr future, [MarshalAs(UnmanagedType.FunctionPtr)] FutureCallbackFunc cb, IntPtr userData);
 
 
     /***********************/
     /****** COAP ***********/
     /***********************/
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern IntPtr nabto_client_coap_new(IntPtr connection, [MarshalAs(UnmanagedType.LPUTF8Str)] string method, [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_coap_free(IntPtr coap);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_coap_stop(IntPtr coap);
 
     // UIntPtr has the same number og bits as size_t
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_coap_set_request_payload(IntPtr coap, ushort contentFormat, byte* payload, UIntPtr payloadLength);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_coap_execute(IntPtr coap, IntPtr future);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_coap_get_response_status_code(IntPtr coap, out ushort statusCode);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_coap_get_response_content_format(IntPtr coap, out ushort contentType);
 
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_coap_get_response_payload(IntPtr coap, out byte* payload, out UIntPtr payloadLength);
 
 
 
     // util functions
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_string_free(byte* s);
 
 
     // error handling
-    [DllImport(DllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern byte* nabto_client_error_get_message(int ec);
 
 

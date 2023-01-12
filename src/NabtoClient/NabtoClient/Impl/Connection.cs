@@ -5,8 +5,8 @@ namespace Nabto.Edge.Client.Impl;
 
 public class Connection : Nabto.Edge.Client.Connection {
 
-    IntPtr handle_;
-    Nabto.Edge.Client.Impl.NabtoClient client_;
+    private IntPtr _handle;
+    private Nabto.Edge.Client.Impl.NabtoClient _client;
 
     public static Connection Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
@@ -20,17 +20,17 @@ public class Connection : Nabto.Edge.Client.Connection {
 
 
     public Connection(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle) {
-        client_ = client;
-        handle_ = handle;
+        _client = client;
+        _handle = handle;
     }
 
     ~Connection()
     {
-        NabtoClientNative.nabto_client_connection_free(handle_);
+        NabtoClientNative.nabto_client_connection_free(_handle);
     }
 
     public void SetOptions(string json) {
-        int ec = NabtoClientNative.nabto_client_connection_set_options(handle_, json);
+        int ec = NabtoClientNative.nabto_client_connection_set_options(_handle, json);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }
@@ -45,7 +45,7 @@ public class Connection : Nabto.Edge.Client.Connection {
 
     public string GetDeviceFingerprint() {
         string fingerprint;
-        int ec = NabtoClientNative.ConnectionGetDeviceFingerprint(handle_, out fingerprint);
+        int ec = NabtoClientNative.ConnectionGetDeviceFingerprint(_handle, out fingerprint);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }
@@ -54,7 +54,7 @@ public class Connection : Nabto.Edge.Client.Connection {
 
     public string GetClientFingerprint() {
         string fingerprint;
-        int ec = NabtoClientNative.ConnectionGetClientFingerprint(handle_, out fingerprint);
+        int ec = NabtoClientNative.ConnectionGetClientFingerprint(_handle, out fingerprint);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }
@@ -65,9 +65,9 @@ public class Connection : Nabto.Edge.Client.Connection {
         TaskCompletionSource connectTask = new TaskCompletionSource();
         var task = connectTask.Task;
 
-        var future = Future.Create(client_);
+        var future = Future.Create(_client);
 
-        NabtoClientNative.nabto_client_connection_connect(handle_, future.GetHandle());
+        NabtoClientNative.nabto_client_connection_connect(_handle, future.GetHandle());
 
         future.Wait((ec) => {
             if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value()) {
@@ -82,10 +82,10 @@ public class Connection : Nabto.Edge.Client.Connection {
 
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path)
     {
-        return CoapRequest.Create(client_, this, method, path);
+        return CoapRequest.Create(_client, this, method, path);
     }
 
     public IntPtr GetHandle() {
-        return handle_;
+        return _handle;
     }
 };
