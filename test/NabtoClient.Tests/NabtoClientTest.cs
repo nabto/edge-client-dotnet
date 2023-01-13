@@ -39,7 +39,7 @@ public class NabtoClientTest {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
         var exception = await Assert.ThrowsAsync<Exception>(() => connection.ConnectAsync());
-        Assert.Equal(exception.Message, "Invalid state");
+        Assert.Equal("Invalid state", exception.Message);
     }
 
     [Fact]
@@ -76,8 +76,8 @@ public class NabtoClientTest {
         ushort contentFormat = response.GetResponseContentFormat();
         byte[] payload = response.GetResponsePayload();
 
-        Assert.Equal(statusCode, 205);
-        Assert.Equal(contentFormat, 0);
+        Assert.Equal(205, statusCode);
+        Assert.Equal(0, contentFormat);
         Assert.True(payload.Length > 4);
     }
 

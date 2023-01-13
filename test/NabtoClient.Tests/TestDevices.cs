@@ -2,8 +2,8 @@ namespace Nabto.Edge.Client.Tests;
 
 public class TestDevice {
 
-    public string ProductId { get; set; }
-    public string DeviceId { get; set; }
+    public string? ProductId { get; set; }
+    public string? DeviceId { get; set; }
     public string? ServerUrl { get; set; }
     public string? ServerKey { get; set; }
     public string? Fingerprint { get; set; }

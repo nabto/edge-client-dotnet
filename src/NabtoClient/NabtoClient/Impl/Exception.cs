@@ -13,7 +13,7 @@ public class NabtoException
             return new ArgumentException();
         else
         {
-            return new Exception(NabtoClientNative.GetErrorMessage(ec));
+            return new Exception(NabtoClientNative.nabto_client_error_get_message(ec));
         }
     }
 }

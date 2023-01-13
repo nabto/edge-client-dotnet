@@ -30,13 +30,13 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
     }
 
     public string GetVersion() {
-        return NabtoClientNative.GetVersion();
+        return NabtoClientNative.nabto_client_version();
     }
 
     public string CreatePrivateKey()
     {
         string privateKey;
-        int ec = NabtoClientNative.CreatePrivateKey(GetHandle(), out privateKey);
+        int ec = NabtoClientNative.nabto_client_create_private_key(GetHandle(), out privateKey);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }
@@ -78,7 +78,7 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
         }
         _logCallback =  (IntPtr logMessage, IntPtr ptr) => {
             LogLevel l = NabtoLogLevelToLogLevel(NabtoClientNative.nabto_client_log_message_get_severity(logMessage));
-            string message = NabtoClientNative.LogMessageGetMessage(logMessage);
+            string message = NabtoClientNative.nabto_client_log_message_get_message(logMessage);
             Microsoft.Extensions.Logging.LoggerExtensions.Log(logger, l, message);
         };
         ec = NabtoClientNative.nabto_client_set_log_callback(GetHandle(), _logCallback, IntPtr.Zero);

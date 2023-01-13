@@ -31,7 +31,7 @@ public class CoapResponse : Nabto.Edge.Client.CoapResponse
     public byte[] GetResponsePayload()
     {
         byte[] payload;
-        int ec = NabtoClientNative.CoapGetResponsePayload(_request.GetHandle(), out payload);
+        int ec = NabtoClientNative.nabto_client_coap_get_response_payload(_request.GetHandle(), out payload);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }

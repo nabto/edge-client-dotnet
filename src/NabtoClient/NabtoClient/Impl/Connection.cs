@@ -45,7 +45,7 @@ public class Connection : Nabto.Edge.Client.Connection {
 
     public string GetDeviceFingerprint() {
         string fingerprint;
-        int ec = NabtoClientNative.ConnectionGetDeviceFingerprint(_handle, out fingerprint);
+        int ec = NabtoClientNative.nabto_client_connection_get_device_fingerprint(_handle, out fingerprint);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }
@@ -54,7 +54,7 @@ public class Connection : Nabto.Edge.Client.Connection {
 
     public string GetClientFingerprint() {
         string fingerprint;
-        int ec = NabtoClientNative.ConnectionGetClientFingerprint(_handle, out fingerprint);
+        int ec = NabtoClientNative.nabto_client_connection_get_client_fingerprint(_handle, out fingerprint);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }

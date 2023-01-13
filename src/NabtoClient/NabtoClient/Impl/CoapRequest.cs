@@ -26,7 +26,7 @@ public class CoapRequest : Nabto.Edge.Client.CoapRequest {
 
     public void SetRequestPayload(ushort contentFormat, byte[] data)
     {
-        int ec = NabtoClientNative.CoapSetRequestPayload(_handle, contentFormat, data);
+        int ec = NabtoClientNative.nabto_client_coap_set_request_payload(_handle, contentFormat, data);
     }
 
     public Task<Nabto.Edge.Client.CoapResponse> ExecuteAsync() {
