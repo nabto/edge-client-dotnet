@@ -22,8 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(Platform)' == 'Linux' ">
-    <Content Include="..\lib\linux\libnabto_client.so">
+  <ItemGroup>
+    <Content Include="..\..\lib\linux\libnabto_client.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
