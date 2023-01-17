@@ -41,4 +41,6 @@ public interface Connection
 
     public Nabto.Edge.Client.Stream CreateStream();
 
+    public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
+
 };

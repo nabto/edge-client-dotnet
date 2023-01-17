@@ -109,6 +109,11 @@ public class Connection : Nabto.Edge.Client.Connection {
         return Stream.Create(_client, this);
     }
 
+    public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel()
+    {
+        return TcpTunnel.Create(_client, this);
+    }
+
     public IntPtr GetHandle() {
         return _handle;
     }
