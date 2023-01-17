@@ -114,6 +114,8 @@ public unsafe class NabtoClientNative
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_connection_connect(IntPtr connection, IntPtr future);
 
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_connection_close(IntPtr connection, IntPtr future);
 
     /***********
      * futures *
@@ -184,6 +186,36 @@ public unsafe class NabtoClientNative
         }
         return ec;
     }
+
+
+
+    /*************
+     * Streaming *
+     *************/
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern IntPtr nabto_client_stream_new(IntPtr connection);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_stream_free(IntPtr stream);
+
+[DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+public static extern void nabto_client_stream_stop(IntPtr stream);
+
+[DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+public static extern void nabto_client_stream_open(IntPtr stream, IntPtr future, UInt32 port);
+
+[DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+public static extern void nabto_client_stream_read_all(IntPtr stream, IntPtr future, IntPtr buffer, UIntPtr bufferLength, out UIntPtr readLength);
+
+[DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+public static extern void nabto_client_stream_read_some(IntPtr stream, IntPtr future, IntPtr buffer, UIntPtr bufferLength, out UIntPtr readLength);
+
+[DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+public static extern void nabto_client_stream_write(IntPtr stream, IntPtr future, IntPtr buffer, UIntPtr bufferLength);
+
+[DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+public static extern void nabto_client_stream_close(IntPtr stream, IntPtr future);
 
 
 

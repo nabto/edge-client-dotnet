@@ -35,7 +35,10 @@ public interface Connection
     public string GetDeviceFingerprint();
     public string GetClientFingerprint();
     public Task ConnectAsync();
+    public Task CloseAsync();
 
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path);
+
+    public Nabto.Edge.Client.Stream CreateStream();
 
 };

@@ -80,9 +80,33 @@ public class Connection : Nabto.Edge.Client.Connection {
         return task;
     }
 
+    public Task CloseAsync() {
+        TaskCompletionSource connectTask = new TaskCompletionSource();
+        var task = connectTask.Task;
+
+        var future = Future.Create(_client);
+
+        NabtoClientNative.nabto_client_connection_close(_handle, future.GetHandle());
+
+        future.Wait((ec) => {
+            if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value()) {
+                connectTask.SetResult();
+            } else {
+                connectTask.SetException(NabtoException.Create(ec));
+            }
+        });
+
+        return task;
+    }
+
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path)
     {
         return CoapRequest.Create(_client, this, method, path);
+    }
+
+    public Nabto.Edge.Client.Stream CreateStream()
+    {
+        return Stream.Create(_client, this);
     }
 
     public IntPtr GetHandle() {
