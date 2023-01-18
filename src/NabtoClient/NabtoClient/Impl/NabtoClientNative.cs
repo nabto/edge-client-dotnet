@@ -132,6 +132,19 @@ public unsafe class NabtoClientNative
     public static extern void nabto_client_future_set_callback(IntPtr future, [MarshalAs(UnmanagedType.FunctionPtr)] FutureCallbackFunc cb, IntPtr userData);
 
 
+    /*************
+     * Listeners *
+     *************/
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern IntPtr nabto_client_listener_new(IntPtr context);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_listener_free(IntPtr listener);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_listener_stop(IntPtr listener);
+
+
     /*****************
      * CoAP Requests *
      *****************/
@@ -238,6 +251,47 @@ public unsafe class NabtoClientNative
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_tcp_tunnel_get_local_port(IntPtr tunnel, out ushort localPort);
 
+    /********
+     * MDNS *
+     ********/
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int nabto_client_mdns_resolver_init_listener(IntPtr client, IntPtr listener, [MarshalAs(UnmanagedType.LPUTF8Str)] string subType);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_listener_new_mdns_result(IntPtr listener, IntPtr future, out IntPtr mdnsResult);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_mdns_result_free(IntPtr result);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true, EntryPoint = "nabto_client_mdns_result_get_device_id")]
+    public static extern byte* nabto_client_mdns_result_get_device_id_native(IntPtr result);
+    public static string nabto_client_mdns_result_get_device_id(IntPtr result)
+    {
+        return constCharPointerToString(nabto_client_mdns_result_get_device_id_native(result));
+    }
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true, EntryPoint = "nabto_client_mdns_result_get_product_id")]
+    public static extern byte* nabto_client_mdns_result_get_product_id_native(IntPtr result);
+    public static string nabto_client_mdns_result_get_product_id(IntPtr result)
+    {
+        return constCharPointerToString(nabto_client_mdns_result_get_product_id_native(result));
+    }
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true, EntryPoint = "nabto_client_mdns_result_get_service_instance_name")]
+    public static extern byte* nabto_client_mdns_result_get_service_instance_name_native(IntPtr result);
+
+    public static string nabto_client_mdns_result_get_service_instance_name(IntPtr result)
+    {
+        return constCharPointerToString(nabto_client_mdns_result_get_service_instance_name_native(result));
+    }
+
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern byte* nabto_client_mdns_result_get_txt_items(IntPtr result);
+
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int nabto_client_mdns_result_get_action(IntPtr result);
 
 
     // util functions

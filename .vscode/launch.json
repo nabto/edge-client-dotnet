@@ -9,6 +9,17 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
+            "program": "${workspaceFolder}/samples/MdnsScanner/bin/Debug/net7.0/MdnsScanner.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/samples/MdnsScanner",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
             "program": "${workspaceFolder}/test/NabtoClient.Tests/bin/Debug/net7.0/NabtoClient.Tests.dll",
             "args": [],
             "cwd": "${workspaceFolder}/test/NabtoClient.Tests",
