@@ -1,8 +1,6 @@
-# This code is still in development, expect breaking changes to occur in future versions.
+# Nabto Edge Client SDK .NET Library
 
-# Nabto Edge .Net Wrapper library for the Nabto Edge Client SDK.
-
-This is a wrapper library created for the Nabto Edge Client SDK.
+This code is still in development, expect breaking changes to occur in future versions.
 
 # Example usage of the library
 
