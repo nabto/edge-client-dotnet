@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 class Program {
     private static readonly AutoResetEvent _closing = new AutoResetEvent(false);
 
-    protected static void myHandler(object sender, ConsoleCancelEventArgs args)
+    protected static void ctrlCHandler(object? sender, ConsoleCancelEventArgs args)
     {
         _closing.Set();
     }
@@ -29,7 +29,7 @@ class Program {
             description: "The device id to use.") { IsRequired = true };
         deviceIdOption.AddAlias("--device-id");
 
-        var serviceOption = new Option<string?>(
+        var serviceOption = new Option<string>(
             name: "--service",
             description: "The TCP Service to use.",
             getDefaultValue: () => "http");
@@ -85,7 +85,7 @@ class Program {
             Console.WriteLine("Connected to simple tunnel, listening for TCP connects on 127.0.0.1:" + localPort);
 
             Console.WriteLine("Press CTRL-C to exit.");
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(myHandler);
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlCHandler);
             _closing.WaitOne();
         },
         productIdOption, deviceIdOption, serviceOption, localPortOption);

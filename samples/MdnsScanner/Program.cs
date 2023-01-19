@@ -10,7 +10,7 @@ class Program {
     }
 
 
-    protected static void myHandler(object sender, ConsoleCancelEventArgs args)
+    protected static void ctrlCHandler(object? sender, ConsoleCancelEventArgs args)
     {
         _closing.Set();
     }
@@ -29,7 +29,7 @@ class Program {
         mdnsScanner.Start();
 
         Console.WriteLine("Press CTRL-C to exit.");
-        Console.CancelKeyPress += new ConsoleCancelEventHandler(myHandler);
+        Console.CancelKeyPress += new ConsoleCancelEventHandler(ctrlCHandler);
         _closing.WaitOne();
     }
 
