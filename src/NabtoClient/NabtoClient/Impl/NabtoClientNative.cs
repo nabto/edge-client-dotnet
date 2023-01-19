@@ -117,6 +117,36 @@ public unsafe class NabtoClientNative
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern void nabto_client_connection_close(IntPtr connection, IntPtr future);
 
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int nabto_client_connection_get_local_channel_error_code(IntPtr connection);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int nabto_client_connection_get_remote_channel_error_code(IntPtr connection);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int nabto_client_connection_get_direct_candidates_channel_error_code(IntPtr connection);
+
+    /*********************
+     * Connection Events *
+     *********************/
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_listener_connection_event(IntPtr listener, IntPtr future, out int e);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int nabto_client_connection_events_init_listener(IntPtr connection, IntPtr listener);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value();
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value();
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern int NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value();
+
+
+
     /***********
      * futures *
      ***********/
@@ -310,7 +340,6 @@ public unsafe class NabtoClientNative
 
 
     [DllImport(_dllName)] public static extern int NABTO_CLIENT_EC_OK_value();
-    [DllImport(_dllName)] public static extern int NABTO_CLIENT_EC_ABORTED_value();
     [DllImport(_dllName)] public static extern int NABTO_CLIENT_EC_BAD_RESPONSE_value();
     [DllImport(_dllName)] public static extern int NABTO_CLIENT_EC_BAD_REQUEST_value();
     [DllImport(_dllName)] public static extern int NABTO_CLIENT_EC_CLOSED_value();

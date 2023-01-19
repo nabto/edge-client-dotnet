@@ -7,6 +7,11 @@ public class Connection : Nabto.Edge.Client.Connection {
 
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClient _client;
+    private Listener _connectionEventslistener;
+    private int _connectionEvent;
+    private Future _connectionEventsFuture;
+
+    public Nabto.Edge.Client.Connection.ConnectionEventHandler ConnectionEventHandlers { get; set; }
 
     public static Connection Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
@@ -22,11 +27,37 @@ public class Connection : Nabto.Edge.Client.Connection {
     public Connection(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle) {
         _client = client;
         _handle = handle;
+
+        _connectionEventslistener = Listener.Create(client);
+        _connectionEventsFuture = Future.Create(_client);
+        ConnectionEventHandlers = (e) => {};
+
+        NabtoClientNative.nabto_client_connection_events_init_listener(_handle, _connectionEventslistener.GetHandle());
+        startListenEvents();
     }
 
     ~Connection()
     {
         NabtoClientNative.nabto_client_connection_free(_handle);
+    }
+
+    public void startListenEvents()
+    {
+        NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out _connectionEvent);
+        _connectionEventsFuture.Wait((ec) => {
+            if (ec == 0) {
+                if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value()) {
+                    ConnectionEventHandlers.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
+                } else if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value()) {
+                    ConnectionEventHandlers.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
+                } else if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value()) {
+                    ConnectionEventHandlers.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
+                } else {
+                    // TODO log error
+                }
+            }
+            startListenEvents();
+        });
     }
 
     public void SetOptions(string json) {
@@ -98,6 +129,17 @@ public class Connection : Nabto.Edge.Client.Connection {
 
         return task;
     }
+
+    public int GetLocalChannelErrorCode() {
+        return NabtoClientNative.nabto_client_connection_get_local_channel_error_code(GetHandle());
+    }
+    public int GetRemoteChannelErrorCode() {
+        return NabtoClientNative.nabto_client_connection_get_remote_channel_error_code(GetHandle());
+    }
+    public int GetDirectCandidatesChannelErrorCode() {
+        return NabtoClientNative.nabto_client_connection_get_direct_candidates_channel_error_code(GetHandle());
+    }
+
 
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path)
     {

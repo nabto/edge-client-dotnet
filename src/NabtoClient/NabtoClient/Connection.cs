@@ -28,6 +28,15 @@ public class ConnectionOptions {
 
 public interface Connection
 {
+    public enum ConnectionEvent {
+        Connected,
+        Closed,
+        ChannelChanged
+    }
+
+    public delegate void ConnectionEventHandler(ConnectionEvent e);
+
+    public ConnectionEventHandler ConnectionEventHandlers { get; set; }
 
     public void SetOptions(string json);
 
@@ -36,6 +45,10 @@ public interface Connection
     public string GetClientFingerprint();
     public Task ConnectAsync();
     public Task CloseAsync();
+
+    public int GetLocalChannelErrorCode();
+    public int GetRemoteChannelErrorCode();
+    public int GetDirectCandidatesChannelErrorCode();
 
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path);
 

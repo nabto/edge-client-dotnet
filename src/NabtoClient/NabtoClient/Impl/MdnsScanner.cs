@@ -18,20 +18,20 @@ public class MdnsResult : Nabto.Edge.Client.MdnsResult
 public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
 {
     private Nabto.Edge.Client.Impl.NabtoClient _client;
-    private IntPtr _listener;
+    private Listener _listener;
     private Future _future;
     private IntPtr _mdnsResult;
     private string? _subtype;
-    public MdnsResultHandler Handlers { get; set; }
+    public  Nabto.Edge.Client.MdnsScanner.ResultHandler Handlers { get; set; }
 
     public static Nabto.Edge.Client.MdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClient client, string? subtype)
     {
-        var listener = NabtoClientNative.nabto_client_listener_new(client.GetHandle());
+        var listener = Listener.Create(client);
         var future = Future.Create(client);
         return new MdnsScanner(client, future, listener, subtype);
     }
 
-    private MdnsScanner(Nabto.Edge.Client.Impl.NabtoClient client, Future future, IntPtr listener, string? subtype) {
+    private MdnsScanner(Nabto.Edge.Client.Impl.NabtoClient client, Future future, Listener listener, string? subtype) {
         Handlers = (r => {});
         _client = client;
         _future = future;
@@ -41,7 +41,7 @@ public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
 
     public void Start()
     {
-        int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(),_listener, _subtype);
+        int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(), _listener.GetHandle(), _subtype);
         if (ec != 0) {
             throw NabtoException.Create(ec);
         }
@@ -49,7 +49,7 @@ public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
     }
 
     private void StartListen() {
-        NabtoClientNative.nabto_client_listener_new_mdns_result(_listener, _future.GetHandle(), out _mdnsResult);
+        NabtoClientNative.nabto_client_listener_new_mdns_result(_listener.GetHandle(), _future.GetHandle(), out _mdnsResult);
         _future.Wait((int ec) => {
 
             if (ec == 0) {

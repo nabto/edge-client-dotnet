@@ -31,15 +31,16 @@ public class NabtoClientTest {
     public void InvalidFormattedJsonToConnectOptionsThrowsArgumentException() {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
-        Assert.Throws<ArgumentException>(() => connection.SetOptions("Invalid json"));
+        var ex = Assert.Throws<NabtoException>(() => connection.SetOptions("Invalid json"));
+        Assert.Equal(NabtoClientError.INVALID_ARGUMENT, ex.ErrorCode);
     }
 
     [Fact]
     public async void ConnectFails() {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
-        var exception = await Assert.ThrowsAsync<Exception>(() => connection.ConnectAsync());
-        Assert.Equal("Invalid state", exception.Message);
+        var exception = await Assert.ThrowsAsync<NabtoException>(() => connection.ConnectAsync());
+        Assert.Equal(NabtoClientError.INVALID_STATE, exception.ErrorCode);
     }
 
     [Fact]

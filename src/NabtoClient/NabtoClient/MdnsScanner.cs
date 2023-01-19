@@ -12,9 +12,8 @@ public class MdnsResult {
     public MdnsAction Action { get; set; }
 };
 
-public delegate void MdnsResultHandler(MdnsResult mdnsResult);
-
 public interface MdnsScanner {
+    public delegate void ResultHandler(MdnsResult mdnsResult);
     public void Start();
-    public MdnsResultHandler Handlers { get; set; }
+    public ResultHandler Handlers { get; set; }
 }

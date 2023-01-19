@@ -1,7 +1,6 @@
 public class NabtoClientError
 {
     public static int OK = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_OK_value();
-    public static int ABORTED = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_ABORTED_value();
     public static int BAD_RESPONSE = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_BAD_RESPONSE_value();
     public static int BAD_REQUEST = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_BAD_REQUEST_value();
     public static int CLOSED = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_CLOSED_value();

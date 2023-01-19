@@ -10,7 +10,7 @@ public class MdnsTest {
         var client = Nabto.Edge.Client.NabtoClient.Create();
         var mdnsScanner = client.CreateMdnsScanner();
 
-        MdnsResultHandler handler = (MdnsResult result) => {};
+        MdnsScanner.ResultHandler handler = (MdnsResult result) => {};
 
         mdnsScanner.Handlers += handler;
 

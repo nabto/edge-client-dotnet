@@ -54,7 +54,8 @@ public class StreamTest {
         await stream.OpenAsync(streamPort);
         await stream.CloseAsync();
         var data = System.Text.UTF8Encoding.UTF8.GetBytes("hello");
-        await Assert.ThrowsAsync<Exception>(() => stream.WriteAsync(data));
+        var ex = await Assert.ThrowsAsync<NabtoException>(() => stream.WriteAsync(data));
+        Assert.Equal(NabtoClientError.CLOSED, ex.ErrorCode);
 
     }
 }
