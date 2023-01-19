@@ -2,6 +2,14 @@
 
 This code is still in development, expect breaking changes to occur in future versions.
 
+# Compatible C# environments
+
+Linux x86_64
+Windows x86_64
+Macos intel, arm
+
+Other environments can be supported if the correct .so, .dll or .dylib is available when running the resulting app/code.
+
 # Example usage of the library
 
 dotnet new console -n MyDemo
