@@ -23,12 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\lib\linux\libnabto_client.so">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\NabtoClient\NabtoClient.csproj" />
   </ItemGroup>
 
