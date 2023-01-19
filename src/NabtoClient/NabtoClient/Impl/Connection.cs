@@ -11,7 +11,7 @@ public class Connection : Nabto.Edge.Client.Connection {
     private int _connectionEvent;
     private Future _connectionEventsFuture;
 
-    public Nabto.Edge.Client.Connection.ConnectionEventHandler ConnectionEventHandlers { get; set; }
+    public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
     public static Connection Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
@@ -30,7 +30,6 @@ public class Connection : Nabto.Edge.Client.Connection {
 
         _connectionEventslistener = Listener.Create(client);
         _connectionEventsFuture = Future.Create(_client);
-        ConnectionEventHandlers = (e) => {};
 
         NabtoClientNative.nabto_client_connection_events_init_listener(_handle, _connectionEventslistener.GetHandle());
         startListenEvents();
@@ -47,11 +46,11 @@ public class Connection : Nabto.Edge.Client.Connection {
         _connectionEventsFuture.Wait((ec) => {
             if (ec == 0) {
                 if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value()) {
-                    ConnectionEventHandlers.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
+                    ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
                 } else if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value()) {
-                    ConnectionEventHandlers.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
+                    ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
                 } else if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value()) {
-                    ConnectionEventHandlers.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
+                    ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
                 } else {
                     // TODO log error
                 }

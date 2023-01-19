@@ -15,5 +15,5 @@ public class MdnsResult {
 public interface MdnsScanner {
     public delegate void ResultHandler(MdnsResult mdnsResult);
     public void Start();
-    public ResultHandler Handlers { get; set; }
+    public ResultHandler? Handlers { get; set; }
 }

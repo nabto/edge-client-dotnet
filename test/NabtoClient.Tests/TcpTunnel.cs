@@ -1,5 +1,7 @@
 using Xunit;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Nabto.Edge.Client.Tests;
 
@@ -45,5 +47,20 @@ public class TcpTunnelTest {
         response.EnsureSuccessStatusCode();
         string responseBody = await response.Content.ReadAsStringAsync();
         await tunnel.CloseAsync();
+    }
+
+    [Fact]
+    public async void TestOpenTunnelUsedPort()
+    {
+        IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+        TcpListener server = new TcpListener(localAddr, 0);
+        server.Start();
+        int localPort = ((IPEndPoint)server.LocalEndpoint).Port;
+
+        var connection = await CreateTcpTunnelDeviceConnectionAsync();
+        var tunnel = connection.CreateTcpTunnel();
+
+        var ex = await Assert.ThrowsAsync<NabtoException>(() => tunnel.OpenAsync("http", (ushort)localPort));
+        Assert.Equal(NabtoClientError.PORT_IN_USE, ex.ErrorCode);
     }
 }

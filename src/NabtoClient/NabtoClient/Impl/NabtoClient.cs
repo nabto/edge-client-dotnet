@@ -48,7 +48,7 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
         return Nabto.Edge.Client.Impl.Connection.Create(this);
     }
 
-    public Nabto.Edge.Client.MdnsScanner CreateMdnsScanner(string? subtype = null)
+    public Nabto.Edge.Client.MdnsScanner CreateMdnsScanner(string subtype = "")
     {
         return Nabto.Edge.Client.Impl.MdnsScanner.Create(this, subtype);
     }

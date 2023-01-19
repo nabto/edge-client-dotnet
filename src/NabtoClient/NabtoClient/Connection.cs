@@ -36,7 +36,7 @@ public interface Connection
 
     public delegate void ConnectionEventHandler(ConnectionEvent e);
 
-    public ConnectionEventHandler ConnectionEventHandlers { get; set; }
+    public ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
     public void SetOptions(string json);
 

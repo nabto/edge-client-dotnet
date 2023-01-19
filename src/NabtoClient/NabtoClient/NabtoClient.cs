@@ -16,7 +16,7 @@ public interface NabtoClient {
 
     public Connection CreateConnection();
 
-    public MdnsScanner CreateMdnsScanner(string? subtype = null);
+    public MdnsScanner CreateMdnsScanner(string subtype = "");
 
     public void SetLogger(ILogger logger);
 }

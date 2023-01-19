@@ -16,4 +16,17 @@ public class MdnsTest {
 
         mdnsScanner.Handlers -= handler;
     }
+
+    [Fact]
+    public void TestMdnsScannerSetHandlerToNull() {
+        var client = Nabto.Edge.Client.NabtoClient.Create();
+        var mdnsScanner = client.CreateMdnsScanner();
+
+        MdnsScanner.ResultHandler handler = (MdnsResult result) => {};
+
+        mdnsScanner.Handlers = null;
+
+        mdnsScanner.Handlers += handler;
+        mdnsScanner.Handlers -= handler;
+    }
 }
