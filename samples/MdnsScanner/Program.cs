@@ -19,9 +19,9 @@ class Program {
 
         var client = NabtoClient.Create();
 
-        //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
-        //var logger = loggerFactory.CreateLogger<NabtoClient>();
-        //client.SetLogger(logger);
+        using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
+        var logger = loggerFactory.CreateLogger<NabtoClient>();
+        client.SetLogger(logger);
 
         var mdnsScanner = client.CreateMdnsScanner();
         mdnsScanner.Handlers += HandleMdnsResult;
