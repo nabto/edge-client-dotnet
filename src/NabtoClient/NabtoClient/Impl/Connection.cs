@@ -54,6 +54,8 @@ public class Connection : Nabto.Edge.Client.Connection {
                 } else {
                     // TODO log error
                 }
+            } else if (ec == Nabto.Edge.Client.NabtoClientError.STOPPED) {
+                return;
             }
             // TODO handle stopped ec
             startListenEvents();

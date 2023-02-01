@@ -22,23 +22,6 @@ public class ConnectionTest {
         await connection.CloseAsync();
     }
 
-
-
-    // [Fact]
-    // public async void TestConnectionEvents()
-    // {
-    //     bool connected = false;
-    //     var client = NabtoClient.Create();
-    //     var connection = client.CreateConnection();
-    //     connection.ConnectionEventHandlers += ((e) => { if (e == Connection.ConnectionEvent.Connected) { connected = true; }});
-    //     var device = TestDevices.GetCoapDevice();
-    //     connection.SetOptions(device.GetConnectOptions());
-    //     connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
-    //     await connection.ConnectAsync();
-    //     await connection.CloseAsync();
-    //     Assert.True(connected);
-    // }
-
     [Fact]
     public async void TestConnectionEvents()
     {

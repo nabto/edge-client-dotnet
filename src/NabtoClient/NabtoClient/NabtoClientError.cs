@@ -1,3 +1,5 @@
+namespace Nabto.Edge.Client;
+
 public class NabtoClientError
 {
     public static int OK = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_OK_value();

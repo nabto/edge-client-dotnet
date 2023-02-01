@@ -21,6 +21,10 @@ class Listener {
         _handle = handle;
     }
 
+    public void Stop() {
+        NabtoClientNative.nabto_client_listener_stop(_handle);
+    }
+
     ~Listener()
     {
         NabtoClientNative.nabto_client_listener_free(_handle);
