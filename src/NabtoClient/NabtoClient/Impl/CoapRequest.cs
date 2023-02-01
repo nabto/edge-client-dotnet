@@ -20,6 +20,10 @@ public class CoapRequest : Nabto.Edge.Client.CoapRequest {
         _client = client;
     }
 
+    ~CoapRequest() {
+        NabtoClientNative.nabto_client_coap_free(_handle);
+    }
+
     public IntPtr GetHandle() {
         return _handle;
     }

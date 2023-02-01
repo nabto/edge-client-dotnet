@@ -58,6 +58,10 @@ public class Stream : Nabto.Edge.Client.Stream {
         _handle = handle;
     }
 
+    ~Stream() {
+        NabtoClientNative.nabto_client_stream_free(_handle);
+    }
+
     public Task OpenAsync(UInt32 port)
     {
         TaskCompletionSource connectTask = new TaskCompletionSource();

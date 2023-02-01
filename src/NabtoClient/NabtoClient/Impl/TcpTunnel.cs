@@ -24,6 +24,11 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel {
         _handle = handle;
     }
 
+    ~TcpTunnel()
+    {
+        NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
+    }
+
     public Task OpenAsync(string service, ushort localPort)
     {
         TaskCompletionSource connectTask = new TaskCompletionSource();
