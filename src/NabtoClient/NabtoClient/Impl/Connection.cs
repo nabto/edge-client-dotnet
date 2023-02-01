@@ -45,16 +45,17 @@ public class Connection : Nabto.Edge.Client.Connection {
         NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out _connectionEvent);
         _connectionEventsFuture.Wait((ec) => {
             if (ec == 0) {
-                if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value()) {
+                if (_connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value()) {
                     ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
-                } else if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value()) {
+                } else if (_connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value()) {
                     ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
-                } else if (ec == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value()) {
+                } else if (_connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value()) {
                     ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
                 } else {
                     // TODO log error
                 }
             }
+            // TODO handle stopped ec
             startListenEvents();
         });
     }
