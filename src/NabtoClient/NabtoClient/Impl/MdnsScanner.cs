@@ -55,6 +55,8 @@ public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
                 MdnsResult r = MdnsResult.Create(_mdnsResult);
                 Handlers?.Invoke(r);
                 NabtoClientNative.nabto_client_mdns_result_free(_mdnsResult);
+            } else if (ec == NabtoClientError.STOPPED) {
+                return;
             }
 
             StartListen();
