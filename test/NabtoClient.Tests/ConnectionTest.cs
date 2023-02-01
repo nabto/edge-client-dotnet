@@ -25,18 +25,20 @@ public class ConnectionTest {
     [Fact]
     public async void TestConnectionEvents()
     {
-        bool connected = false;
-        bool closed = false;
+        var connected = new TaskCompletionSource<bool>();
+        var closed = new TaskCompletionSource<bool>();
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
-        connection.ConnectionEventHandlers += ((e) => { if (e == Connection.ConnectionEvent.Connected) { connected = true; } else if (e == Connection.ConnectionEvent.Closed) {closed = true; } });
+        connection.ConnectionEventHandlers += ((e) => { if (e == Connection.ConnectionEvent.Connected) { connected.SetResult(true); } else if (e == Connection.ConnectionEvent.Closed) { closed.SetResult(true); } });
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());
         connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
         await connection.ConnectAsync();
         await connection.CloseAsync();
-        Assert.True(connected);
-        Assert.True(closed);
+        connected.Task.Wait(1000);
+        closed.Task.Wait(1000);
+        Assert.True(connected.Task.Result);
+        Assert.True(closed.Task.Result);
     }
 
 }
