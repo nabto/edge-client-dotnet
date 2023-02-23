@@ -40,6 +40,7 @@ class Future {
         }
 
         _cb = (ptr, ec, userData) => {
+            var localCb = _cb;
             _cb = null;
             cb(ec);
         };
