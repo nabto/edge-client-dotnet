@@ -1,10 +1,14 @@
 namespace Nabto.Edge.Client.Impl;
+using System.Runtime.InteropServices;
 
 class Future {
 
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClient _client;
-    private NabtoClientNative.FutureCallbackFunc? _cb;
+    //private NabtoClientNative.FutureCallbackFunc? _cb;
+    private GCHandle? _gcHandle;
+    private WaitCallbackHandler? _waitCallback;
+
 
     public static Future Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
@@ -32,19 +36,32 @@ class Future {
         return _handle;
     }
 
+    private static void CallbackHandler(IntPtr ptr, int ec, IntPtr userData)
+    {
+        GCHandle gch = GCHandle.FromIntPtr(userData);
+        Future future = (Future)gch.Target;
+        future.HandleCallback(ec);
+    }
+
+    private void HandleCallback(int ec) 
+    {
+        var cb = _waitCallback;
+        _waitCallback = null;
+        _gcHandle?.Free();
+        cb(ec);
+    }
+
     public delegate void WaitCallbackHandler(int ec);
     public void Wait(WaitCallbackHandler cb)
     {
-        if (_cb != null) {
+        if (_waitCallback != null) {
             throw new Exception("Already waiting for a callback on the future.");
         }
 
-        _cb = (ptr, ec, userData) => {
-            var localCb = _cb;
-            _cb = null;
-            cb(ec);
-        };
+        GCHandle handle = GCHandle.Alloc(this);
+        _gcHandle = handle;
+        _waitCallback = cb;
 
-        NabtoClientNative.nabto_client_future_set_callback(_handle, _cb, IntPtr.Zero);
+        NabtoClientNative.nabto_client_future_set_callback(_handle, CallbackHandler, GCHandle.ToIntPtr(handle));
     }
 }
