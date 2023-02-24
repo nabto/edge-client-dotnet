@@ -6,7 +6,7 @@ namespace Nabto.Edge.Client.Tests;
 
 public class ConnectionTest {
     [Fact]
-    public async void AsyncClose()
+    public async Task AsyncClose()
     {
         var client = NabtoClient.Create();
 
@@ -23,7 +23,7 @@ public class ConnectionTest {
     }
 
     [Fact]
-    public async void TestConnectionEvents()
+    public async Task TestConnectionEvents()
     {
         var connected = new TaskCompletionSource<bool>();
         var closed = new TaskCompletionSource<bool>();

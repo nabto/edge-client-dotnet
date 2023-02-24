@@ -36,7 +36,7 @@ public class NabtoClientTest {
     }
 
     [Fact]
-    public async void ConnectFails() {
+    public async Task ConnectFails() {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
         var exception = await Assert.ThrowsAsync<NabtoException>(() => connection.ConnectAsync());
@@ -44,7 +44,7 @@ public class NabtoClientTest {
     }
 
     [Fact]
-    public async void ConnectOk() {
+    public async Task ConnectOk() {
         var client = NabtoClient.Create();
 
         //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
@@ -61,7 +61,7 @@ public class NabtoClientTest {
     }
 
     [Fact]
-    public async void GetCoapHelloWorld() {
+    public async Task GetCoapHelloWorld() {
         var client = NabtoClient.Create();
 
         var connection = client.CreateConnection();

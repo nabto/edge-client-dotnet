@@ -22,7 +22,7 @@ public class TcpTunnelTest {
     }
 
     [Fact]
-    public async void TestOpenClose()
+    public async Task TestOpenClose()
     {
         var connection = await CreateTcpTunnelDeviceConnectionAsync();
         var tunnel = connection.CreateTcpTunnel();
@@ -33,7 +33,7 @@ public class TcpTunnelTest {
     }
 
     [Fact]
-    public async void TestGetDataFromTunnel()
+    public async Task TestGetDataFromTunnel()
     {
         var connection = await CreateTcpTunnelDeviceConnectionAsync();
         var tunnel = connection.CreateTcpTunnel();

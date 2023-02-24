@@ -20,7 +20,7 @@ public class StreamTest {
     }
 
     [Fact]
-    public async void TestStreamWriteThenReadSome()
+    public async Task TestStreamWriteThenReadSome()
     {
         var connection = await CreateStreamDeviceConnectionAsync();
         var stream = connection.CreateStream();
@@ -33,7 +33,7 @@ public class StreamTest {
     }
 
     [Fact]
-    public async void TestStreamReadAll()
+    public async Task TestStreamReadAll()
     {
         var connection = await CreateStreamDeviceConnectionAsync();
         var stream = connection.CreateStream();
@@ -46,7 +46,7 @@ public class StreamTest {
     }
 
     [Fact]
-    public async void TestStreamWriteAfterClose()
+    public async Task TestStreamWriteAfterClose()
     {
         var connection = await CreateStreamDeviceConnectionAsync();
         var stream = connection.CreateStream();
