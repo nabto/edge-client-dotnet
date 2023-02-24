@@ -17,17 +17,10 @@ class Program {
         GC.Collect();
     }
 
-    public static async Task Main(string[] args) 
-    {
-        int i = 0;
-        var gcTimer = new System.Threading.Timer(GcCallback, null, 0, 500);
-    
+    public static async Task DoConnections(int n) {
         var client = NabtoClient.Create();
-        using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
-        var logger = loggerFactory.CreateLogger<NabtoClient>();
-        client.SetLogger(logger);
-
-        while (true) {
+        
+        for (int i = 0; i < n; i++) {
             var connection = client.CreateConnection();
             var device = TestDevices.GetTcpTunnelDevice();
             connection.SetOptions(device.GetConnectOptions());
@@ -47,12 +40,18 @@ class Program {
             await tunnel.CloseAsync();
             await connection.CloseAsync();
             Console.WriteLine("connection {0}", i);
-            i++;
+        }
+    }
+
+    public static async Task Main(string[] args) 
+    {
+        var tasks = new List<Task>();
+
+        for (int j = 0; j < 100; j++) {
+            tasks.Add(Task.Run(() => DoConnections(100)));
         }
 
-        //Dispose the timer
-        gcTimer.Dispose();
-    
+        await Task.WhenAll(tasks);    
     }
 
 };
