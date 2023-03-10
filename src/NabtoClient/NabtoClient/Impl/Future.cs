@@ -1,19 +1,21 @@
 namespace Nabto.Edge.Client.Impl;
 using System.Runtime.InteropServices;
 
-class Future {
+class Future
+{
 
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClient _client;
-    //private NabtoClientNative.FutureCallbackFunc? _cb;
     private GCHandle? _gcHandle;
-    private WaitCallbackHandler? _waitCallback;
+
+    TaskCompletionSource<int>? _waitTask;
 
 
     public static Future Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_future_new(client.GetHandle());
-        if (ptr == IntPtr.Zero) {
+        if (ptr == IntPtr.Zero)
+        {
             throw new NullReferenceException();
         }
         return new Future(client, ptr);
@@ -21,7 +23,8 @@ class Future {
 
 
 
-    public Future(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle) {
+    public Future(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle)
+    {
         _client = client;
         _handle = handle;
     }
@@ -39,29 +42,33 @@ class Future {
     private static void CallbackHandler(IntPtr ptr, int ec, IntPtr userData)
     {
         GCHandle gch = GCHandle.FromIntPtr(userData);
-        Future future = (Future)gch.Target;
-        future.HandleCallback(ec);
+        Future? future = (Future?)gch.Target;
+        future?.HandleCallback(ec);
     }
 
-    private void HandleCallback(int ec) 
+    private void HandleCallback(int ec)
     {
-        var cb = _waitCallback;
-        _waitCallback = null;
+        var waitTask = _waitTask;
+        _waitTask = null;
         _gcHandle?.Free();
-        cb(ec);
+        waitTask?.SetResult(ec);
     }
 
     public delegate void WaitCallbackHandler(int ec);
-    public void Wait(WaitCallbackHandler cb)
+    public Task<int> WaitAsync()
     {
-        if (_waitCallback != null) {
+        if (_waitTask != null)
+        {
             throw new Exception("Already waiting for a callback on the future.");
         }
+        _waitTask = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var task = _waitTask.Task;
 
         GCHandle handle = GCHandle.Alloc(this);
         _gcHandle = handle;
-        _waitCallback = cb;
 
         NabtoClientNative.nabto_client_future_set_callback(_handle, CallbackHandler, GCHandle.ToIntPtr(handle));
+
+        return task;
     }
 }

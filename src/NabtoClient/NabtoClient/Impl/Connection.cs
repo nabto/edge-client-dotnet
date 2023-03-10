@@ -1,22 +1,100 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
-public class Connection : Nabto.Edge.Client.Connection {
+public class ConnectionEventsListener
+{
+    private System.WeakReference<Connection> _connection;
+
+    private Listener _connectionEventslistener;
+
+    private Future _connectionEventsFuture;
+
+    private Task _eventsListenerTask;
+
+
+
+    public ConnectionEventsListener(Connection connection, Nabto.Edge.Client.Impl.NabtoClient client)
+    {
+        _connection = new System.WeakReference<Connection>(connection);
+
+        _connectionEventslistener = Listener.Create(client);
+        _connectionEventsFuture = Future.Create(client);
+
+        NabtoClientNative.nabto_client_connection_events_init_listener(connection.GetHandle(), _connectionEventslistener.GetHandle());
+        _eventsListenerTask = Task.Run(startListenEvents);
+
+    }
+
+    ~ConnectionEventsListener() {
+    }
+
+    public void Stop()
+    {
+        _connectionEventslistener.Stop();
+    }
+
+
+
+    public async Task startListenEvents()
+    {
+        // Allocate the connectionEvent on the heap such that we can pin it such that the garbage collector is not moving around with the underlying address of the event.
+        var connectionEvent = new int(); 
+
+        GCHandle handle = GCHandle.Alloc(connectionEvent, GCHandleType.Pinned);
+        while (true)
+        {
+            NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEvent);
+            var ec = await _connectionEventsFuture.WaitAsync();
+            if (ec == 0)
+            {
+                Connection? connection;
+                if (!_connection.TryGetTarget(out connection))
+                {
+                    return;
+                }
+                if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value())
+                {
+                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
+                }
+                else if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value())
+                {
+                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
+                }
+                else if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value())
+                {
+                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
+                }
+                else
+                {
+                    // TODO log error
+                }
+            }
+            else if (ec == Nabto.Edge.Client.NabtoClientError.STOPPED)
+            {
+                return;
+            }
+        }
+    }
+
+};
+
+public class Connection : Nabto.Edge.Client.Connection
+{
 
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClient _client;
-    private Listener _connectionEventslistener;
-    private int _connectionEvent;
-    private Future _connectionEventsFuture;
+    private ConnectionEventsListener _connectionEventsListener;
 
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
     public static Connection Create(Nabto.Edge.Client.Impl.NabtoClient client)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_connection_new(client.GetHandle());
-        if (ptr == IntPtr.Zero) {
+        if (ptr == IntPtr.Zero)
+        {
             throw new NullReferenceException();
         }
         return new Connection(client, ptr);
@@ -24,47 +102,29 @@ public class Connection : Nabto.Edge.Client.Connection {
 
 
 
-    public Connection(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle) {
+    public Connection(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle)
+    {
         _client = client;
         _handle = handle;
-
-        _connectionEventslistener = Listener.Create(client);
-        _connectionEventsFuture = Future.Create(_client);
-
-        NabtoClientNative.nabto_client_connection_events_init_listener(_handle, _connectionEventslistener.GetHandle());
-        startListenEvents();
+        _connectionEventsListener = new ConnectionEventsListener(this, client);
     }
 
     ~Connection()
     {
+        _connectionEventsListener.Stop();
         NabtoClientNative.nabto_client_connection_free(_handle);
     }
 
-    public void startListenEvents()
+    public void DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent e)
     {
-        NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out _connectionEvent);
-        _connectionEventsFuture.Wait((ec) => {
-            if (ec == 0) {
-                if (_connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value()) {
-                    ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
-                } else if (_connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value()) {
-                    ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
-                } else if (_connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value()) {
-                    ConnectionEventHandlers?.Invoke(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
-                } else {
-                    // TODO log error
-                }
-            } else if (ec == Nabto.Edge.Client.NabtoClientError.STOPPED) {
-                return;
-            }
-            // TODO handle stopped ec
-            startListenEvents();
-        });
+        ConnectionEventHandlers?.Invoke(e);
     }
 
-    public void SetOptions(string json) {
+    public void SetOptions(string json)
+    {
         int ec = NabtoClientNative.nabto_client_connection_set_options(_handle, json);
-        if (ec != 0) {
+        if (ec != 0)
+        {
             throw NabtoException.Create(ec);
         }
     }
@@ -76,25 +136,30 @@ public class Connection : Nabto.Edge.Client.Connection {
         SetOptions(jsonString);
     }
 
-    public string GetDeviceFingerprint() {
+    public string GetDeviceFingerprint()
+    {
         string fingerprint;
         int ec = NabtoClientNative.nabto_client_connection_get_device_fingerprint(_handle, out fingerprint);
-        if (ec != 0) {
+        if (ec != 0)
+        {
             throw NabtoException.Create(ec);
         }
         return fingerprint;
     }
 
-    public string GetClientFingerprint() {
+    public string GetClientFingerprint()
+    {
         string fingerprint;
         int ec = NabtoClientNative.nabto_client_connection_get_client_fingerprint(_handle, out fingerprint);
-        if (ec != 0) {
+        if (ec != 0)
+        {
             throw NabtoException.Create(ec);
         }
         return fingerprint;
     }
 
-    public Task ConnectAsync() {
+    public async Task ConnectAsync()
+    {
         TaskCompletionSource connectTask = new TaskCompletionSource();
         var task = connectTask.Task;
 
@@ -102,43 +167,47 @@ public class Connection : Nabto.Edge.Client.Connection {
 
         NabtoClientNative.nabto_client_connection_connect(_handle, future.GetHandle());
 
-        future.Wait((ec) => {
-            if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value()) {
-                connectTask.SetResult();
-            } else {
-                connectTask.SetException(NabtoException.Create(ec));
-            }
-        });
-
-        return task;
+        var ec = await future.WaitAsync();
+        if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
+        {
+            return;
+        }
+        else
+        {
+            throw NabtoException.Create(ec);
+        }
     }
 
-    public Task CloseAsync() {
-        TaskCompletionSource connectTask = new TaskCompletionSource();
-        var task = connectTask.Task;
+    public async Task CloseAsync()
+    {
+        TaskCompletionSource closeTask = new TaskCompletionSource();
+        var task = closeTask.Task;
 
         var future = Future.Create(_client);
 
         NabtoClientNative.nabto_client_connection_close(_handle, future.GetHandle());
 
-        future.Wait((ec) => {
-            if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value()) {
-                connectTask.SetResult();
-            } else {
-                connectTask.SetException(NabtoException.Create(ec));
-            }
-        });
-
-        return task;
+        var ec = await future.WaitAsync();
+        if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
+        {
+            return;
+        }
+        else
+        {
+            throw NabtoException.Create(ec);
+        }
     }
 
-    public int GetLocalChannelErrorCode() {
+    public int GetLocalChannelErrorCode()
+    {
         return NabtoClientNative.nabto_client_connection_get_local_channel_error_code(GetHandle());
     }
-    public int GetRemoteChannelErrorCode() {
+    public int GetRemoteChannelErrorCode()
+    {
         return NabtoClientNative.nabto_client_connection_get_remote_channel_error_code(GetHandle());
     }
-    public int GetDirectCandidatesChannelErrorCode() {
+    public int GetDirectCandidatesChannelErrorCode()
+    {
         return NabtoClientNative.nabto_client_connection_get_direct_candidates_channel_error_code(GetHandle());
     }
 
@@ -158,7 +227,8 @@ public class Connection : Nabto.Edge.Client.Connection {
         return TcpTunnel.Create(_client, this);
     }
 
-    public IntPtr GetHandle() {
+    public IntPtr GetHandle()
+    {
         return _handle;
     }
 };
