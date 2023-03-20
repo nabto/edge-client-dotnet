@@ -198,6 +198,26 @@ public class Connection : Nabto.Edge.Client.Connection
         }
     }
 
+    public async Task PasswordAuthenticate(string username, string password)
+    {
+        TaskCompletionSource passwordAuthenticateTask = new TaskCompletionSource();
+        var task = passwordAuthenticateTask.Task;
+
+        var future = Future.Create(_client);
+
+        NabtoClientNative.nabto_client_connection_password_authenticate(_handle, username, password, future.GetHandle());
+
+        var ec = await future.WaitAsync();
+        if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
+        {
+            return;
+        }
+        else
+        {
+            throw NabtoException.Create(ec);
+        }
+    }
+
     public int GetLocalChannelErrorCode()
     {
         return NabtoClientNative.nabto_client_connection_get_local_channel_error_code(GetHandle());

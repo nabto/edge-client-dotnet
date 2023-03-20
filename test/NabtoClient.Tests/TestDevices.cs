@@ -9,6 +9,8 @@ public class TestDevice {
     public string? Fingerprint { get; set; }
     public string? ServerConnectToken { get; set; }
 
+    public string? Password { get; set; }
+
     public ConnectionOptions GetConnectOptions() {
         return new ConnectionOptions {
             ProductId = ProductId,
@@ -33,5 +35,15 @@ public class TestDevices {
 
     public static TestDevice GetTcpTunnelDevice() {
         return new TestDevice { ProductId = "pr-fatqcwj9", DeviceId = "de-ijrdq47i", ServerUrl = "https://pr-fatqcwj9.clients.nabto.net", ServerKey = "sk-9c826d2ebb4343a789b280fe22b98305", ServerConnectToken = "WzwjoTabnvux" };
+    }
+
+
+    public static TestDevice GetPasswordAuthenticateDevice() {
+        return new TestDevice { ProductId = "pr-fatqcwj9",
+            DeviceId = "de-ijrdq47i",
+            ServerUrl = "https://pr-fatqcwj9.clients.nabto.net",
+            ServerKey = "sk-9c826d2ebb4343a789b280fe22b98305",
+            ServerConnectToken = "WzwjoTabnvux",
+            Password = "open-password" };
     }
 }

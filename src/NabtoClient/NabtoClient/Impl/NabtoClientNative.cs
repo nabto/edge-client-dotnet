@@ -118,6 +118,10 @@ public unsafe class NabtoClientNative
     public static extern void nabto_client_connection_close(IntPtr connection, IntPtr future);
 
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    public static extern void nabto_client_connection_password_authenticate(IntPtr connection, [MarshalAs(UnmanagedType.LPUTF8Str)] string username, [MarshalAs(UnmanagedType.LPUTF8Str)] string password, IntPtr future);
+
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     public static extern int nabto_client_connection_get_local_channel_error_code(IntPtr connection);
 
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]

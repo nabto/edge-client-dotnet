@@ -47,4 +47,22 @@ public class ConnectionTest {
         Assert.True(closed.Task.Result);
     }
 
+    [Fact]
+    public async Task TestPasswordAuthenticate()
+    {
+        var connected = new TaskCompletionSource<bool>();
+        var closed = new TaskCompletionSource<bool>();
+        var client = NabtoClient.Create();
+        //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
+        //var logger = loggerFactory.CreateLogger<NabtoClient>();
+        //client.SetLogger(logger);
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetPasswordAuthenticateDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        await connection.ConnectAsync();
+        await connection.PasswordAuthenticate("", device.Password);
+        await connection.CloseAsync();
+    }
+
 }

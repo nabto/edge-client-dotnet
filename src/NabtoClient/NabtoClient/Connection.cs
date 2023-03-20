@@ -46,6 +46,8 @@ public interface Connection
     public Task ConnectAsync();
     public Task CloseAsync();
 
+    public Task PasswordAuthenticate(string username, string password);
+
     public int GetLocalChannelErrorCode();
     public int GetRemoteChannelErrorCode();
     public int GetDirectCandidatesChannelErrorCode();
