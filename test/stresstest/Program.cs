@@ -89,7 +89,7 @@ class Program
 
     public static async Task Main(string[] args)
     {
-        System.Threading.Timer timer = new System.Threading.Timer(GcCallback, null, 200, 200);
+        //System.Threading.Timer timer = new System.Threading.Timer(GcCallback, null, 200, 200);
         var tasks = new List<Task>();
 
         for (int j = 0; j < 100; j++)
