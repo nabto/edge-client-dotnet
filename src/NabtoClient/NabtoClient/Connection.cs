@@ -27,19 +27,23 @@ public class ConnectionOptions {
 }
 
 /**
+ * <summary>
  * This interface represents a connection to a specific Nabto Edge device. The Connection object must
  * be kept alive for the duration of all streams, tunnels, and CoAP sessions created from it.
  *
- * Instances are created using `NabtoClient.createConnection()`.
+ * Instances are created using <c>NabtoClient.createConnection()</c>.
+ * </summary>
  */
 public interface Connection
 {
     /**
+     * <summary>
      * Connection events
      *
-     * - `Connected`: a connection is established
-     * - `Closed`: a connection is closed
-     * - `ChannelChanged`: the underlying channel has changed, e.g. from relay to p2p
+     * - <c>Connected</c>: a connection is established
+     * - <c>Closed</c>: a connection is closed
+     * - <c>ChannelChanged</c>: the underlying channel has changed, e.g. from relay to p2p
+     * </summary>
      */
     public enum ConnectionEvent {
         Connected,
@@ -48,147 +52,175 @@ public interface Connection
     }
 
     /**
+     * <summary>
      * ConnectionEvent delegate to receive connection events.
-     * @param e resulting ConnectionEvent
+     * </summary>
+     * <param name="e">resulting ConnectionEvent</param>
      */
     public delegate void ConnectionEventHandler(ConnectionEvent e);
 
-    /* TODO
+    /**
+     * <summary>
      * Set a ConnectionEventHandler to receive connection events.
-     * @param e resulting ConnectionEvent
+     * </summary>
+     * <value>Property <c>ConnectionEventHandlers</c> used to subscribe for connection events</value>
      */
     public ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
 
     /**
-     * Set connection options. Options must be set prior to invoking `connect()`.
+     * <summary>
+     * Set connection options. Options must be set prior to invoking <c>connect()</c>.
+     * </summary>
      *
-     * @param json The options to set as a JSON-string
-     * @throws INVALID_ARGUMENT if input is invalid
+     * <param name="json"> The options to set as a JSON-string</param>
+     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_ARGUMENT</c> if input is invalid</exception>
      */
     public void SetOptions(string json);
 
     /**
-     * Set connection options. Options must be set prior to invoking `connect()`.
+     * <summary>
+     * Set connection options. Options must be set prior to invoking <c>connect()</c>.
+     * </summary>
      *
-     * @param options The options to set as ConnectionOptions object
-     * @throws INVALID_ARGUMENT if input is invalid
+     * <param name="options"> The options to set as ConnectionOptions object</param>
+     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_ARGUMENT</c> if input is invalid</exception>
      */
     public void SetOptions(ConnectionOptions options);
 
 
     /**
+     * <summary>
      * Get the full fingerprint of the remote device public key. The fingerprint is used to validate
      * the identity of the remote device.
+     * </summary>
      *
-     * @throws INVALID_STATE if the connection is not established.
-     * @return The fingerprint encoded as hex.
+     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_STATE</c> if the connection is not established.</exception>
+     * <returns type="string">The fingerprint encoded as hex.</returns>
      */
     public string GetDeviceFingerprint();
 
     /**
+     * <summary>
      * Get the fingerprint of the client public key used for this connection.
-     * @throws INVALID_STATE if the connection is not established.
-     * @return The fingerprint encoded as hex.
+     * </summary>
+     * <returns>The fingerprint encoded as hex.</returns>
+     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_STATE</c> if the connection is not established.</exception>
      */
     public string GetClientFingerprint();
 
     /**
+     * <summary>
      * Establish this connection asynchronously.
      *
      * The returned task is completed with an error if an error occurs.
-     * - `UNAUTHORIZED` if the authentication options do not match the basestation configuration
+     * - <c>UNAUTHORIZED</c> if the authentication options do not match the basestation configuration
      * for this
-     * - `TOKEN_REJECTED` if the basestation could not validate the specified token
-     * - `STOPPED` if the client instance was stopped
-     * - `NO_CHANNELS` if all parameters input were accepted but a connection could not be
+     * - <c>TOKEN_REJECTED</c> if the basestation could not validate the specified token
+     * - <c>STOPPED</c> if the client instance was stopped
+     * - <c>NO_CHANNELS</c> if all parameters input were accepted but a connection could not be
      * established. Details about what went wrong are available as the
      * associated localError and remoteError.
-     * - `NO_CHANNELS.remoteError.NOT_ATTACHED` if the target remote device is not attached to the basestation
-     * - `NO_CHANNELS.remoteError.FORBIDDEN` if the basestation request is rejected
-     * - `NO_CHANNELS.remoteError.NONE` if remote relay was not enabled
-     * - `NO_CHANNELS.localError.NONE` if mDNS discovery was not enabled
-     * - `NO_CHANNELS.localError.NOT_FOUND` if no local device was found
+     * - <c>NO_CHANNELS.remoteError.NOT_ATTACHED</c> if the target remote device is not attached to the basestation
+     * - <c>NO_CHANNELS.remoteError.FORBIDDEN</c> if the basestation request is rejected
+     * - <c>NO_CHANNELS.remoteError.NONE</c> if remote relay was not enabled
+     * - <c>NO_CHANNELS.localError.NONE</c> if mDNS discovery was not enabled
+     * - <c>NO_CHANNELS.localError.NOT_FOUND</c> if no local device was found
+     * </summary>
      *
-     * @return Task completed when the connect attempt succeeds or fails.
+     * <returns>Task completed when the connect attempt succeeds or fails.</returns>
      */
     public Task ConnectAsync();
 
     /**
+     * <summary>
      * Close this connection asynchronously.
      *
      * The returned Task completes with an error if an error occurs.
-     * - `NabtoClientError` if an error occurs during close.
+     * - <c>NabtoClientError</c> if an error occurs during close.
+     * </summary>
      *
-     * @return Task completed when the close succeeds or fails.
+     * <returns>Task completed when the close succeeds or fails.</returns>
      */
     public Task CloseAsync();
 
     public Task PasswordAuthenticate(string username, string password);
 
     /**
+     * <summary>
      * Get underlying error code on local channel.
      *
      * Possible local channel error code are:
      *
-     * - `NOT_FOUND` if the device was not found locally
-     * - `NONE` if mDNS discovery was not enabled
+     * - <c>NOT_FOUND</c> if the device was not found locally
+     * - <c>NONE</c> if mDNS discovery was not enabled
+     * </summary>
      *
-     * @return the local channel error code
+     * <returns>the local channel error code</returns>
      */
     public int GetLocalChannelErrorCode();
 
     /**
+     * <summary>
      * Get underlying error code on remote channel.
      *
      * Possible remote channel error code are:
      *
-     * - `NOT_ATTACHED` if the target remote device is not attached to the basestation
-     * - `TIMEOUT` if a timeout occured when connecting to the basestation.
-     * - `FORBIDDEN` if the basestation request is rejected
-     * - `TOKEN_REJECTED` if the basestation rejected based on an invalid SCT or JWT
-     * - `DNS` if the server URL failed to resolve
-     * - `UNKNOWN_SERVER_KEY` if the provided server key was not known by the basestation
-     * - `UNKNOWN_PRODUCT_ID` if the provided product ID was not known by the basestation
-     * - `UNKNOWN_DEVICE_ID` if the provided device ID was not known by the basestation
-     * - `NONE` if remote relay was not enabled
+     * - <c>NOT_ATTACHED</c> if the target remote device is not attached to the basestation
+     * - <c>TIMEOUT</c> if a timeout occured when connecting to the basestation.
+     * - <c>FORBIDDEN</c> if the basestation request is rejected
+     * - <c>TOKEN_REJECTED</c> if the basestation rejected based on an invalid SCT or JWT
+     * - <c>DNS</c> if the server URL failed to resolve
+     * - <c>UNKNOWN_SERVER_KEY</c> if the provided server key was not known by the basestation
+     * - <c>UNKNOWN_PRODUCT_ID</c> if the provided product ID was not known by the basestation
+     * - <c>UNKNOWN_DEVICE_ID</c> if the provided device ID was not known by the basestation
+     * - <c>NONE</c> if remote relay was not enabled
+     * </summary>
      *
-     * @return the remote channel error code
+     * <returns>the remote channel error code</returns>
      */
     public int GetRemoteChannelErrorCode();
 
     /**
+     * <summary>
      * Get the direct channel error code.
      *
      * Possible direct channel error code are:
      *
-     * - `NOT_FOUND` if no responses was received on any added direct channels
-     * - `NONE` if direct channels was not enabled
+     * - <c>NOT_FOUND</c> if no responses was received on any added direct channels
+     * - <c>NONE</c> if direct channels was not enabled
+     * </summary>
      *
-     * @return the direct channel error code
+     * <returns>the direct channel error code</returns>
      */
     public int GetDirectCandidatesChannelErrorCode();
 
     /**
+     * <summary>
      * Create a coap request object. The returned CoapRequest object must be kept alive while in use.
+     * </summary>
      *
-     * @param method CoAP request method e.g. GET, POST or PUT
-     * @param path CoAP request path e.g. /hello-world
-     * @return the created CoapRequest object.
+     * <param name="method"> CoAP request method e.g. GET, POST or PUT</param>
+     * <param name="path"> CoAP request path e.g. /hello-world</param>
+     * <returns>the created CoapRequest object.</returns>
      */
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path);
 
     /**
+     * <summary>
      * Create stream. The returned Stream object must be kept alive while in use.
+     * </summary>
      *
-     * @return The created stream.
+     * <returns>The created stream.</returns>
      */
     public Nabto.Edge.Client.Stream CreateStream();
 
     /**
+     * <summary>
      * Create a TCP tunnel. The returned TcpTunnel object must be kept alive while in use.
+     * </summary>
      *
-     * @return The created TCP tunnel.
+     * <returns>The created TCP tunnel.</returns>
      */
     public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
 
