@@ -125,7 +125,7 @@ public class Connection : Nabto.Edge.Client.Connection
         int ec = NabtoClientNative.nabto_client_connection_set_options(_handle, json);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 
@@ -142,7 +142,7 @@ public class Connection : Nabto.Edge.Client.Connection
         int ec = NabtoClientNative.nabto_client_connection_get_device_fingerprint(_handle, out fingerprint);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return fingerprint;
     }
@@ -153,7 +153,7 @@ public class Connection : Nabto.Edge.Client.Connection
         int ec = NabtoClientNative.nabto_client_connection_get_client_fingerprint(_handle, out fingerprint);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return fingerprint;
     }
@@ -174,7 +174,7 @@ public class Connection : Nabto.Edge.Client.Connection
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 
@@ -194,7 +194,7 @@ public class Connection : Nabto.Edge.Client.Connection
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 
@@ -214,7 +214,7 @@ public class Connection : Nabto.Edge.Client.Connection
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 

@@ -38,7 +38,7 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
         string privateKey;
         int ec = NabtoClientNative.nabto_client_create_private_key(GetHandle(), out privateKey);
         if (ec != 0) {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return privateKey;
     }
@@ -79,7 +79,7 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
     {
         int ec = NabtoClientNative.nabto_client_set_log_level(GetHandle(), "trace");
         if (ec != 0) {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         _logCallback =  (IntPtr logMessage, IntPtr ptr) => {
             LogLevel l = NabtoLogLevelToLogLevel(NabtoClientNative.nabto_client_log_message_get_severity(logMessage));

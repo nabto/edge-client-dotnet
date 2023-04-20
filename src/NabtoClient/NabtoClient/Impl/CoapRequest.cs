@@ -54,7 +54,7 @@ public class CoapRequest : Nabto.Edge.Client.CoapRequest
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 }

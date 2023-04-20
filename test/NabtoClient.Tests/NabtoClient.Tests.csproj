@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\NabtoClient\NabtoClient.csproj" />
+    <ProjectReference Include="..\..\src\IamUtil\IamUtil.csproj" />
   </ItemGroup>
 
 </Project>

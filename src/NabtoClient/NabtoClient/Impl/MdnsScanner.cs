@@ -43,7 +43,7 @@ public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
         int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(), _listener.GetHandle(), _subtype);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         StartListen();
     }

@@ -88,7 +88,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 
@@ -121,7 +121,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
     public async Task<byte[]> ReadAllAsync(int bytes)
@@ -152,7 +152,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
     public async Task WriteAsync(byte[] data)
@@ -175,7 +175,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
     public async Task CloseAsync()
@@ -195,7 +195,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 }

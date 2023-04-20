@@ -48,7 +48,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
     public async Task CloseAsync()
@@ -68,7 +68,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         }
         else
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
     }
 
@@ -78,7 +78,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         int ec = NabtoClientNative.nabto_client_tcp_tunnel_get_local_port(_handle, out localPort);
         if (ec != NabtoClientNative.NABTO_CLIENT_EC_OK_value())
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return localPort;
     }
