@@ -36,15 +36,6 @@ public class ConnectionOptions {
  */
 public interface Connection
 {
-    /**
-     * <summary>
-     * Connection events
-     *
-     * - <c>Connected</c>: a connection is established
-     * - <c>Closed</c>: a connection is closed
-     * - <c>ChannelChanged</c>: the underlying channel has changed, e.g. from relay to p2p
-     * </summary>
-     */
     public enum ConnectionEvent {
         Connected,
         Closed,
@@ -54,6 +45,26 @@ public interface Connection
     /**
      * <summary>
      * ConnectionEvent delegate to receive connection events.
+     *
+     * Possible events are:
+     *
+     * <list type="bullet">
+     *   <item>
+     *     <description>
+     *       `Connected`: a connection is established
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *     `Closed`: a connection is closed
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *     `ChannelChanged`: the underlying channel has changed, e.g. from relay to p2p
+     *     </description>
+     *   </item>
+     * </list>
      * </summary>
      * <param name="e">resulting ConnectionEvent</param>
      */
@@ -63,7 +74,6 @@ public interface Connection
      * <summary>
      * Set a ConnectionEventHandler to receive connection events.
      * </summary>
-     * <value>Property <c>ConnectionEventHandlers</c> used to subscribe for connection events</value>
      */
     public ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
@@ -74,7 +84,7 @@ public interface Connection
      * </summary>
      *
      * <param name="json"> The options to set as a JSON-string</param>
-     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_ARGUMENT</c> if input is invalid</exception>
+     * <exception cref="NabtoException">Thrown with error code: `INVALID_ARGUMENT` if input is invalid</exception>
      */
     public void SetOptions(string json);
 
@@ -84,7 +94,7 @@ public interface Connection
      * </summary>
      *
      * <param name="options"> The options to set as ConnectionOptions object</param>
-     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_ARGUMENT</c> if input is invalid</exception>
+     * <exception cref="NabtoException">Thrown with error code: `INVALID_ARGUMENT` if input is invalid</exception>
      */
     public void SetOptions(ConnectionOptions options);
 
@@ -95,7 +105,7 @@ public interface Connection
      * the identity of the remote device.
      * </summary>
      *
-     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_STATE</c> if the connection is not established.</exception>
+     * <exception cref="NabtoException">Thrown with error code: `INVALID_STATE` if the connection is not established.</exception>
      * <returns type="string">The fingerprint encoded as hex.</returns>
      */
     public string GetDeviceFingerprint();
@@ -105,7 +115,7 @@ public interface Connection
      * Get the fingerprint of the client public key used for this connection.
      * </summary>
      * <returns>The fingerprint encoded as hex.</returns>
-     * <exception cref="NabtoException">Thrown with error code: <c>INVALID_STATE</c> if the connection is not established.</exception>
+     * <exception cref="NabtoException">Thrown with error code: `INVALID_STATE` if the connection is not established.</exception>
      */
     public string GetClientFingerprint();
 
@@ -114,18 +124,57 @@ public interface Connection
      * Establish this connection asynchronously.
      *
      * The returned task is completed with an error if an error occurs.
-     * - <c>UNAUTHORIZED</c> if the authentication options do not match the basestation configuration
-     * for this
-     * - <c>TOKEN_REJECTED</c> if the basestation could not validate the specified token
-     * - <c>STOPPED</c> if the client instance was stopped
-     * - <c>NO_CHANNELS</c> if all parameters input were accepted but a connection could not be
+     *
+     *
+     * <list type="bullet">
+     *   <item>
+     *     <description>
+     *       `UNAUTHORIZED`: If the authentication options do not match the basestation configuration for this
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `TOKEN_REJECTED`: If the basestation could not validate the specified token
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `STOPPED`: If the client instance was stopped
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NO_CHANNELS`: If all parameters input were accepted but a connection could not be
      * established. Details about what went wrong are available as the
      * associated localError and remoteError.
-     * - <c>NO_CHANNELS.remoteError.NOT_ATTACHED</c> if the target remote device is not attached to the basestation
-     * - <c>NO_CHANNELS.remoteError.FORBIDDEN</c> if the basestation request is rejected
-     * - <c>NO_CHANNELS.remoteError.NONE</c> if remote relay was not enabled
-     * - <c>NO_CHANNELS.localError.NONE</c> if mDNS discovery was not enabled
-     * - <c>NO_CHANNELS.localError.NOT_FOUND</c> if no local device was found
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NO_CHANNELS.remoteError.NOT_ATTACHED`: If the target remote device is not attached to the basestation
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NO_CHANNELS.remoteError.FORBIDDEN`: If the basestation request is rejected
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NO_CHANNELS.remoteError.NONE`: If remote relay was not enabled
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NO_CHANNELS.localError.NONE`: If mDNS discovery was not enabled
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NO_CHANNELS.localError.NOT_FOUND`: If no local device was found
+     *     </description>
+     *   </item>
+     * </list>
      * </summary>
      *
      * <returns>Task completed when the connect attempt succeeds or fails.</returns>
@@ -137,7 +186,13 @@ public interface Connection
      * Close this connection asynchronously.
      *
      * The returned Task completes with an error if an error occurs.
-     * - <c>NabtoClientError</c> if an error occurs during close.
+     * <list type="bullet">
+     *   <item>
+     *     <description>
+     *       `NabtoClientError`: If an error occurs during close.
+     *     </description>
+     *   </item>
+     * </list>
      * </summary>
      *
      * <returns>Task completed when the close succeeds or fails.</returns>
@@ -152,8 +207,18 @@ public interface Connection
      *
      * Possible local channel error code are:
      *
-     * - <c>NOT_FOUND</c> if the device was not found locally
-     * - <c>NONE</c> if mDNS discovery was not enabled
+     * <list type="bullet">
+     *   <item>
+     *     <description>
+     *       `NOT_FOUND`: If the device was not found locally
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NONE`: If mDNS discovery was not enabled
+     *     </description>
+     *   </item>
+     * </list>
      * </summary>
      *
      * <returns>the local channel error code</returns>
@@ -166,15 +231,53 @@ public interface Connection
      *
      * Possible remote channel error code are:
      *
-     * - <c>NOT_ATTACHED</c> if the target remote device is not attached to the basestation
-     * - <c>TIMEOUT</c> if a timeout occured when connecting to the basestation.
-     * - <c>FORBIDDEN</c> if the basestation request is rejected
-     * - <c>TOKEN_REJECTED</c> if the basestation rejected based on an invalid SCT or JWT
-     * - <c>DNS</c> if the server URL failed to resolve
-     * - <c>UNKNOWN_SERVER_KEY</c> if the provided server key was not known by the basestation
-     * - <c>UNKNOWN_PRODUCT_ID</c> if the provided product ID was not known by the basestation
-     * - <c>UNKNOWN_DEVICE_ID</c> if the provided device ID was not known by the basestation
-     * - <c>NONE</c> if remote relay was not enabled
+     * <list type="bullet">
+     *   <item>
+     *     <description>
+     *       `NOT_ATTACHED`: If the target remote device is not attached to the basestation
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `TIMEOUT`: If a timeout occured when connecting to the basestation.
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `FORBIDDEN`: If the basestation request is rejected
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `TOKEN_REJECTED`: If the basestation rejected based on an invalid SCT or JWT
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `DNS`: If the server URL failed to resolve
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `UNKNOWN_SERVER_KEY`: If the provided server key was not known by the basestation
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `UNKNOWN_PRODUCT_ID`: If the provided product ID was not known by the basestation
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `UNKNOWN_DEVICE_ID`: If the provided device ID was not known by the basestation
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NONE`: If remote relay was not enabled
+     *     </description>
+     *   </item>
+     * </list>
      * </summary>
      *
      * <returns>the remote channel error code</returns>
@@ -187,8 +290,18 @@ public interface Connection
      *
      * Possible direct channel error code are:
      *
-     * - <c>NOT_FOUND</c> if no responses was received on any added direct channels
-     * - <c>NONE</c> if direct channels was not enabled
+     * <list type="bullet">
+     *   <item>
+     *     <description>
+     *       `NOT_FOUND`: If no responses was received on any added direct channels
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NONE`: If direct channels was not enabled
+     *     </description>
+     *   </item>
+     * </list>
      * </summary>
      *
      * <returns>the direct channel error code</returns>
