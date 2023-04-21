@@ -34,35 +34,24 @@ public class Pairing {
 
         var response = await coapRequest.ExecuteAsync();
 
-        var statusCode = response.GetResponseStatusCode();
-        // TODO
-
-        return;
+        HandlePairingResponse(response);
     }
 
     public static async Task PairInvitePasswordAsync(Nabto.Edge.Client.Connection connection, string username, string password)
     { 
-        // TODO
-    }
-
-    private static async Task<IamError> CoapPairPasswordOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername)
-    { 
-        var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/password-open");
-
-        var cbor = CBORObject.NewMap().Add("Username", desiredUsername);
-
-        coapRequest.SetRequestPayload((ushort)CoapContentFormat.APPLICATION_CBOR, cbor.EncodeToBytes());
-
-        var response = await coapRequest.ExecuteAsync();
-        var statusCode = response.GetResponseStatusCode();
-        switch (statusCode) { 
-            case 201: return IamError.NONE;
-            case 400: return IamError.INVALID_INPUT;
-            case 403: return IamError.BLOCKED_BY_DEVICE_CONFIGURATION;
-            case 404: return IamError.PAIRING_MODE_DISABLED;
-            case 409: return IamError.USERNAME_EXISTS;
-            default: return IamError.FAILED;
+        try
+        {
+            await connection.PasswordAuthenticate(username, password);
+        } catch (NabtoException e) {
+            if (e.ErrorCode == NabtoClientError.UNAUTHORIZED) {
+                throw new IamException(IamError.AUTHENTICATION_ERROR);
+            }
+            throw;
         }
+
+        var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/password-invite");
+        var response = await coapRequest.ExecuteAsync();
+        HandlePairingResponse(response);
     }
 
     public static async Task PairPasswordOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername, string password)
@@ -76,11 +65,14 @@ public class Pairing {
             }
             throw;
         }
+       
+        var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/password-open");
 
-        var iamError = await CoapPairPasswordOpenAsync(connection, desiredUsername);
+        var cbor = CBORObject.NewMap().Add("Username", desiredUsername);
 
-        if (iamError != IamError.NONE) {
-            throw new IamException(iamError);
-        }
+        coapRequest.SetRequestPayload((ushort)CoapContentFormat.APPLICATION_CBOR, cbor.EncodeToBytes());
+
+        var response = await coapRequest.ExecuteAsync();
+        HandlePairingResponse(response);
     }
 }

@@ -78,12 +78,10 @@ public class IamUtil
         return IamUtilImpl.GetCurrentUserAsync(connection);
     }
 
-
     public static Task<IamUser> GetUserAsync(Nabto.Edge.Client.Connection connection, string username)
     {
         return IamUtilImpl.GetUserAsync(connection, username);
     }
-
     
     // Update user settings
     public static Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.Connection connection, string username, string displayName)
@@ -97,14 +95,10 @@ public class IamUtil
         return null;
     }
 
-
     public static Task UpdateUserFingerprintAsync(Nabto.Edge.Client.Connection connection, string username, string fingerprint)
     {
         return UserSettings.UpdateUserFingerprintAsync(connection, username, fingerprint);
     }
-
-    
-
 
     public static Task UpdateUserNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection, string username, List<string> categories)
     {
