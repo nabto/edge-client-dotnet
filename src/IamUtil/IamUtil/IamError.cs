@@ -25,6 +25,11 @@ public enum IamError
     USER_DOES_NOT_EXIST,
 
     /**
+     * The operation referenced an user or role which does not exists
+     */
+    USER_OR_ROLE_DOES_NOT_EXISTS,
+
+    /**
      * The operation referenced a role on the device that does not exist.
      */
     ROLE_DOES_NOT_EXIST,
@@ -51,9 +56,19 @@ public enum IamError
     IAM_NOT_SUPPORTED,
 
     /**
-     * The client could be authenticated towards the device using the specified credentials.
+     * The client could not be authenticated towards the device using the specified credentials.
      */
     AUTHENTICATION_ERROR,
+
+    /**
+     * The client is not allowed to do the requested operation. Improve the Authentication of the client or change the authorization requirements in the device.
+     */
+    FORBIDDEN,
+
+    /**
+     * A fingerprint is already in use for another user so it cannot be set on the current user.
+     */
+    FINGERPRINT_IN_USE,
 
     /**
      * Something unspecified failed.
