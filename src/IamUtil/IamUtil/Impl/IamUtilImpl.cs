@@ -65,8 +65,7 @@ public class IamUtilImpl {
 
         var responseFormat = response.GetResponseContentFormat();
         if (responseFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
-            // TODO throw a parse error or data format error
-            throw new IamException(IamError.FAILED);
+            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
         }
         var data = response.GetResponsePayload();
         
@@ -104,7 +103,7 @@ public class IamUtilImpl {
 
         var contentFormat = response.GetResponseContentFormat();
         if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.FAILED);
+            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
         }
 
         var data = response.GetResponsePayload();
@@ -134,7 +133,7 @@ public class IamUtilImpl {
 
         var contentFormat = response.GetResponseContentFormat();
         if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.FAILED);
+            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
         }
 
         var data = response.GetResponsePayload();

@@ -62,7 +62,7 @@ public class IamException : Exception
         switch (statusCode) { 
             case 400: throw new IamException(IamError.INVALID_INPUT, r);
             case 401: throw new IamException(IamError.AUTHENTICATION_ERROR, r);
-            case 403: throw new IamException(IamError. AUTHENTICATION_ERROR, r);
+            case 403: throw new IamException(IamError.AUTHENTICATION_ERROR, r);
             default: throw new IamException(IamError.FAILED, r, statusCode);
         }
     }

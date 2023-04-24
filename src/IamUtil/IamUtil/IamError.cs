@@ -71,6 +71,11 @@ public enum IamError
     FINGERPRINT_IN_USE,
 
     /**
+     * The response cannot be parsed.
+     */
+    CANNOT_PARSE_RESPONSE,
+
+    /**
      * Something unspecified failed.
      */
     FAILED

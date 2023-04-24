@@ -42,22 +42,22 @@ public class IamUtil
 
     public static Task<IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.Connection connection)
     {
-        return null;
+        return Nabto.Edge.Client.Impl.IamSettings.GetIamSettingsAsync(connection);
     }
 
     public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
     {
-        return null;
+        return Nabto.Edge.Client.Impl.IamSettings.UpdateIamSettingsPasswordOpenPairingAsync(connection, enabled);
     }
 
     public static Task UpdateIamSettingsPasswordInvitePairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
     {
-        return null;
+        return Nabto.Edge.Client.Impl.IamSettings.UpdateIamSettingsPasswordInvitePairingAsync(connection, enabled);
     }
 
     public static Task UpdateIamSettingsLocalOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
     {
-        return null;
+        return Nabto.Edge.Client.Impl.IamSettings.UpdateIamSettingsLocalOpenPairingAsync(connection, enabled);
     }
 
     // list roles and notification categories
