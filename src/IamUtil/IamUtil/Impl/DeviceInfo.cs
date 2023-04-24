@@ -69,7 +69,7 @@ public class DeviceInfo
             throw new IamException(IamError.IAM_NOT_SUPPORTED);
         }
 
-        IamException.HandleDefaultCoap(response);
+        IamExceptionImpl.HandleDefaultCoap(response);
 
         ushort contentFormat = response.GetResponseContentFormat();
         if (contentFormat != CoapContentFormat.APPLICATION_CBOR) {
@@ -88,7 +88,7 @@ public class DeviceInfo
         coapRequest.SetRequestPayload(CoapContentFormat.APPLICATION_CBOR, value.EncodeToBytes());
 
         var response = await coapRequest.ExecuteAsync();
-        IamException.HandleDefaultCoap(response);
+        IamExceptionImpl.HandleDefaultCoap(response);
     }
 
     public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName) {
@@ -99,14 +99,8 @@ public class DeviceInfo
     { 
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
         var response = await coapRequest.ExecuteAsync();
-        
-        var statusCode = response.GetResponseStatusCode();
-        switch (statusCode) { 
-            case 205: break;
-            case 400: throw new IamException(IamError.INVALID_INPUT);
-            case 403: throw new IamException(IamError.BLOCKED_BY_DEVICE_CONFIGURATION);
-            default: throw new IamException(IamError.FAILED);
-        }
+
+        IamExceptionImpl.HandleDefaultCoap(response);
 
         var contentFormat = response.GetResponseContentFormat();
         if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
@@ -129,14 +123,8 @@ public class DeviceInfo
     { 
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
         var response = await coapRequest.ExecuteAsync();
-        
-        var statusCode = response.GetResponseStatusCode();
-        switch (statusCode) { 
-            case 205: break;
-            case 400: throw new IamException(IamError.INVALID_INPUT);
-            case 403: throw new IamException(IamError.BLOCKED_BY_DEVICE_CONFIGURATION);
-            default: throw new IamException(IamError.FAILED);
-        }
+
+        IamExceptionImpl.HandleDefaultCoap(response);
 
         var contentFormat = response.GetResponseContentFormat();
         if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {

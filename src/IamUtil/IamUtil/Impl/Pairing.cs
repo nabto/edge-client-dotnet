@@ -9,11 +9,11 @@ public class Pairing {
 
         switch (statusCode) { 
             case 201: break;
-            case 400: throw new IamException(IamError.INVALID_INPUT, response);
-            case 403: throw new IamException(IamError.BLOCKED_BY_DEVICE_CONFIGURATION, response);
-            case 404: throw new IamException(IamError.PAIRING_MODE_DISABLED, response);
-            case 409: throw new IamException(IamError.USERNAME_EXISTS, response);
-            default: throw new IamException(IamError.FAILED, response, statusCode);
+            case 400: throw IamExceptionImpl.Create(IamError.INVALID_INPUT, response);
+            case 403: throw IamExceptionImpl.Create(IamError.BLOCKED_BY_DEVICE_CONFIGURATION, response);
+            case 404: throw IamExceptionImpl.Create(IamError.PAIRING_MODE_DISABLED, response);
+            case 409: throw IamExceptionImpl.Create(IamError.USERNAME_EXISTS, response);
+            default: throw IamExceptionImpl.Create(IamError.FAILED, response, statusCode);
         }
     }
 

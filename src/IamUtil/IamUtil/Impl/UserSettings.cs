@@ -21,8 +21,8 @@ public class UserSettings
 
         switch (statusCode)
         {
-            case 404: throw new IamException(IamError.USER_DOES_NOT_EXIST, response);
-            default: IamException.HandleDefaultCoap(response); break;
+            case 404: throw IamExceptionImpl.Create(IamError.USER_DOES_NOT_EXIST, response);
+            default: IamExceptionImpl.HandleDefaultCoap(response); break;
         }
     }
 
@@ -44,7 +44,7 @@ public class UserSettings
     public static async Task UpdateUserFingerprintAsync(Nabto.Edge.Client.Connection connection, string username, string fingerprint)
     {
 
-        await UpdateUserSettingAsync(connection, username, "fingerprint", CBORObject.FromObject(fingerprint), (statusCode, response) => { if (statusCode == 409) { throw new IamException(IamError.FINGERPRINT_IN_USE, response); } });
+        await UpdateUserSettingAsync(connection, username, "fingerprint", CBORObject.FromObject(fingerprint), (statusCode, response) => { if (statusCode == 409) { throw IamExceptionImpl.Create(IamError.FINGERPRINT_IN_USE, response); } });
     }
 
     public static async Task UpdateUserNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection, string username, List<string> categories)
@@ -66,7 +66,7 @@ public class UserSettings
 
     public static async Task UpdateUserRoleAsync(Nabto.Edge.Client.Connection connection, string username, string role)
     {
-        await UpdateUserSettingAsync(connection, username, "role", CBORObject.FromObject(role), (statusCode, response) => { if (statusCode == 404) { throw new IamException(IamError.USER_OR_ROLE_DOES_NOT_EXISTS, response); } });
+        await UpdateUserSettingAsync(connection, username, "role", CBORObject.FromObject(role), (statusCode, response) => { if (statusCode == 404) { throw IamExceptionImpl.Create(IamError.USER_OR_ROLE_DOES_NOT_EXISTS, response); } });
     }
     public static async Task UpdateUserSctAsync(Nabto.Edge.Client.Connection connection, string username, string sct)
     {

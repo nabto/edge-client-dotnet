@@ -15,8 +15,8 @@ public class User {
         var statusCode = response.GetResponseStatusCode();
 
         switch (statusCode) {
-            case 409: throw new IamException(IamError.USERNAME_EXISTS, response);
-            default: IamException.HandleDefaultCoap(response); break;
+            case 409: throw IamExceptionImpl.Create(IamError.USERNAME_EXISTS, response);
+            default: IamExceptionImpl.HandleDefaultCoap(response); break;
         }
 
 
@@ -30,8 +30,8 @@ public class User {
         var statusCode = response.GetResponseStatusCode();
 
         switch (statusCode) {
-            case 404: throw new IamException(IamError.USER_DOES_NOT_EXIST, response);
-            default: IamException.HandleDefaultCoap(response); break;
+            case 404: throw IamExceptionImpl.Create(IamError.USER_DOES_NOT_EXIST, response);
+            default: IamExceptionImpl.HandleDefaultCoap(response); break;
         }
     }
 
@@ -96,13 +96,11 @@ public class User {
     { 
         var response = await coapRequest.ExecuteAsync();
         var statusCode = response.GetResponseStatusCode();
-        switch (statusCode) { 
-            case 205: break;
-            case 400: throw new IamException(IamError.INVALID_INPUT);
-            case 403: throw new IamException(IamError.BLOCKED_BY_DEVICE_CONFIGURATION);
-            case 404: throw new IamException(IamError.USER_DOES_NOT_EXIST);
-            default: throw new IamException(IamError.FAILED);
+
+        if (statusCode == 404) { 
+            throw new IamException(IamError.USER_DOES_NOT_EXIST);
         }
+        IamExceptionImpl.HandleDefaultCoap(response);
 
         var responseFormat = response.GetResponseContentFormat();
         if (responseFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {

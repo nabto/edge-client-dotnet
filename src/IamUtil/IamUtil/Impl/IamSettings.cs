@@ -46,7 +46,7 @@ public class IamSettings {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/settings");
         var response = await coapRequest.ExecuteAsync();
 
-        IamException.HandleDefaultCoap(response);
+        IamExceptionImpl.HandleDefaultCoap(response);
 
         var contentFormat = response.GetResponseContentFormat();
         if (contentFormat != CoapContentFormat.APPLICATION_CBOR) {
@@ -65,7 +65,7 @@ public class IamSettings {
         coapRequest.SetRequestPayload(CoapContentFormat.APPLICATION_CBOR, value.EncodeToBytes());
 
         var response = await coapRequest.ExecuteAsync();
-        IamException.HandleDefaultCoap(response);
+        IamExceptionImpl.HandleDefaultCoap(response);
     }
 
     public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
