@@ -1,6 +1,7 @@
 namespace Nabto.Edge.Client;
 
 /**
+ * <summary>
  * The TCP Tunnel API.
  *
  * The TCP Tunnel API is a high level wrapper for streaming, allowing applications to tunnel traffic
@@ -16,36 +17,63 @@ namespace Nabto.Edge.Client;
  *
  * TCP Tunnel instances are created using the Connection.createTcpTunnel() factory method.
  * The TcpTunnel object must be kept alive while in use.
+ * </summary>
  */
 public interface TcpTunnel {
 
     /**
+     * <summary>
      * Open this tunnel without blocking. The returned task can fail with:
-     * - `FORBIDDEN` if the device did not allow opening the tunnel.
-     * - `STOPPED` if the tunnel or a parent object is stopped.
-     * - `NOT_CONNECTED` if the connection is not established yet.
+     * <list type="bullet">
+     * <item>
+     *   <description>
+     *     `FORBIDDEN` if the device did not allow opening the tunnel.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `STOPPED` if the tunnel or a parent object is stopped.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `NOT_CONNECTED` if the connection is not established yet.
+     *   </description>
+     * </item>
+     * </list>
      *
-     * @param service The service to connect to on the remote device (as defined in the device's
+     * </summary>
+     * <param name="service"> The service to connect to on the remote device (as defined in the device's</param>
      * configuration), e.g. "http", "http-admin", "ssh", "rtsp".
-     * @param localPort The local port to listen on. If 0 is specified, an ephemeral port is used,
+     * <param name="localPort"> The local port to listen on. If 0 is specified, an ephemeral port is used,</param>
      * it can be retrieved with `getLocalPort()`.
-     * @return The Task that will complete once the tunnel is opened.
+     * <returns>
+     *     The Task that will complete once the tunnel is opened.
+     * </returns>
      */
     public Task OpenAsync(string service, ushort localPort);
 
 
     /**
+     * <summary>
      * Close a tunnel without blocking.
      *
-     * @return The Task that will complete once the tunnel is closed.
+     * </summary>
+     * <returns>
+     *     The Task that will complete once the tunnel is closed.
+     * </returns>
      */
     public Task CloseAsync();
 
     /**
+     * <summary>
      * Get the local port which the tunnel is bound to.
      *
-     * @throws NabtoException with error code `INVALID_STATE` if the tunnel is not open.
-     * @return the local port number used.
+     * </summary>
+     * <exception cref="NabtoException">NabtoException with error code `INVALID_STATE` if the tunnel is not open.</exception>
+     * <returns>
+     *     the local port number used.
+     * </returns>
      */
     public ushort GetLocalPort();
 }

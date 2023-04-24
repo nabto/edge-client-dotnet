@@ -1,6 +1,7 @@
 namespace Nabto.Edge.Client;
 
 /**
+ * <summary>
  * The Stream API.
  *
  * The Streaming API enables socket-like communication between client and device. The stream is
@@ -10,54 +11,110 @@ namespace Nabto.Edge.Client;
  * Stream instances are created using the Connection.createStream() factory method.
  * The Stream object must be kept alive while in use.
  *
+ * </summary>
  */
 public interface Stream {
 
     /**
+     * <summary>
      * Open a stream async.
      * The returned task can fail with
-     * - `STOPPED` if the stream or a parent object was stopped.
-     * - `NOT_CONNECTED` if the connection is not established yet.
+     * <list type="bullet">
+     * <item>
+     *   <description>
+     *     `STOPPED` if the stream or a parent object was stopped.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `NOT_CONNECTED` if the connection is not established yet.
+     *   </description>
+     * </item>
+     * </list>
      *
-     * @param streamPort  The streamPort to use on the remote server, a
+     * </summary>
+     * <param name="streamPort">  The streamPort to use on the remote server, a</param>
      * streamPort is a demultiplexing id.
-     * @return The Task that will complete once the stream is opened.
+     * <returns>
+     *     The Task that will complete once the stream is opened.
+     * </returns>
      */
     public Task OpenAsync(UInt32 port);
 
     /**
+     * <summary>
      * Read some bytes from a stream without blocking.
      * The returned Task can fail with:
-     * - `STOPPED` if the stream was stopped.
-     * - `OPERATION_IN_PROGRESS` if another read is in progress.
-     * - `EOF` if eof is reached
+     * <list type="bullet">
+     * <item>
+     *   <description>
+     *     `STOPPED` if the stream was stopped.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `OPERATION_IN_PROGRESS` if another read is in progress.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `EOF` if eof is reached
+     *   </description>
+     * </item>
+     * </list>
      *
-     * @param max The max number of bytes to read
-     * @return The Task that will complete when the bytes are ready.
+     * </summary>
+     * <param name="max"> The max number of bytes to read</param>
+     * <returns>
+     *     The Task that will complete when the bytes are ready.
+     * </returns>
      */
     public Task<byte[]> ReadSomeAsync(int max);
 
     /**
+     * <summary>
      * Read an exact amount of bytes from a stream.
      * The returned Task can fail with:
-     * - `STOPPED` if the stream was stopped.
-     * - `OPERATION_IN_PROGRESS` if another read is in progress.
-     * - `EOF` if eof is reached
+     * <list type="bullet">
+     * <item>
+     *   <description>
+     *     `STOPPED` if the stream was stopped.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `OPERATION_IN_PROGRESS` if another read is in progress.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `EOF` if eof is reached
+     *   </description>
+     * </item>
+     * </list>
      *
-     * @param bytes The number of bytes to read
-     * @return The Task that will complete when the bytes are ready.
+     * </summary>
+     * <param name="bytes"> The number of bytes to read</param>
+     * <returns>
+     *     The Task that will complete when the bytes are ready.
+     * </returns>
      */
     public Task<byte[]> ReadAllAsync(int bytes);
 
     /**
+     * <summary>
      * Write bytes to a stream.
      *
-     * @param bytes  The bytes to write to the stream.
-     * @return The Task that will complete once the operation is done.
+     * </summary>
+     * <param name="bytes">  The bytes to write to the stream.</param>
+     * <returns>
+     *     The Task that will complete once the operation is done.
+     * </returns>
      */
     public Task WriteAsync(byte[] data);
 
     /**
+     * <summary>
      * Close the write direction of the stream. This will make the
      * other end reach end of file when reading from a stream when all
      * sent data has been received and acknowledged.
@@ -66,11 +123,28 @@ public interface Stream {
      * stream.
      *
      * Close can fail with the with:
-     * - `STOPPED` if the stream is stopped.
-     * - `OPERATION_IN_PROGRESS` if another stop is in progress.
-     * - `INVALID_STATE` if the stream is not opened yet.
+     * <list type="bullet">
+     * <item>
+     *   <description>
+     *     `STOPPED` if the stream is stopped.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `OPERATION_IN_PROGRESS` if another stop is in progress.
+     *   </description>
+     * </item>
+     * <item>
+     *   <description>
+     *     `INVALID_STATE` if the stream is not opened yet.
+     *   </description>
+     * </item>
+     * </list>
      *
-     * @return The Task that will complete once the operation is done.
+     * </summary>
+     * <returns>
+     *     The Task that will complete once the operation is done.
+     * </returns>
      */
     public Task CloseAsync();
 }

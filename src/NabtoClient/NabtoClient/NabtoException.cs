@@ -1,7 +1,9 @@
 namespace Nabto.Edge.Client;
 
 /**
+ * <summary>
  * Base class for Nabto specific exceptions.
+ * </summary>
  */
 public class NabtoException : Exception
 {
@@ -20,7 +22,9 @@ public class NabtoException : Exception
 }
 
 /**
+ * <summary>
  * This exception is thrown from a function requiring a Connection to be connected but it was not.
+ * </summary>
  */
 public class NotConnectedException : Exception {
     public NotConnectedException() :

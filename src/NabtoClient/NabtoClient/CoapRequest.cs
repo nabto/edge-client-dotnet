@@ -1,6 +1,7 @@
 namespace Nabto.Edge.Client;
 
 /**
+ * <summary>
  * This interface represents a CoAP request on an open connection, ready to be executed.
  *
  * Instances are created using createCoapRequest() function on the Connection class.
@@ -8,18 +9,22 @@ namespace Nabto.Edge.Client;
  *
  * See https://docs.nabto.com/developer/guides/get-started/coap/intro.html for info about Nabto Edge
  * CoAP.
+ * </summary>
  */
  public interface CoapRequest {
 
     /**
+     * <summary>
      * Set payload and content format for the payload.
-     * @param contentFormat See https://www.iana.org/assignments/core-parameters/core-parameters.xhtml, some often used values are defined in ContentFormat.
-     * @param data Data for the request encoded as specified in the `contentFormat` parameter.
-     * @throws NabtoEdgeClientError.FAILED if payload could not be set
+     * </summary>
+     * <param name="contentFormat"> See https://www.iana.org/assignments/core-parameters/core-parameters.xhtml, some often used values are defined in ContentFormat.</param>
+     * <param name="data"> Data for the request encoded as specified in the `contentFormat` parameter.</param>
+     * <exception cref="NabtoException">FAILED if payload could not be set</exception>
      */
     public void SetRequestPayload(ushort contentFormat, byte[] data);
 
     /**
+     * <summary>
      * Execute a CoAP request asynchronously.
      *
      * The specified closure is invoked when the response is ready or an early error occurs.
@@ -30,7 +35,10 @@ namespace Nabto.Edge.Client;
      * If an early error occurs, the first parameter is set to an appropriate NabtoEdgeClientError
      * and the second parameter is nil.
      *
-     * @return Task which completes with a CoapResponse when the async operation completes
+     * </summary>
+     * <returns>
+     *     Task which completes with a CoapResponse when the async operation completes
+     * </returns>
      */
     public Task<CoapResponse> ExecuteAsync();
 }
