@@ -27,15 +27,14 @@ public class IamUtil
 
     // Get and set device details
 
-    public static Task<DeviceDetails> GetDeviceDetails(Nabto.Edge.Client.Connection connection)
+    public static Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.Connection connection)
     {
-        // TODO
-        return null;
+        return DeviceInfo.GetDeviceDetailsAsync(connection);
     }
 
-    public static Task UpdateDeviceFriendlyName(Nabto.Edge.Client.Connection connection, string friendlyName) 
+    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName) 
     {
-        return null;
+        return DeviceInfo.UpdateDeviceFriendlyNameAsync(connection, friendlyName);
     }
 
     // get set iam settings
