@@ -28,7 +28,7 @@ public class IamException : Exception
                 var payload = r.GetResponsePayload();
                 var s = Encoding.Default.GetString(payload);
                 return e.ToString() + ". Details: " + s + ".";
-            } catch (NabtoException ne) {
+            } catch {
             }
         }
 

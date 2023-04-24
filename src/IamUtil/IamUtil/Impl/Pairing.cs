@@ -22,6 +22,11 @@ public class Pairing {
         var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/local-initial");
         var response = await coapRequest.ExecuteAsync();
 
+        var statusCode = response.GetResponseStatusCode();
+        if (statusCode == 409) {
+            throw new IamException(IamError.INITIAL_USER_ALREADY_PAIRED);
+        }
+
         HandlePairingResponse(response);
     }
 

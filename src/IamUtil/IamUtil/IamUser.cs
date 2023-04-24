@@ -15,5 +15,5 @@ public class IamUser {
 
     public Fcm? Fcm { get; set; }
 
-    public List<string> NotificationCategories { get; set; }
+    public List<string>? NotificationCategories { get; set; }
 }

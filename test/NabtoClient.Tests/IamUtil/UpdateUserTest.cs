@@ -28,6 +28,21 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     }
 
     [Fact]
+    public async Task UpdateUserFcm()
+    {
+        var projectId = TestUtil.RandomString(10);
+        var token = TestUtil.RandomString(10);
+        await IamUtil.UpdateUserFcmAsync(_connection, _testUser1, projectId, token);
+
+        var updatedUser = await IamUtil.GetUserAsync(_connection, _testUser1);
+
+        Assert.NotNull(updatedUser.Fcm);
+        Assert.Equal(projectId, updatedUser.Fcm.ProjectId);
+        Assert.Equal(token, updatedUser.Fcm.Token);
+    }
+
+
+    [Fact]
     public async Task UpdateUserFingerprint()
     {
         var newFingerprint = TestUtil.RandomFingerprint();
@@ -57,6 +72,7 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
 
         var user = await IamUtil.GetUserAsync(_connection, _testUser1);
 
+        Assert.NotNull(user.NotificationCategories);
         Assert.Empty(user.NotificationCategories);
     }
 

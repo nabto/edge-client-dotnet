@@ -26,9 +26,19 @@ public class UserSettings
         }
     }
 
+
+
     public static async Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.Connection connection, string username, string displayName)
     {
         await UpdateUserSettingAsync(connection, username, "display-name", CBORObject.FromObject(displayName));
+    }
+
+    public static async Task UpdateUserFcmAsync(Nabto.Edge.Client.Connection connection, string username, string fcmProjectId, string fcmToken)
+    {
+        CBORObject o = CBORObject.NewMap();
+        o["ProjectId"] = CBORObject.FromObject(fcmProjectId);
+        o["Token"] = CBORObject.FromObject(fcmToken);
+        await UpdateUserSettingAsync(connection, username, "fcm", o);
     }
 
     public static async Task UpdateUserFingerprintAsync(Nabto.Edge.Client.Connection connection, string username, string fingerprint)

@@ -15,6 +15,7 @@ public class GetUserTest
         Assert.NotNull(user.Role);
         Assert.NotNull(user.Sct);
         Assert.Equal(user.Fingerprint, iamConnection.Connection.GetClientFingerprint());
+        Assert.NotNull(user.NotificationCategories);
         Assert.Empty(user.NotificationCategories);
     }
 

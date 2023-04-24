@@ -63,6 +63,12 @@ public class DeviceInfo
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/pairing");
         var response = await coapRequest.ExecuteAsync();
+
+        var statusCode = response.GetResponseStatusCode();
+        if (statusCode == 404) {
+            throw new IamException(IamError.IAM_NOT_SUPPORTED);
+        }
+
         IamException.HandleDefaultCoap(response);
 
         ushort contentFormat = response.GetResponseContentFormat();
@@ -87,5 +93,65 @@ public class DeviceInfo
 
     public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName) {
         return UpdateDeviceInfoAsync(connection, "friendly-name", CBORObject.FromObject(friendlyName));
+    }
+
+     public static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
+    { 
+        var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
+        var response = await coapRequest.ExecuteAsync();
+        
+        var statusCode = response.GetResponseStatusCode();
+        switch (statusCode) { 
+            case 205: break;
+            case 400: throw new IamException(IamError.INVALID_INPUT);
+            case 403: throw new IamException(IamError.BLOCKED_BY_DEVICE_CONFIGURATION);
+            default: throw new IamException(IamError.FAILED);
+        }
+
+        var contentFormat = response.GetResponseContentFormat();
+        if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
+            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
+        }
+
+        var data = response.GetResponsePayload();
+
+        CBORObject cborObject = CBORObject.DecodeFromBytes(data);
+        List<string> roles = new List<string>();
+        foreach (CBORObject i in cborObject.Values) {
+            roles.Add(i.AsString());
+        }
+
+        return roles;
+
+    }
+
+    public static async Task<List<string>> ListNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
+    { 
+        var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
+        var response = await coapRequest.ExecuteAsync();
+        
+        var statusCode = response.GetResponseStatusCode();
+        switch (statusCode) { 
+            case 205: break;
+            case 400: throw new IamException(IamError.INVALID_INPUT);
+            case 403: throw new IamException(IamError.BLOCKED_BY_DEVICE_CONFIGURATION);
+            default: throw new IamException(IamError.FAILED);
+        }
+
+        var contentFormat = response.GetResponseContentFormat();
+        if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
+            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
+        }
+
+        var data = response.GetResponsePayload();
+
+        CBORObject cborObject = CBORObject.DecodeFromBytes(data);
+        List<string> roles = new List<string>();
+        foreach (CBORObject i in cborObject.Values) {
+            roles.Add(i.AsString());
+        }
+
+        return roles;
+
     }
 };

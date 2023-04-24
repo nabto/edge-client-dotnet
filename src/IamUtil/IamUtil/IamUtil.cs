@@ -63,23 +63,23 @@ public class IamUtil
 
     public static Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
     {
-        return IamUtilImpl.ListRolesAsync(connection);
+        return DeviceInfo.ListRolesAsync(connection);
     }
     public static Task<List<string>> ListNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
     {
-        return IamUtilImpl.ListNotificationCategoriesAsync(connection);
+        return DeviceInfo.ListNotificationCategoriesAsync(connection);
     }
 
 
     // user management
     public static Task<IamUser> GetCurrentUserAsync(Nabto.Edge.Client.Connection connection)
     {
-        return IamUtilImpl.GetCurrentUserAsync(connection);
+        return User.GetCurrentUserAsync(connection);
     }
 
     public static Task<IamUser> GetUserAsync(Nabto.Edge.Client.Connection connection, string username)
     {
-        return IamUtilImpl.GetUserAsync(connection, username);
+        return User.GetUserAsync(connection, username);
     }
     
     // Update user settings
@@ -90,8 +90,7 @@ public class IamUtil
 
     public static Task UpdateUserFcmAsync(Nabto.Edge.Client.Connection connection, string username, string fcmProjectId, string fcmToken)
     {
-        // TODO
-        return null;
+        return UserSettings.UpdateUserFcmAsync(connection, username, fcmProjectId, fcmToken);
     }
 
     public static Task UpdateUserFingerprintAsync(Nabto.Edge.Client.Connection connection, string username, string fingerprint)
