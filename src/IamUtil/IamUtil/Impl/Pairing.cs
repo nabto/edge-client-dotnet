@@ -1,13 +1,14 @@
-namespace Nabto.Edge.Client.Impl;
+namespace Nabto.Edge.ClientIam.Impl;
 
 using PeterO.Cbor;
+using Nabto.Edge.Client;
 
-public class Pairing { 
-    private static void HandlePairingResponse(Nabto.Edge.Client.CoapResponse response) 
-    { 
+public class Pairing {
+    private static void HandlePairingResponse(Nabto.Edge.Client.CoapResponse response)
+    {
         var statusCode = response.GetResponseStatusCode();
 
-        switch (statusCode) { 
+        switch (statusCode) {
             case 201: break;
             case 400: throw IamExceptionImpl.Create(IamError.INVALID_INPUT, response);
             case 403: throw IamExceptionImpl.Create(IamError.BLOCKED_BY_DEVICE_CONFIGURATION, response);
@@ -43,7 +44,7 @@ public class Pairing {
     }
 
     public static async Task PairInvitePasswordAsync(Nabto.Edge.Client.Connection connection, string username, string password)
-    { 
+    {
         try
         {
             await connection.PasswordAuthenticate(username, password);
@@ -70,7 +71,7 @@ public class Pairing {
             }
             throw;
         }
-       
+
         var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/password-open");
 
         var cbor = CBORObject.NewMap().Add("Username", desiredUsername);

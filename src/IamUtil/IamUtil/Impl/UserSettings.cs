@@ -1,6 +1,7 @@
-namespace Nabto.Edge.Client.Impl;
+namespace Nabto.Edge.ClientIam.Impl;
 
 using PeterO.Cbor;
+using Nabto.Edge.Client;
 
 public class UserSettings
 {

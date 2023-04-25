@@ -1,11 +1,12 @@
-namespace Nabto.Edge.Client.Impl;
+namespace Nabto.Edge.ClientIam.Impl;
 
 using PeterO.Cbor;
+using Nabto.Edge.Client;
 
 public class DeviceInfo
 {
 
-    private static Nabto.Edge.Client.DeviceDetails DecodeDeviceDetails(CBORObject cbor) {
+    private static Nabto.Edge.ClientIam.DeviceDetails DecodeDeviceDetails(CBORObject cbor) {
         var pairingModes = cbor["Modes"];
 
         var nabtoVersion = cbor["NabtoVersion"];
@@ -23,7 +24,7 @@ public class DeviceInfo
             var values = pairingModes.Values;
             foreach (var v in values) {
                 var pairingMode = v.AsString();
-                switch (pairingMode) { 
+                switch (pairingMode) {
                     case "LocalOpen": dd.Modes.Add(PairingMode.LOCAL_OPEN); break;
                     case "PasswordOpen": dd.Modes.Add(PairingMode.PASSWORD_OPEN); break;
                     case "LocalInitial": dd.Modes.Add(PairingMode.LOCAL_INITIAL); break;
@@ -82,7 +83,7 @@ public class DeviceInfo
     }
 
     public static async Task UpdateDeviceInfoAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
-    { 
+    {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/device-info/{setting}");
 
         coapRequest.SetRequestPayload(CoapContentFormat.APPLICATION_CBOR, value.EncodeToBytes());
@@ -96,7 +97,7 @@ public class DeviceInfo
     }
 
      public static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
-    { 
+    {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
         var response = await coapRequest.ExecuteAsync();
 
@@ -120,7 +121,7 @@ public class DeviceInfo
     }
 
     public static async Task<List<string>> ListNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
-    { 
+    {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
         var response = await coapRequest.ExecuteAsync();
 

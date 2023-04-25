@@ -1,10 +1,11 @@
-namespace Nabto.Edge.Client.Impl;
+namespace Nabto.Edge.ClientIam.Impl;
 
 using PeterO.Cbor;
+using Nabto.Edge.Client;
 
 public class User {
     public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, string username)
-    { 
+    {
         var cbor = CBORObject.NewMap().Add("Username", username);
 
         var req = connection.CreateCoapRequest("POST", "/iam/users");
@@ -23,7 +24,7 @@ public class User {
     }
 
     public static async Task DeleteUserAsync(Nabto.Edge.Client.Connection connection, string username)
-    { 
+    {
         var req = connection.CreateCoapRequest("DELETE", $"/iam/users/{username}");
         var response = await req.ExecuteAsync();
 
@@ -84,7 +85,7 @@ public class User {
                 user.Fcm.ProjectId = projectId.AsString();
             }
 
-            if (token != null) { 
+            if (token != null) {
                 user.Fcm.Token = token.AsString();
             }
         }
@@ -93,11 +94,11 @@ public class User {
     }
 
     public static async Task<IamUser> GetUserAsync(Nabto.Edge.Client.CoapRequest coapRequest)
-    { 
+    {
         var response = await coapRequest.ExecuteAsync();
         var statusCode = response.GetResponseStatusCode();
 
-        if (statusCode == 404) { 
+        if (statusCode == 404) {
             throw new IamException(IamError.USER_DOES_NOT_EXIST);
         }
         IamExceptionImpl.HandleDefaultCoap(response);
@@ -107,7 +108,7 @@ public class User {
             throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
         }
         var data = response.GetResponsePayload();
-        
+
         CBORObject cborObject = CBORObject.DecodeFromBytes(data);
 
         IamUser iamUser = IamUserFromCBOR(cborObject);
@@ -115,14 +116,14 @@ public class User {
     }
 
     public static async Task<IamUser> GetUserAsync(Nabto.Edge.Client.Connection connection, string username)
-    { 
+    {
         var coapRequest = connection.CreateCoapRequest("GET", $"/iam/users/{username}");
         return await GetUserAsync(coapRequest);
     }
 
 
     public static async Task<IamUser> GetCurrentUserAsync(Nabto.Edge.Client.Connection connection)
-    { 
+    {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/me");
         return await GetUserAsync(coapRequest);
     }

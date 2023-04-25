@@ -1,11 +1,12 @@
-namespace Nabto.Edge.Client.Impl;
+namespace Nabto.Edge.ClientIam.Impl;
 
+using Nabto.Edge.Client;
 using System.Text;
 
 public class IamExceptionImpl
 {
     private static string GetMessage(IamError e, Nabto.Edge.Client.CoapResponse r)
-    { 
+    {
         ushort? contentFormat = null;
         try
         {
@@ -18,7 +19,7 @@ public class IamExceptionImpl
             }
         }
 
-        if (contentFormat.HasValue && contentFormat == CoapContentFormat.TEXT_PLAIN) { 
+        if (contentFormat.HasValue && contentFormat == CoapContentFormat.TEXT_PLAIN) {
             try
             {
                 var payload = r.GetResponsePayload();
@@ -32,7 +33,7 @@ public class IamExceptionImpl
 
     }
 
-    public static IamException Create(IamError e) 
+    public static IamException Create(IamError e)
     {
         return new IamException(e.ToString(), e);
     }
@@ -52,7 +53,7 @@ public class IamExceptionImpl
         if (statusCode >= 200 && statusCode < 300) {
             return;
         }
-        switch (statusCode) { 
+        switch (statusCode) {
             case 400: throw Create(IamError.INVALID_INPUT, r);
             case 401: throw Create(IamError.AUTHENTICATION_ERROR, r);
             case 403: throw Create(IamError.FORBIDDEN, r);

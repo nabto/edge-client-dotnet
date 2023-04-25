@@ -1,4 +1,4 @@
-namespace Nabto.Edge.Client;
+namespace Nabto.Edge.ClientIam;
 
 using System.Text;
 
@@ -11,8 +11,8 @@ public class IamException : Exception
     {
         Error = e;
     }
-    public IamException(string message, IamError e) 
-        : base(message) 
+    public IamException(string message, IamError e)
+        : base(message)
     {
         Error = e;
     }

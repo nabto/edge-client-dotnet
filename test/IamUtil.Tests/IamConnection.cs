@@ -1,6 +1,8 @@
-namespace Nabto.Edge.Client.Tests;
+namespace Nabto.Edge.ClientIam.Tests;
 
 using Microsoft.Extensions.Logging;
+using Nabto.Edge.Client;
+using Nabto.Edge.Client.Tests;
 
 public class IamConnection {
     public static async Task<IamConnection> Create() {
@@ -19,7 +21,7 @@ public class IamConnection {
         Username = TestUtil.UniqueUsername();
     }
 
-    public async Task init() { 
+    public async Task init() {
         var testDevice = TestDevices.GetLocalAllowAllIamDevice();
         Connection.SetOptions(testDevice.GetConnectOptions());
         Connection.SetOptions(new ConnectionOptions { PrivateKey = _client.CreatePrivateKey() });
@@ -27,7 +29,7 @@ public class IamConnection {
         {
             await Connection.ConnectAsync();
         } catch (NabtoException e) {
-            if (e.ErrorCode == NabtoClientError.NO_CHANNELS) { 
+            if (e.ErrorCode == NabtoClientError.NO_CHANNELS) {
 
             }
         }

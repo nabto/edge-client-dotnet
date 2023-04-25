@@ -1,6 +1,9 @@
-namespace Nabto.Edge.Client.Tests;
+namespace Nabto.Edge.ClientIam.Tests;
 
 using Xunit;
+
+using Nabto.Edge.Client.Tests;
+using Nabto.Edge.Client;
 
 public class LocalAllowAllIamFixture : IAsyncLifetime
 {

@@ -1,4 +1,4 @@
-namespace Nabto.Edge.Client.Tests;
+namespace Nabto.Edge.ClientIam.Tests;
 
 public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
 {
@@ -66,7 +66,7 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
 
 
     [Fact]
-    public async Task UpdateUserNotificationCategories() 
+    public async Task UpdateUserNotificationCategories()
     {
         await IamUtil.UpdateUserNotificationCategoriesAsync(_connection, _testUser1, new List<string>{});
 
@@ -77,23 +77,23 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     }
 
     [Fact]
-    public async Task UpdateUserPassword() 
+    public async Task UpdateUserPassword()
     {
         var password = TestUtil.RandomString(16);
         await IamUtil.UpdateUserPasswordAsync(_connection, _testUser1, password);
     }
 
     [Fact]
-    public async Task UpdateUserRole_NonExisisting() 
+    public async Task UpdateUserRole_NonExisisting()
     {
         var role = TestUtil.RandomString(10);
         var e = await Assert.ThrowsAsync<IamException>(async () => { await IamUtil.UpdateUserRoleAsync(_connection, _testUser1, role); });
 
-        Assert.Equal(IamError.USER_OR_ROLE_DOES_NOT_EXISTS, e.Error);        
+        Assert.Equal(IamError.USER_OR_ROLE_DOES_NOT_EXISTS, e.Error);
     }
 
     [Fact]
-    public async Task UpdateUserRole() 
+    public async Task UpdateUserRole()
     {
         var roles = await IamUtil.ListRolesAsync(_connection);
         var role = roles[0];
@@ -103,7 +103,7 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     }
 
     [Fact]
-    public async Task UpdateUserSct() 
+    public async Task UpdateUserSct()
     {
         var sct = TestUtil.RandomString(16);
         await IamUtil.UpdateUserSctAsync(_connection, _testUser1, sct);

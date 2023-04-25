@@ -1,4 +1,4 @@
-namespace Nabto.Edge.Client;
+namespace Nabto.Edge.ClientIam;
 
 public class IamSettings {
     public bool? PasswordOpenPairing;

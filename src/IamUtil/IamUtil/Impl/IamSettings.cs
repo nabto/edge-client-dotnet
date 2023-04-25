@@ -1,4 +1,6 @@
-namespace Nabto.Edge.Client.Impl;
+using Nabto.Edge.Client;
+
+namespace Nabto.Edge.ClientIam.Impl;
 
 
 
@@ -6,7 +8,7 @@ using PeterO.Cbor;
 
 public class IamSettings {
 
-    public static Nabto.Edge.Client.IamSettings DecodeIamSettings(CBORObject settings)
+    public static Nabto.Edge.ClientIam.IamSettings DecodeIamSettings(CBORObject settings)
     {
         var passwordOpenPairing = settings["PasswordOpenPairing"];
         var passwordInvitePairing = settings["PasswordInvitePairing"];
@@ -16,7 +18,7 @@ public class IamSettings {
         var passwordOpenPassword = settings["PasswordOpenPassword"];
 
 
-        var iamSettings = new Nabto.Edge.Client.IamSettings();
+        var iamSettings = new Nabto.Edge.ClientIam.IamSettings();
 
         if (passwordOpenPairing != null) {
             iamSettings.PasswordOpenPairing = passwordOpenPairing.AsBoolean();
@@ -41,7 +43,7 @@ public class IamSettings {
         return iamSettings;
     }
 
-    public static async Task<Nabto.Edge.Client.IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.Connection connection)
+    public static async Task<Nabto.Edge.ClientIam.IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/settings");
         var response = await coapRequest.ExecuteAsync();
@@ -59,7 +61,7 @@ public class IamSettings {
     }
 
     public static async Task UpdateIamSettingsAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
-    { 
+    {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/settings/{setting}");
 
         coapRequest.SetRequestPayload(CoapContentFormat.APPLICATION_CBOR, value.EncodeToBytes());

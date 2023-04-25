@@ -1,11 +1,15 @@
-public class Fcm {
+namespace Nabto.Edge.ClientIam;
+
+public class Fcm
+{
     public string? Token { get; set; }
     public string? ProjectId { get; set; }
 }
 
-public class IamUser { 
+public class IamUser
+{
     public String? Username { get; set; }
-    public String? DisplayName { get; set;  }
+    public String? DisplayName { get; set; }
 
     public String? Fingerprint { get; set; }
 

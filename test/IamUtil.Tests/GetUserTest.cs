@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Nabto.Edge.Client.Tests;
+namespace Nabto.Edge.ClientIam.Tests;
 
 public class GetUserTest
 {
@@ -20,7 +20,7 @@ public class GetUserTest
     }
 
     [Fact]
-    public async Task ListRoles() { 
+    public async Task ListRoles() {
         var iamConnection = await IamConnection.Create();
 
         var roles = await IamUtil.ListRolesAsync(iamConnection.Connection);
@@ -28,7 +28,7 @@ public class GetUserTest
     }
 
     [Fact]
-    public async Task ListNotificationCategories() { 
+    public async Task ListNotificationCategories() {
         var iamConnection = await IamConnection.Create();
 
         var categories = await IamUtil.ListNotificationCategoriesAsync(iamConnection.Connection);

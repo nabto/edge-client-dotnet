@@ -1,6 +1,6 @@
 
-namespace Nabto.Edge.Client;
-using Nabto.Edge.Client.Impl;
+namespace Nabto.Edge.ClientIam;
+using Nabto.Edge.ClientIam.Impl;
 
 public class IamUtil
 {
@@ -32,7 +32,7 @@ public class IamUtil
         return DeviceInfo.GetDeviceDetailsAsync(connection);
     }
 
-    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName) 
+    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName)
     {
         return DeviceInfo.UpdateDeviceFriendlyNameAsync(connection, friendlyName);
     }
@@ -41,22 +41,22 @@ public class IamUtil
 
     public static Task<IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.Connection connection)
     {
-        return Nabto.Edge.Client.Impl.IamSettings.GetIamSettingsAsync(connection);
+        return Nabto.Edge.ClientIam.Impl.IamSettings.GetIamSettingsAsync(connection);
     }
 
     public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
     {
-        return Nabto.Edge.Client.Impl.IamSettings.UpdateIamSettingsPasswordOpenPairingAsync(connection, enabled);
+        return Nabto.Edge.ClientIam.Impl.IamSettings.UpdateIamSettingsPasswordOpenPairingAsync(connection, enabled);
     }
 
     public static Task UpdateIamSettingsPasswordInvitePairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
     {
-        return Nabto.Edge.Client.Impl.IamSettings.UpdateIamSettingsPasswordInvitePairingAsync(connection, enabled);
+        return Nabto.Edge.ClientIam.Impl.IamSettings.UpdateIamSettingsPasswordInvitePairingAsync(connection, enabled);
     }
 
     public static Task UpdateIamSettingsLocalOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
     {
-        return Nabto.Edge.Client.Impl.IamSettings.UpdateIamSettingsLocalOpenPairingAsync(connection, enabled);
+        return Nabto.Edge.ClientIam.Impl.IamSettings.UpdateIamSettingsLocalOpenPairingAsync(connection, enabled);
     }
 
     // list roles and notification categories
@@ -81,7 +81,7 @@ public class IamUtil
     {
         return User.GetUserAsync(connection, username);
     }
-    
+
     // Update user settings
     public static Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.Connection connection, string username, string displayName)
     {

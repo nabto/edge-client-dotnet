@@ -1,4 +1,8 @@
-namespace Nabto.Edge.Client.Tests;
+namespace Nabto.Edge.ClientIam.Tests;
+
+using Nabto.Edge.Client.Tests;
+using Nabto.Edge.Client;
+
 
 public class PairInvitePasswordTest : LocalAllowAllIamFixture {
     [Fact]
@@ -24,5 +28,5 @@ public class PairInvitePasswordTest : LocalAllowAllIamFixture {
 
         var user = await IamUtil.GetCurrentUserAsync(c);
         Assert.Equal(username, user.Username);
-    }   
+    }
 }
