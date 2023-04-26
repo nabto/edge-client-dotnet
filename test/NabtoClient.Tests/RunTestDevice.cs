@@ -9,8 +9,8 @@ namespace Nabto.Edge.Client.Tests;
 
 public class DeviceConfig
 {
-    public string ProductId { get; set; }
-    public string DeviceId { get; set; }
+    public string? ProductId { get; set; }
+    public string? DeviceId { get; set; }
 }
 
 public class TestDeviceRunner : IDisposable
@@ -150,7 +150,6 @@ public class TestDeviceRunner : IDisposable
 }";
 
     private string _tempPath;
-    private string _logsDir;
 
 
     private StreamWriter _standardError;
@@ -185,11 +184,11 @@ public class TestDeviceRunner : IDisposable
         string configDir = Path.Combine(_tempPath, "config");
         string keysDir = Path.Combine(_tempPath, "keys");
         string stateDir = Path.Combine(_tempPath, "state");
-        _logsDir = Path.Combine(_tempPath, "logs");
+        string logsDir = Path.Combine(_tempPath, "logs");
         Directory.CreateDirectory(configDir);
         Directory.CreateDirectory(keysDir);
         Directory.CreateDirectory(stateDir);
-        Directory.CreateDirectory(_logsDir);
+        Directory.CreateDirectory(logsDir);
 
         WriteConfig(configDir);
         WriteIamConfig(configDir);
@@ -197,8 +196,8 @@ public class TestDeviceRunner : IDisposable
         WriteKey(keysDir);
         WriteState(stateDir);
 
-        _standardError = new StreamWriter(Path.Combine(_logsDir, "error.log"));
-        _standardOutput = new StreamWriter(Path.Combine(_logsDir, "output.log"));
+        _standardError = new StreamWriter(Path.Combine(logsDir, "error.log"));
+        _standardOutput = new StreamWriter(Path.Combine(logsDir, "output.log"));
 
     }
 
