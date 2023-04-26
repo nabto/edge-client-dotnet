@@ -48,14 +48,9 @@ public class IamSettings {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/settings");
         var response = await coapRequest.ExecuteAsync();
 
-        IamExceptionImpl.HandleDefaultCoap(response);
+        var data = IamExceptionImpl.HandleDefaultCoapCborPayload(response);
 
-        var contentFormat = response.GetResponseContentFormat();
-        if (contentFormat != CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
-        }
-
-        CBORObject o = CBORObject.DecodeFromBytes(response.GetResponsePayload());
+        CBORObject o = CBORObject.DecodeFromBytes(data);
         var s = DecodeIamSettings(o);
         return s;
     }

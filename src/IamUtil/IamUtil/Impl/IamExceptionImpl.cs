@@ -60,4 +60,30 @@ public class IamExceptionImpl
             default: throw Create(IamError.FAILED, r, statusCode);
         }
     }
+
+    public static byte[] HandleDefaultCoapCborPayload(Nabto.Edge.Client.CoapResponse r)
+    {
+        HandleDefaultCoap(r);
+        try {
+            ushort contentFormat = r.GetResponseContentFormat();
+            if (contentFormat != CoapContentFormat.APPLICATION_CBOR) {
+                throw new IamException("The content format is not application/cbor", IamError.CANNOT_PARSE_RESPONSE);
+            }
+        } catch (NabtoException e) {
+            if (e.ErrorCode == NabtoClientError.NO_DATA) {
+                throw new IamException("The coap response does not contain a content format", IamError.CANNOT_PARSE_RESPONSE);
+            }
+            throw;
+        }
+
+        try {
+            var data = r.GetResponsePayload();
+            return data;
+        } catch (NabtoException e) {
+            if (e.ErrorCode == NabtoClientError.NO_DATA) {
+                throw new IamException("The coap response is missing expected response data", IamError.CANNOT_PARSE_RESPONSE);
+            }
+            throw;
+        }
+    }
 };

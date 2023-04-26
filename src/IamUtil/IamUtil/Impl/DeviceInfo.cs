@@ -70,12 +70,7 @@ public class DeviceInfo
             throw new IamException(IamError.IAM_NOT_SUPPORTED);
         }
 
-        IamExceptionImpl.HandleDefaultCoap(response);
-
-        ushort contentFormat = response.GetResponseContentFormat();
-        if (contentFormat != CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
-        }
+        var data = IamExceptionImpl.HandleDefaultCoapCborPayload(response);
 
         var dd = DecodeDeviceDetails(CBORObject.DecodeFromBytes(response.GetResponsePayload()));
 
@@ -101,14 +96,7 @@ public class DeviceInfo
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
         var response = await coapRequest.ExecuteAsync();
 
-        IamExceptionImpl.HandleDefaultCoap(response);
-
-        var contentFormat = response.GetResponseContentFormat();
-        if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
-        }
-
-        var data = response.GetResponsePayload();
+        var data = IamExceptionImpl.HandleDefaultCoapCborPayload(response);
 
         CBORObject cborObject = CBORObject.DecodeFromBytes(data);
         List<string> roles = new List<string>();
@@ -125,14 +113,7 @@ public class DeviceInfo
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
         var response = await coapRequest.ExecuteAsync();
 
-        IamExceptionImpl.HandleDefaultCoap(response);
-
-        var contentFormat = response.GetResponseContentFormat();
-        if (contentFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
-        }
-
-        var data = response.GetResponsePayload();
+        var data = IamExceptionImpl.HandleDefaultCoapCborPayload(response);
 
         CBORObject cborObject = CBORObject.DecodeFromBytes(data);
         List<string> roles = new List<string>();

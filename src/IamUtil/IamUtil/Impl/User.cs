@@ -101,13 +101,7 @@ public class User {
         if (statusCode == 404) {
             throw new IamException(IamError.USER_DOES_NOT_EXIST);
         }
-        IamExceptionImpl.HandleDefaultCoap(response);
-
-        var responseFormat = response.GetResponseContentFormat();
-        if (responseFormat != (ushort)CoapContentFormat.APPLICATION_CBOR) {
-            throw new IamException(IamError.CANNOT_PARSE_RESPONSE);
-        }
-        var data = response.GetResponsePayload();
+        var data = IamExceptionImpl.HandleDefaultCoapCborPayload (response);
 
         CBORObject cborObject = CBORObject.DecodeFromBytes(data);
 
