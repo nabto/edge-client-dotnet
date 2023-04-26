@@ -1,10 +1,10 @@
 namespace Nabto.Edge.Client.Impl;
 
-public class CoapResponse : Nabto.Edge.Client.CoapResponse
+public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
 {
-    private CoapRequest _request;
+    private CoapRequestImpl _request;
 
-    public CoapResponse(CoapRequest request)
+    public CoapResponseImpl(CoapRequestImpl request)
     {
         _request = request;
     }

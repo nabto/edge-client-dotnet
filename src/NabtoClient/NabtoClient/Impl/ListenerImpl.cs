@@ -1,24 +1,24 @@
 namespace Nabto.Edge.Client.Impl;
 
-public class Listener
+public class ListenerImpl
 {
 
     private IntPtr _handle;
-    private Nabto.Edge.Client.Impl.NabtoClient client_;
+    private Nabto.Edge.Client.Impl.NabtoClientImpl client_;
 
-    public static Listener Create(Nabto.Edge.Client.Impl.NabtoClient client)
+    public static ListenerImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_listener_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
             throw new NullReferenceException();
         }
-        return new Listener(client, ptr);
+        return new ListenerImpl(client, ptr);
     }
 
 
 
-    public Listener(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle)
+    public ListenerImpl(Nabto.Edge.Client.Impl.NabtoClientImpl client, IntPtr handle)
     {
         client_ = client;
         _handle = handle;
@@ -29,7 +29,7 @@ public class Listener
         NabtoClientNative.nabto_client_listener_stop(_handle);
     }
 
-    ~Listener()
+    ~ListenerImpl()
     {
         //NabtoClientNative.nabto_client_listener_free(_handle);
     }

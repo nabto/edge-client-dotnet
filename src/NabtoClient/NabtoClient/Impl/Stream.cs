@@ -47,10 +47,10 @@ public class Stream : Nabto.Edge.Client.Stream
 {
 
     private IntPtr _handle;
-    private Nabto.Edge.Client.Impl.NabtoClient _client;
-    private Nabto.Edge.Client.Impl.Connection _connection;
+    private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
+    private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
 
-    public static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClient client, Nabto.Edge.Client.Impl.Connection connection)
+    public static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_stream_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)
@@ -60,7 +60,7 @@ public class Stream : Nabto.Edge.Client.Stream
         return new Stream(client, connection, ptr);
     }
 
-    public Stream(Nabto.Edge.Client.Impl.NabtoClient client, Nabto.Edge.Client.Impl.Connection connection, IntPtr handle)
+    public Stream(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
@@ -77,7 +77,7 @@ public class Stream : Nabto.Edge.Client.Stream
         TaskCompletionSource openTask = new TaskCompletionSource();
         var task = openTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         NabtoClientNative.nabto_client_stream_open(_handle, future.GetHandle(), port);
 
@@ -97,7 +97,7 @@ public class Stream : Nabto.Edge.Client.Stream
         TaskCompletionSource<byte[]> readTask = new TaskCompletionSource<byte[]>();
         var task = readTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         var op = new ReadOperation(max);
         var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
@@ -129,7 +129,7 @@ public class Stream : Nabto.Edge.Client.Stream
         TaskCompletionSource<byte[]> readTask = new TaskCompletionSource<byte[]>();
         var task = readTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         var op = new ReadOperation(bytes);
         var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
@@ -160,7 +160,7 @@ public class Stream : Nabto.Edge.Client.Stream
         TaskCompletionSource writeTask = new TaskCompletionSource();
         var task = writeTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         var op = new WriteOperation(data);
         var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
@@ -183,7 +183,7 @@ public class Stream : Nabto.Edge.Client.Stream
         TaskCompletionSource closeTask = new TaskCompletionSource();
         var task = closeTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         NabtoClientNative.nabto_client_stream_close(_handle, future.GetHandle());
 

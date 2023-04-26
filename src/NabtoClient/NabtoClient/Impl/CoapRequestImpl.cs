@@ -1,28 +1,28 @@
 namespace Nabto.Edge.Client.Impl;
 
-public class CoapRequest : Nabto.Edge.Client.CoapRequest
+public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 {
 
     private IntPtr _handle;
-    private NabtoClient _client;
+    private NabtoClientImpl _client;
 
-    public static CoapRequest Create(Nabto.Edge.Client.Impl.NabtoClient client, Nabto.Edge.Client.Impl.Connection connection, string method, string path)
+    public static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
     {
         IntPtr handle = NabtoClientNative.nabto_client_coap_new(connection.GetHandle(), method, path);
         if (handle == IntPtr.Zero)
         {
             throw new NullReferenceException();
         }
-        return new CoapRequest(client, handle);
+        return new CoapRequestImpl(client, handle);
     }
 
-    public CoapRequest(NabtoClient client, IntPtr handle)
+    public CoapRequestImpl(NabtoClientImpl client, IntPtr handle)
     {
         _handle = handle;
         _client = client;
     }
 
-    ~CoapRequest()
+    ~CoapRequestImpl()
     {
         NabtoClientNative.nabto_client_coap_free(_handle);
     }
@@ -41,7 +41,7 @@ public class CoapRequest : Nabto.Edge.Client.CoapRequest
     {
         TaskCompletionSource<Nabto.Edge.Client.CoapResponse> executeTask = new TaskCompletionSource<Nabto.Edge.Client.CoapResponse>();
         var task = executeTask.Task;
-        Future future = Future.Create(_client);
+        FutureImpl future = FutureImpl.Create(_client);
 
         NabtoClientNative.nabto_client_coap_execute(_handle, future.GetHandle());
 
@@ -50,7 +50,7 @@ public class CoapRequest : Nabto.Edge.Client.CoapRequest
         if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
         {
 
-            return new CoapResponse(this);
+            return new CoapResponseImpl(this);
         }
         else
         {

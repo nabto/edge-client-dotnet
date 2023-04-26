@@ -6,10 +6,10 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
 {
 
     private IntPtr _handle;
-    private Nabto.Edge.Client.Impl.NabtoClient _client;
-    private Nabto.Edge.Client.Impl.Connection _connection;
+    private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
+    private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
 
-    public static Nabto.Edge.Client.TcpTunnel Create(Nabto.Edge.Client.Impl.NabtoClient client, Nabto.Edge.Client.Impl.Connection connection)
+    public static Nabto.Edge.Client.TcpTunnel Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_tcp_tunnel_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)
@@ -19,7 +19,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         return new TcpTunnel(client, connection, ptr);
     }
 
-    public TcpTunnel(Nabto.Edge.Client.Impl.NabtoClient client, Nabto.Edge.Client.Impl.Connection connection, IntPtr handle)
+    public TcpTunnel(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
@@ -36,7 +36,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         TaskCompletionSource openTask = new TaskCompletionSource();
         var task = openTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         NabtoClientNative.nabto_client_tcp_tunnel_open(_handle, future.GetHandle(), service, localPort);
 
@@ -56,7 +56,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         TaskCompletionSource closeTask = new TaskCompletionSource();
         var task = closeTask.Task;
 
-        var future = Future.Create(_client);
+        var future = FutureImpl.Create(_client);
 
         NabtoClientNative.nabto_client_tcp_tunnel_close(_handle, future.GetHandle());
 

@@ -4,24 +4,24 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 
-public class NabtoClient : Nabto.Edge.Client.NabtoClient {
+public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     private IntPtr _handle;
     private NabtoClientNative.LogCallbackFunc? _logCallback;
 
-    public static NabtoClient Create() {
+    public static NabtoClientImpl Create() {
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
         if (ptr == IntPtr.Zero) {
             throw new NullReferenceException();
         }
-        return new NabtoClient(ptr);
+        return new NabtoClientImpl(ptr);
     }
 
-    public NabtoClient(IntPtr h)
+    public NabtoClientImpl(IntPtr h)
     {
         _handle = h;
     }
 
-    ~NabtoClient() {
+    ~NabtoClientImpl() {
         NabtoClientNative.nabto_client_free(_handle);
     }
 
@@ -45,12 +45,12 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
 
     public Nabto.Edge.Client.Connection CreateConnection()
     {
-        return Nabto.Edge.Client.Impl.Connection.Create(this);
+        return Nabto.Edge.Client.Impl.ConnectionImpl.Create(this);
     }
 
     public Nabto.Edge.Client.MdnsScanner CreateMdnsScanner(string subtype = "")
     {
-        return Nabto.Edge.Client.Impl.MdnsScanner.Create(this, subtype);
+        return Nabto.Edge.Client.Impl.MdnsScannerImpl.Create(this, subtype);
     }
 
     /*
