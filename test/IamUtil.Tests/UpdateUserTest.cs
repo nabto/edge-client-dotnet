@@ -12,8 +12,8 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     public new async Task InitializeAsync() {
         await base.InitializeAsync();
 
-        await IamUtil.CreateUserAsync(_connection, _testUser1);
-        await IamUtil.CreateUserAsync(_connection, _testUser2);
+        await IamUtil.CreateUserAsync(_connection, new IamUser{Username = _testUser1});
+        await IamUtil.CreateUserAsync(_connection, new IamUser{Username = _testUser2});
     }
 
     [Fact]

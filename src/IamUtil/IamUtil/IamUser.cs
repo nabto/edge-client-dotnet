@@ -8,14 +8,16 @@ public class Fcm
 
 public class IamUser
 {
-    public String? Username { get; set; }
-    public String? DisplayName { get; set; }
+    public string? Username { get; set; }
+    public string? DisplayName { get; set; }
 
-    public String? Fingerprint { get; set; }
+    public string? Fingerprint { get; set; }
 
-    public String? Sct { get; set; }
+    public string? Password { get; set; }
 
-    public String? Role { get; set; }
+    public string? Sct { get; set; }
+
+    public string? Role { get; set; }
 
     public Fcm? Fcm { get; set; }
 

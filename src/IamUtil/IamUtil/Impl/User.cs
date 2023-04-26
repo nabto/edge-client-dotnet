@@ -4,6 +4,46 @@ using PeterO.Cbor;
 using Nabto.Edge.Client;
 
 public class User {
+
+    public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, IamUser user)
+    {
+        if (user.Username == null) {
+            throw new ArgumentException("Missing required Username.");
+        }
+
+        await CreateUserAsync(connection, user.Username);
+        if (user.DisplayName != null) {
+            await UserSettings.UpdateUserDisplayNameAsync(connection, user.Username, user.DisplayName);
+        }
+
+        if (user.Fcm != null) {
+            if (user.Fcm.ProjectId == null || user.Fcm.Token == null) {
+                throw new ArgumentException("If Fcm is set ProjectId and Token is required to be nonnull.");
+            }
+            await UserSettings.UpdateUserFcmAsync(connection, user.Username, user.Fcm.ProjectId, user.Fcm.Token);
+        }
+
+        if (user.NotificationCategories != null) {
+            await UserSettings.UpdateUserNotificationCategoriesAsync(connection, user.Username, user.NotificationCategories);
+        }
+
+        if (user.Sct != null) {
+            await UserSettings.UpdateUserSctAsync(connection, user.Username, user.Sct);
+        }
+
+        if (user.Password != null) {
+            await UserSettings.UpdateUserPasswordAsync(connection, user.Username, user.Password);
+        }
+
+        if (user.Role != null) {
+            await UserSettings.UpdateUserRoleAsync(connection, user.Username, user.Role);
+        }
+
+        if (user.Fingerprint != null) {
+            await UserSettings.UpdateUserFingerprintAsync(connection, user.Username, user.Fingerprint);
+        }
+    }
+
     public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, string username)
     {
         var cbor = CBORObject.NewMap().Add("Username", username);

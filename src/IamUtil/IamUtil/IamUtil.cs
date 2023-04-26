@@ -128,8 +128,8 @@ public class IamUtil
         return User.DeleteUserAsync(connection, username);
     }
 
-    public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, string username)
+    public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, IamUser user)
     {
-        await User.CreateUserAsync(connection, username);
+        await User.CreateUserAsync(connection, user);
     }
 };

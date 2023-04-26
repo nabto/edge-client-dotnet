@@ -12,9 +12,7 @@ public class PairInvitePasswordTest : LocalAllowAllIamFixture {
 
         var username = TestUtil.UniqueUsername();
         string password = "supersecret";
-        await IamUtil.CreateUserAsync(_connection, username);
-        await IamUtil.UpdateUserPasswordAsync(_connection, username, password);
-        await IamUtil.UpdateUserRoleAsync(_connection, username, "Administrator");
+        await IamUtil.CreateUserAsync(_connection, new IamUser { Username = username, Password = password, Role = "Administrator" });
 
         var c = _client.CreateConnection();
         c.SetOptions(GetConnectionOptions());

@@ -12,7 +12,7 @@ public class DeleteUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     public new async Task InitializeAsync() {
         await base.InitializeAsync();
 
-        await IamUtil.CreateUserAsync(_connection, _testUser1);
+        await IamUtil.CreateUserAsync(_connection, new IamUser{ Username = _testUser1 });
     }
 
     [Fact]

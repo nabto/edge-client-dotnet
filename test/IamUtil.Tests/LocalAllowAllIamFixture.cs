@@ -41,11 +41,7 @@ public class LocalAllowAllIamFixture : IAsyncLifetime, IDisposable
 
     public async Task<string> CreateDefaultUser() {
         var username = TestUtil.UniqueUsername();
-        await IamUtil.CreateUserAsync(_connection, username);
-        await IamUtil.UpdateUserRoleAsync(_connection, username, "Administrator");
-        await IamUtil.UpdateUserDisplayNameAsync(_connection, username, "displayname");
-        await IamUtil.UpdateUserFingerprintAsync(_connection, username, _connection.GetClientFingerprint());
-
+        await IamUtil.CreateUserAsync(_connection, new IamUser { Username = username, Role = "Administrator", DisplayName = "displayname", Fingerprint = _connection.GetClientFingerprint() });
         return username;
     }
 }
