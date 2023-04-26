@@ -8,8 +8,6 @@ public class PairInvitePasswordTest : LocalAllowAllIamFixture {
     [Fact]
     public async Task PairSuccess()
     {
-        var iamConnection = await IamConnection.Create();
-
         // create a new user on the device
 
         var username = TestUtil.UniqueUsername();
@@ -19,7 +17,7 @@ public class PairInvitePasswordTest : LocalAllowAllIamFixture {
         await IamUtil.UpdateUserRoleAsync(_connection, username, "Administrator");
 
         var c = _client.CreateConnection();
-        c.SetOptions(TestDevices.GetLocalAllowAllIamDevice().GetConnectOptions());
+        c.SetOptions(GetConnectionOptions());
         c.SetOptions(new ConnectionOptions { PrivateKey = _client.CreatePrivateKey() });
 
         await c.ConnectAsync();

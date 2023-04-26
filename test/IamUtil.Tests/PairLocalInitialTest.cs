@@ -2,12 +2,11 @@ namespace Nabto.Edge.ClientIam.Tests;
 
 using Xunit;
 
-public class PairLocalInitialTest {
+public class PairLocalInitialTest : LocalAllowAllIamFixture {
 
     [Fact]
     public async Task InitialPairing() {
-        var iamConnection = await IamConnection.Create();
-        var exception = await Assert.ThrowsAsync<IamException>(async () => { await IamUtil.PairLocalInitialAsync(iamConnection.Connection); });
+        var exception = await Assert.ThrowsAsync<IamException>(async () => { await IamUtil.PairLocalInitialAsync(_connection); });
         Assert.Equal(IamError.PAIRING_MODE_DISABLED, exception.Error);
     }
 }
