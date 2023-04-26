@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace Nabto.Edge.Client.Tests;
@@ -245,6 +246,20 @@ public class TestDeviceRunner : IDisposable
     public void StartDevice()
     {
         ProcessStartInfo info = new ProcessStartInfo();
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            info.FileName = "../../../../../test-devices/tcp_tunnel_device_macos";
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux";
+
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            info.FileName = "../../../../../test-devices/tcp_tunnel_device_windows";
+        }
+
         info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux";
         info.Arguments = $"-H {_tempPath} --random-ports";
         info.RedirectStandardError = true;
