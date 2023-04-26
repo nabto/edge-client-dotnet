@@ -104,6 +104,7 @@ public class ConnectionTest {
         connection.SetOptions(device.GetConnectOptions());
         connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
         await connection.ConnectAsync();
+        Assert.NotNull(device.Password);
         await connection.PasswordAuthenticate("", device.Password);
         await connection.CloseAsync();
     }

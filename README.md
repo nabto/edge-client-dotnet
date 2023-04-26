@@ -39,3 +39,8 @@ var coapRequest = connection.CreateCoapRequest("GET", "/path");
 var response = await coapRequest.ExecuteAsync();
 Console.WriteLine(System.Text.Encoding.UTF8.GetString(response.GetResponsePayload()));
 ```
+
+
+# Testing of the code.
+
+dotnet test runs NabtoClient and IamUtil tests. IamUtil is using local test devices which is started as a background process.

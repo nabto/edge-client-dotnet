@@ -4,24 +4,24 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 
-public class NabtoClient : Nabto.Edge.Client.NabtoClient {
+public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     private IntPtr _handle;
     private NabtoClientNative.LogCallbackFunc? _logCallback;
 
-    public static NabtoClient Create() {
+    public static NabtoClientImpl Create() {
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
         if (ptr == IntPtr.Zero) {
             throw new NullReferenceException();
         }
-        return new NabtoClient(ptr);
+        return new NabtoClientImpl(ptr);
     }
 
-    public NabtoClient(IntPtr h)
+    public NabtoClientImpl(IntPtr h)
     {
         _handle = h;
     }
 
-    ~NabtoClient() {
+    ~NabtoClientImpl() {
         NabtoClientNative.nabto_client_free(_handle);
     }
 
@@ -38,19 +38,19 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
         string privateKey;
         int ec = NabtoClientNative.nabto_client_create_private_key(GetHandle(), out privateKey);
         if (ec != 0) {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return privateKey;
     }
 
     public Nabto.Edge.Client.Connection CreateConnection()
     {
-        return Nabto.Edge.Client.Impl.Connection.Create(this);
+        return Nabto.Edge.Client.Impl.ConnectionImpl.Create(this);
     }
 
     public Nabto.Edge.Client.MdnsScanner CreateMdnsScanner(string subtype = "")
     {
-        return Nabto.Edge.Client.Impl.MdnsScanner.Create(this, subtype);
+        return Nabto.Edge.Client.Impl.MdnsScannerImpl.Create(this, subtype);
     }
 
     /*
@@ -79,7 +79,7 @@ public class NabtoClient : Nabto.Edge.Client.NabtoClient {
     {
         int ec = NabtoClientNative.nabto_client_set_log_level(GetHandle(), "trace");
         if (ec != 0) {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         _logCallback =  (IntPtr logMessage, IntPtr ptr) => {
             LogLevel l = NabtoLogLevelToLogLevel(NabtoClientNative.nabto_client_log_message_get_severity(logMessage));

@@ -1,6 +1,6 @@
 namespace Nabto.Edge.Client.Impl;
 
-public class NabtoException
+public class NabtoExceptionFactory
 {
     public static Exception Create(int ec)
     {

@@ -2,35 +2,35 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
-public class MdnsResult : Nabto.Edge.Client.MdnsResult
+public class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
 {
-    public static MdnsResult Create(IntPtr result)
+    public static MdnsResultImpl Create(IntPtr result)
     {
         string serviceInstanceName = NabtoClientNative.nabto_client_mdns_result_get_service_instance_name(result);
         string productId = NabtoClientNative.nabto_client_mdns_result_get_product_id(result);
         string deviceId = NabtoClientNative.nabto_client_mdns_result_get_device_id(result);
         int action = NabtoClientNative.nabto_client_mdns_result_get_action(result);
 
-        return new MdnsResult { ServiceInstanceName = serviceInstanceName, ProductId = productId, DeviceId = deviceId, Action = (Client.MdnsResult.MdnsAction)action };
+        return new MdnsResultImpl { ServiceInstanceName = serviceInstanceName, ProductId = productId, DeviceId = deviceId, Action = (Client.MdnsResult.MdnsAction)action };
     }
 }
 
-public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
+public class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
 {
-    private Nabto.Edge.Client.Impl.NabtoClient _client;
-    private Listener _listener;
-    private Future _future;
+    private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
+    private ListenerImpl _listener;
+    private FutureImpl _future;
     private string _subtype;
     public Nabto.Edge.Client.MdnsScanner.ResultHandler? Handlers { get; set; }
 
-    public static Nabto.Edge.Client.MdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClient client, string subtype)
+    public static Nabto.Edge.Client.MdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, string subtype)
     {
-        var listener = Listener.Create(client);
-        var future = Future.Create(client);
-        return new MdnsScanner(client, future, listener, subtype);
+        var listener = ListenerImpl.Create(client);
+        var future = FutureImpl.Create(client);
+        return new MdnsScannerImpl(client, future, listener, subtype);
     }
 
-    private MdnsScanner(Nabto.Edge.Client.Impl.NabtoClient client, Future future, Listener listener, string subtype)
+    private MdnsScannerImpl(Nabto.Edge.Client.Impl.NabtoClientImpl client, FutureImpl future, ListenerImpl listener, string subtype)
     {
         _client = client;
         _future = future;
@@ -43,7 +43,7 @@ public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
         int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(), _listener.GetHandle(), _subtype);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         StartListen();
     }
@@ -60,7 +60,7 @@ public class MdnsScanner : Nabto.Edge.Client.MdnsScanner
 
             if (ec == 0)
             {
-                MdnsResult r = MdnsResult.Create(mdnsResult);
+                MdnsResultImpl r = MdnsResultImpl.Create(mdnsResult);
                 Handlers?.Invoke(r);
                 NabtoClientNative.nabto_client_mdns_result_free(mdnsResult);
             }

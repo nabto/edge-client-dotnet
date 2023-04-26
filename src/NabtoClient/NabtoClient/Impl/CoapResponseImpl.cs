@@ -1,10 +1,10 @@
 namespace Nabto.Edge.Client.Impl;
 
-public class CoapResponse : Nabto.Edge.Client.CoapResponse
+public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
 {
-    private CoapRequest _request;
+    private CoapRequestImpl _request;
 
-    public CoapResponse(CoapRequest request)
+    public CoapResponseImpl(CoapRequestImpl request)
     {
         _request = request;
     }
@@ -17,7 +17,7 @@ public class CoapResponse : Nabto.Edge.Client.CoapResponse
         ec = NabtoClientNative.nabto_client_coap_get_response_status_code(_request.GetHandle(), out statusCode);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return statusCode;
     }
@@ -28,7 +28,7 @@ public class CoapResponse : Nabto.Edge.Client.CoapResponse
         int ec = NabtoClientNative.nabto_client_coap_get_response_content_format(_request.GetHandle(), out contentFormat);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return contentFormat;
     }
@@ -39,7 +39,7 @@ public class CoapResponse : Nabto.Edge.Client.CoapResponse
         int ec = NabtoClientNative.nabto_client_coap_get_response_payload(_request.GetHandle(), out payload);
         if (ec != 0)
         {
-            throw NabtoException.Create(ec);
+            throw NabtoExceptionFactory.Create(ec);
         }
         return payload;
     }

@@ -1,35 +1,35 @@
 namespace Nabto.Edge.Client.Impl;
 using System.Runtime.InteropServices;
 
-class Future
+class FutureImpl
 {
 
     private IntPtr _handle;
-    private Nabto.Edge.Client.Impl.NabtoClient _client;
+    private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private GCHandle? _gcHandle;
 
     TaskCompletionSource<int>? _waitTask;
 
 
-    public static Future Create(Nabto.Edge.Client.Impl.NabtoClient client)
+    public static FutureImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_future_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
             throw new NullReferenceException();
         }
-        return new Future(client, ptr);
+        return new FutureImpl(client, ptr);
     }
 
 
 
-    public Future(Nabto.Edge.Client.Impl.NabtoClient client, IntPtr handle)
+    public FutureImpl(Nabto.Edge.Client.Impl.NabtoClientImpl client, IntPtr handle)
     {
         _client = client;
         _handle = handle;
     }
 
-    ~Future()
+    ~FutureImpl()
     {
         NabtoClientNative.nabto_client_future_free(_handle);
     }
@@ -42,7 +42,7 @@ class Future
     private static void CallbackHandler(IntPtr ptr, int ec, IntPtr userData)
     {
         GCHandle gch = GCHandle.FromIntPtr(userData);
-        Future? future = (Future?)gch.Target;
+        FutureImpl? future = (FutureImpl?)gch.Target;
         future?.HandleCallback(ec);
     }
 

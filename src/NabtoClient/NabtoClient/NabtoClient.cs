@@ -8,7 +8,7 @@ namespace Nabto.Edge.Client;
 
 public interface NabtoClient {
     public static NabtoClient Create() {
-        return Impl.NabtoClient.Create();
+        return Impl.NabtoClientImpl.Create();
     }
     public string GetVersion();
 
