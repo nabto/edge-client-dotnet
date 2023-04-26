@@ -257,10 +257,9 @@ public class TestDeviceRunner : IDisposable
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            info.FileName = "../../../../../test-devices/tcp_tunnel_device_windows";
+            info.FileName = "../../../../../test-devices/tcp_tunnel_device_windows.exe";
         }
 
-        info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux";
         info.Arguments = $"-H {_tempPath} --random-ports";
         info.RedirectStandardError = true;
         info.RedirectStandardOutput = true;
