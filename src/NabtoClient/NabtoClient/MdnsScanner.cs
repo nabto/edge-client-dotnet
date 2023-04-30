@@ -9,8 +9,7 @@ public class MdnsResult {
 
     /**
      * <summary>
-     * Action which is associated with a result. This is used together
-     * with the service instance name to manipulate the list of device.
+     * Actions emitted by device to manipulate the mDNS service cache in the client. Applies to the service identified by serviceInstanceName in the result.
      *
      * <list type="bullet">
      * <item>
@@ -37,11 +36,32 @@ public class MdnsResult {
         REMOVE = 2
     }
 
-    /* TODO
+    /**
+     * <summary>
+     * The service instance name. Can be considered a globally unique primary key for the announced service and used for maintaining a service cache in the client, identifying each entry. The provided action in the result specifies how the cache should be updated for this service.
+     * </summary>
      */
     public string? ServiceInstanceName { get; set; }
+
+    /**
+     * <summary>
+     * Product id, nil if not set in received result.
+     * </summary>
+     */
     public string? ProductId { get; set; }
+
+    /**
+     * <summary>
+     * Device id, nil if not set in received result.
+     * </summary>
+     */
     public string? DeviceId { get; set; }
+
+    /**
+     * <summary>
+     * The action indicating how this result should be used for updating the client’s service cache.
+     * </summary>
+     */
     public MdnsAction Action { get; set; }
 };
 
