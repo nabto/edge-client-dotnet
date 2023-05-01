@@ -238,10 +238,22 @@ public class NabtoClientError
      */
     public static int PRIVILEGED_PORT = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_PRIVILEGED_PORT_value();
 
+    /**
+     * <summary>
+     * Map an error code to an English description.
+     * </summary>
+     * <param name="ec">The error code to map to a message</param>
+     */
     public static string GetErrorMessage(int ec) {
         return Nabto.Edge.Client.Impl.NabtoClientNative.nabto_client_error_get_message(ec);
     }
 
+    /**
+     * <summary>
+     * Return the native Nabto Client Edge SDK string representation of an error code, for instance NABTO_CLIENT_EC_OK.
+     * </summary>
+     * <param name="ec">The error code to map to a string</param>
+     */
     public static string GetErrorString(int ec) {
         return Nabto.Edge.Client.Impl.NabtoClientNative.nabto_client_error_get_string(ec);
     }

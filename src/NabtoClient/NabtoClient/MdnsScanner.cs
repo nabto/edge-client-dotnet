@@ -89,8 +89,8 @@ public interface MdnsScanner {
      */
     public void Start();
 
-    /* TODO:
-     *
+    /**
+     * <summary>Access result handlers.</summary>
      */
     public ResultHandler? Handlers { get; set; }
 }

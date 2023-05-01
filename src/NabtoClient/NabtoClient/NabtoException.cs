@@ -7,13 +7,16 @@ namespace Nabto.Edge.Client;
  */
 public class NabtoException : Exception
 {
-     /* TODO
-     * Access the underlying Nabto Edge Client SDK error code.
-     *
+    /**
+     * <summary>Access the underlying Nabto Edge Client SDK error code.</summary>
      * @return The underlying Nabto Edge Client SDK error code.
      */
     public int ErrorCode { get; }
 
+    /**
+     * <summary>Create an exception, representing the underlying Nabto Edge Client SDK error code.</summary>
+     * <param name="ec">The error to represent</param>
+     */
     public NabtoException(int ec)
         : base(NabtoClientError.GetErrorMessage(ec))
     {
@@ -27,6 +30,9 @@ public class NabtoException : Exception
  * </summary>
  */
 public class NotConnectedException : Exception {
+    /**
+     * <summary>Create a NotConnectedException</summary>
+     */
     public NotConnectedException() :
         base("The connection is not connected")
     {

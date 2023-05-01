@@ -44,10 +44,10 @@ public interface TcpTunnel {
      * </list>
      *
      * </summary>
-     * <param name="service"> The service to connect to on the remote device (as defined in the device's</param>
-     * configuration), e.g. "http", "http-admin", "ssh", "rtsp".
-     * <param name="localPort"> The local port to listen on. If 0 is specified, an ephemeral port is used,</param>
-     * it can be retrieved with `getLocalPort()`.
+     * <param name="service"> The service to connect to on the remote device (as defined in the device's
+     * configuration), e.g. "http", "http-admin", "ssh", "rtsp".</param>
+     * <param name="localPort"> The local port to listen on. If 0 is specified, an ephemeral port is used,
+     * it can be retrieved with `getLocalPort()`.</param>
      * <returns>
      *     The Task that will complete once the tunnel is opened.
      * </returns>
@@ -58,7 +58,6 @@ public interface TcpTunnel {
     /**
      * <summary>
      * Close a tunnel without blocking.
-     *
      * </summary>
      * <returns>
      *     The Task that will complete once the tunnel is closed.
@@ -69,7 +68,6 @@ public interface TcpTunnel {
     /**
      * <summary>
      * Get the local port which the tunnel is bound to.
-     *
      * </summary>
      * <exception cref="NabtoException">NabtoException with error code `INVALID_STATE` if the tunnel is not open.</exception>
      * <returns>

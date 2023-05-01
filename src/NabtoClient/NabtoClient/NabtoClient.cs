@@ -69,7 +69,7 @@ public interface NabtoClient {
      * <summary>
      * Create an mDNS scanner to discover local devices. Returned object must be kept alive while in use.
      * </summary>
-     * <param name="subType"> the mDNS subtype to scan for: If the empty string, the mDNS subtype
+     * <param name="subtype"> the mDNS subtype to scan for: If the empty string, the mDNS subtype
      * `_nabto._udp.local` is located; if subtype is specified, `[subtype]._sub._nabto._udp.local` is located.</param>
      * <exception cref="NabtoException">NabtoEdgeClientError</exception>
      * <returns>
