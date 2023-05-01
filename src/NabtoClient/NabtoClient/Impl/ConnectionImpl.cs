@@ -4,6 +4,12 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
+// This is used to hold a connection event such that we can pin the object such
+// that garbage collection does not change the address of the ConnectionEvent.
+public class ConnectionEventHolder {
+    public int ConnectionEvent;
+}
+
 public class ConnectionEventsListenerImpl
 {
     private System.WeakReference<ConnectionImpl> _connection;
@@ -41,15 +47,16 @@ public class ConnectionEventsListenerImpl
     public async Task startListenEvents()
     {
         // Allocate the connectionEvent on the heap such that we can pin it such that the garbage collector is not moving around with the underlying address of the event.
-        var connectionEvent = new int();
+        var connectionEventHolder = new ConnectionEventHolder();
 
-        GCHandle handle = GCHandle.Alloc(connectionEvent, GCHandleType.Pinned);
+        GCHandle handle = GCHandle.Alloc(connectionEventHolder, GCHandleType.Pinned);
         while (true)
         {
-            NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEvent);
+            NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
             var ec = await _connectionEventsFuture.WaitAsync();
             if (ec == 0)
             {
+                var connectionEvent = connectionEventHolder.ConnectionEvent;
                 ConnectionImpl? connection;
                 if (!_connection.TryGetTarget(out connection))
                 {
