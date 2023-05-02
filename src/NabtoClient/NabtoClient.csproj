@@ -13,7 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Condition="$([MSBuild]::IsOSPlatform('Linux'))" Include="..\..\native_libraries\lib\linux-x86_64\libnabto_client.so">
+    <Content Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'" Include="..\..\native_libraries\lib\linux-x86_64\libnabto_client.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'" Include="..\..\native_libraries\lib\linux-arm64\libnabto_client.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Condition="$([MSBuild]::IsOSPlatform('Windows'))" Include="..\..\native_libraries\lib\windows-x86_64\nabto_client.dll">
