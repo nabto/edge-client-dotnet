@@ -15,6 +15,8 @@ public class TestDevice {
 
     public bool? Remote { get; set; }
 
+    public bool? P2p { get; set; }
+
     public ConnectionOptions GetConnectOptions() {
         var co = new ConnectionOptions {
             ProductId = ProductId,
@@ -29,6 +31,10 @@ public class TestDevice {
 
         if ((Remote != null)) {
             co.Remote = Remote;
+        }
+
+        if ((P2p != null)) {
+            co.Rendezvous = P2p; 
         }
 
         return co;
