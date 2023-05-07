@@ -2,15 +2,15 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
-public class ReadOperation
+internal class ReadOperation
 {
 
-    public IntPtr Buffer { get; }
-    public UIntPtr ReadLength;
-    public UIntPtr BufferLength;
+    internal IntPtr Buffer { get; }
+    internal UIntPtr ReadLength;
+    internal UIntPtr BufferLength;
 
 
-    public ReadOperation(int bufferSize)
+    internal ReadOperation(int bufferSize)
     {
         Buffer = Marshal.AllocHGlobal(bufferSize);
         BufferLength = (UIntPtr)bufferSize;
@@ -22,12 +22,12 @@ public class ReadOperation
     }
 }
 
-public class WriteOperation
+internal class WriteOperation
 {
 
-    public IntPtr Buffer { get; }
-    public UIntPtr BufferLength { get; }
-    public WriteOperation(byte[] data)
+    internal IntPtr Buffer { get; }
+    internal UIntPtr BufferLength { get; }
+    internal WriteOperation(byte[] data)
     {
         BufferLength = (UIntPtr)data.Length;
         Buffer = Marshal.AllocHGlobal(data.Length);
@@ -43,6 +43,7 @@ public class WriteOperation
     }
 }
 
+/// <inheritdocs/>
 public class Stream : Nabto.Edge.Client.Stream
 {
 
@@ -50,7 +51,7 @@ public class Stream : Nabto.Edge.Client.Stream
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
 
-    public static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
+    internal static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_stream_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)
@@ -60,6 +61,7 @@ public class Stream : Nabto.Edge.Client.Stream
         return new Stream(client, connection, ptr);
     }
 
+    /// <inheritdocs/>
     public Stream(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
@@ -67,11 +69,13 @@ public class Stream : Nabto.Edge.Client.Stream
         _handle = handle;
     }
 
+    /// <inheritdocs/>
     ~Stream()
     {
         NabtoClientNative.nabto_client_stream_free(_handle);
     }
 
+    /// <inheritdocs/>
     public async Task OpenAsync(UInt32 port)
     {
         TaskCompletionSource openTask = new TaskCompletionSource();
@@ -92,6 +96,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
     }
 
+    /// <inheritdocs/>
     public async Task<byte[]> ReadSomeAsync(int max)
     {
         TaskCompletionSource<byte[]> readTask = new TaskCompletionSource<byte[]>();
@@ -124,6 +129,8 @@ public class Stream : Nabto.Edge.Client.Stream
             throw NabtoExceptionFactory.Create(ec);
         }
     }
+
+    /// <inheritdocs/>
     public async Task<byte[]> ReadAllAsync(int bytes)
     {
         TaskCompletionSource<byte[]> readTask = new TaskCompletionSource<byte[]>();
@@ -155,6 +162,8 @@ public class Stream : Nabto.Edge.Client.Stream
             throw NabtoExceptionFactory.Create(ec);
         }
     }
+
+    /// <inheritdocs/>
     public async Task WriteAsync(byte[] data)
     {
         TaskCompletionSource writeTask = new TaskCompletionSource();
@@ -178,6 +187,8 @@ public class Stream : Nabto.Edge.Client.Stream
             throw NabtoExceptionFactory.Create(ec);
         }
     }
+
+    /// <inheritdocs/>
     public async Task CloseAsync()
     {
         TaskCompletionSource closeTask = new TaskCompletionSource();

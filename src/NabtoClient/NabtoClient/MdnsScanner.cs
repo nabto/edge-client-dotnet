@@ -31,8 +31,12 @@ public class MdnsResult {
      * </summary>
      */
     public enum MdnsAction {
+
+        /// <summary>Adding a new result</summary>
         ADD = 0,
+        /// <summary>Updating existing result</summary>
         UPDATE = 1,
+        /// <summary>Removing existing result</summary>
         REMOVE = 2
     }
 

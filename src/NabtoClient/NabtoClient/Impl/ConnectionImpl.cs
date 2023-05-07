@@ -90,9 +90,10 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private ConnectionEventsListenerImpl _connectionEventsListener;
 
+    /// <inheritdoc/>
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
-    public static ConnectionImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
+    internal static ConnectionImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_connection_new(client.GetHandle());
         if (ptr == IntPtr.Zero)

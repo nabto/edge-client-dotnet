@@ -1,14 +1,16 @@
 namespace Nabto.Edge.Client.Impl;
 
+/// <inheritdoc />
 public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
 {
     private CoapRequestImpl _request;
 
-    public CoapResponseImpl(CoapRequestImpl request)
+    internal CoapResponseImpl(CoapRequestImpl request)
     {
         _request = request;
     }
 
+    /// <inheritdoc/>
     public ushort GetResponseStatusCode()
     {
         ushort statusCode = 0;
@@ -22,6 +24,7 @@ public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
         return statusCode;
     }
 
+    /// <inheritdoc/>
     public ushort GetResponseContentFormat()
     {
         ushort contentFormat = 0;
@@ -33,6 +36,7 @@ public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
         return contentFormat;
     }
 
+    /// <inheritdoc/>
     public byte[] GetResponsePayload()
     {
         byte[] payload;

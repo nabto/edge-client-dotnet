@@ -152,11 +152,11 @@ public class TestDeviceRunner : IDisposable
     private string _tempPath;
 
 
-    private StreamWriter _standardError;
-    private StreamWriter _standardOutput;
+    private StreamWriter _standardError = default!;
+    private StreamWriter _standardOutput = default!;
     private Guid _uuid;
 
-    private Process _deviceProcess;
+    private Process _deviceProcess = default!;
 
     public string ProductId { get; set; } = TestUtil.RandomProductId();
     public string DeviceId { get; set; } = TestUtil.RandomDeviceId();
@@ -198,7 +198,6 @@ public class TestDeviceRunner : IDisposable
 
         _standardError = new StreamWriter(Path.Combine(logsDir, "error.log"));
         _standardOutput = new StreamWriter(Path.Combine(logsDir, "output.log"));
-
     }
 
     public void WriteConfig(string configDir)
