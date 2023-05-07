@@ -19,7 +19,6 @@ public class ConnectionOptions {
      * <summary>Device id of the device to connect to.</summary>
      */
     public string? DeviceId { get; set; }
-
     /**
      * <summary>Override the default relay dispatcher endpoint. This is the initial server the client connects to find and make a remote connection to the remote peer. The default endpoint is https://productid.clients.nabto.com. This is only needed if the solution is deployed as a standalone solution with selfmanaged dns.</summary>
      */
@@ -72,7 +71,7 @@ public class ConnectionOptions {
      * <summary>Set the timeout for getting the first DTLS packet back from the device. This is used to make a connection attempt fail faster if a route to the device is believed to be open, when in fact it is not. Eg. if the device lost its connection to the Nabto Server, but the server has yet to detect the disconnect. Value in milliseconds, default 10000.</summary>
      */
     public int? DtlsHelloTimeout { get; set; }
-
+    
     /**
      * <summary>Enable/disable local connections (default enabled).</summary>
      */
@@ -161,6 +160,21 @@ public interface Connection
      */
     public ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
+    /**
+     * <summary>The type of this connection - relay or direct (local or p2p).</summary>
+     */
+    public enum ConnectionType {
+        /// <summary>local or p2p connection</summary>
+        Direct,
+        /// <summary>relay through basestation</summary>
+        Relay
+    }
+
+    /**
+     * <summary>Get the type of this connection.</summary>
+     * <returns>The type of this connection.</returns>
+     */
+     public ConnectionType GetConnectionType();
 
     /**
      * <summary>
@@ -430,5 +444,5 @@ public interface Connection
      * <returns>The created TCP tunnel.</returns>
      */
     public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
-
-};
+    
+}
