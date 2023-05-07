@@ -55,6 +55,11 @@ class FutureImpl
     }
 
     public delegate void WaitCallbackHandler(int ec);
+
+
+    // Ensure that the FutureCallbackFunc delegate is not garbage collected.
+    private readonly NabtoClientNative.FutureCallbackFunc _callbackHandler = new NabtoClientNative.FutureCallbackFunc(CallbackHandler);
+
     public Task<int> WaitAsync()
     {
         if (_waitTask != null)
@@ -67,7 +72,7 @@ class FutureImpl
         GCHandle handle = GCHandle.Alloc(this);
         _gcHandle = handle;
 
-        NabtoClientNative.nabto_client_future_set_callback(_handle, CallbackHandler, GCHandle.ToIntPtr(handle));
+        NabtoClientNative.nabto_client_future_set_callback(_handle, _callbackHandler, GCHandle.ToIntPtr(handle));
 
         return task;
     }
