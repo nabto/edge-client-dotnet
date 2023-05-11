@@ -43,7 +43,7 @@ internal class WriteOperation
     }
 }
 
-/// <inheritdocs/>
+/// <inheritdoc/>
 public class Stream : Nabto.Edge.Client.Stream
 {
 
@@ -61,7 +61,7 @@ public class Stream : Nabto.Edge.Client.Stream
         return new Stream(client, connection, ptr);
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public Stream(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
@@ -69,13 +69,13 @@ public class Stream : Nabto.Edge.Client.Stream
         _handle = handle;
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     ~Stream()
     {
         NabtoClientNative.nabto_client_stream_free(_handle);
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task OpenAsync(UInt32 port)
     {
         TaskCompletionSource openTask = new TaskCompletionSource();
@@ -96,7 +96,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task<byte[]> ReadSomeAsync(int max)
     {
         TaskCompletionSource<byte[]> readTask = new TaskCompletionSource<byte[]>();
@@ -130,7 +130,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task<byte[]> ReadAllAsync(int bytes)
     {
         TaskCompletionSource<byte[]> readTask = new TaskCompletionSource<byte[]>();
@@ -163,7 +163,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task WriteAsync(byte[] data)
     {
         TaskCompletionSource writeTask = new TaskCompletionSource();
@@ -188,7 +188,7 @@ public class Stream : Nabto.Edge.Client.Stream
         }
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task CloseAsync()
     {
         TaskCompletionSource closeTask = new TaskCompletionSource();

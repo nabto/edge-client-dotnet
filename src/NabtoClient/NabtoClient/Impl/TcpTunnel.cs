@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
-/// <inheritdocs/>
+/// <inheritdoc/>
 public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
 {
 
@@ -27,13 +27,13 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         _handle = handle;
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
      ~TcpTunnel()
     {
         NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task OpenAsync(string service, ushort localPort)
     {
         TaskCompletionSource openTask = new TaskCompletionSource();
@@ -55,7 +55,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         }
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public async Task CloseAsync()
     {
         TaskCompletionSource closeTask = new TaskCompletionSource();
@@ -77,7 +77,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         }
     }
 
-    /// <inheritdocs/>
+    /// <inheritdoc/>
     public ushort GetLocalPort()
     {
         ushort localPort = 0;
