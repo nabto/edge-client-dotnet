@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
-public class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
+internal class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
 {
     public static MdnsResultImpl Create(IntPtr result)
     {
@@ -15,15 +15,17 @@ public class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
     }
 }
 
-public class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
+internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
 {
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private ListenerImpl _listener;
     private FutureImpl _future;
     private string _subtype;
+
+    /// <inheritdoc/>
     public Nabto.Edge.Client.MdnsScanner.ResultHandler? Handlers { get; set; }
 
-    public static Nabto.Edge.Client.MdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, string subtype)
+    internal static Nabto.Edge.Client.MdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, string subtype)
     {
         var listener = ListenerImpl.Create(client);
         var future = FutureImpl.Create(client);
@@ -38,6 +40,7 @@ public class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
         _subtype = subtype;
     }
 
+    /// <inheritdoc/>
     public void Start()
     {
         int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(), _listener.GetHandle(), _subtype);

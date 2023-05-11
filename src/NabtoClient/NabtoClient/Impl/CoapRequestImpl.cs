@@ -1,12 +1,13 @@
 namespace Nabto.Edge.Client.Impl;
 
+/// <inheritdoc />
 public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 {
 
     private IntPtr _handle;
     private NabtoClientImpl _client;
 
-    public static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
+    internal static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
     {
         IntPtr handle = NabtoClientNative.nabto_client_coap_new(connection.GetHandle(), method, path);
         if (handle == IntPtr.Zero)
@@ -16,27 +17,30 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
         return new CoapRequestImpl(client, handle);
     }
 
-    public CoapRequestImpl(NabtoClientImpl client, IntPtr handle)
+    internal CoapRequestImpl(NabtoClientImpl client, IntPtr handle)
     {
         _handle = handle;
         _client = client;
     }
 
+    /// <inheritdoc />
     ~CoapRequestImpl()
     {
         NabtoClientNative.nabto_client_coap_free(_handle);
     }
 
-    public IntPtr GetHandle()
+    internal IntPtr GetHandle()
     {
         return _handle;
     }
 
+    /// <inheritdoc />
     public void SetRequestPayload(ushort contentFormat, byte[] data)
     {
         int ec = NabtoClientNative.nabto_client_coap_set_request_payload(_handle, contentFormat, data);
     }
 
+    /// <inheritdoc />
     public async Task<Nabto.Edge.Client.CoapResponse> ExecuteAsync()
     {
         TaskCompletionSource<Nabto.Edge.Client.CoapResponse> executeTask = new TaskCompletionSource<Nabto.Edge.Client.CoapResponse>();
@@ -57,4 +61,5 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
             throw NabtoExceptionFactory.Create(ec);
         }
     }
+
 }

@@ -1,3 +1,5 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
 
 
@@ -23,13 +25,39 @@ public class ConnectionTest {
         Assert.Equal(NabtoClientError.INVALID_ARGUMENT, ex.ErrorCode);
     }
 
-    [Fact]
+    [Fact] 
     public async Task ConnectFails() {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
         var exception = await Assert.ThrowsAsync<NabtoException>(() => connection.ConnectAsync());
         Assert.Equal(NabtoClientError.INVALID_STATE, exception.ErrorCode);
     }
+
+    [Fact]
+    public async Task GetConnectionType() {
+        var client = NabtoClient.Create();
+
+        using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
+        var logger = loggerFactory.CreateLogger<NabtoClient>();
+        client.SetLogger(logger);
+
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        device.Local = false;
+        device.P2p = false;
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        connection.SetOptions(device.GetConnectOptions());
+
+        var serializerOptions = new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+        var options = device.GetConnectOptions();
+        string jsonString = JsonSerializer.Serialize(options, serializerOptions);
+        Console.WriteLine("Connection.options: {0}", jsonString);
+
+        await connection.ConnectAsync();
+        var type = connection.GetConnectionType();
+        Assert.Equal(Connection.ConnectionType.Relay, type);
+    }
+
 
     [Fact]
     public async Task ConnectOk() {
