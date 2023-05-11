@@ -94,6 +94,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private ConnectionEventsListenerImpl _connectionEventsListener;
+    private bool _disposedUnmanaged;
 
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
@@ -114,12 +115,6 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         _client = client;
         _handle = handle;
         _connectionEventsListener = new ConnectionEventsListenerImpl(this, client);
-    }
-
-    ~ConnectionImpl()
-    {
-        _connectionEventsListener.Stop();
-        NabtoClientNative.nabto_client_connection_free(_handle);
     }
 
     public void DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent e)
@@ -258,4 +253,34 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     {
         return _handle;
     }
-};
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~ConnectionImpl()
+    {
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            _connectionEventsListener.Stop();
+            NabtoClientNative.nabto_client_connection_free(_handle);
+        }
+        _disposedUnmanaged = true;
+    }
+
+}

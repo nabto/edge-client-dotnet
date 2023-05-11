@@ -109,4 +109,48 @@ public class ConnectionTest {
         await connection.CloseAsync();
     }
 
+    [Fact]
+    public void TestSyncDispose() 
+    {
+        var client = NabtoClient.Create();
+        using (var connection = client.CreateConnection()) {            
+            // todo: use a mock framework and inject the nabto resources as dependencies to actually test; for now just put a breakpoint in the dispose impl 
+            Console.WriteLine("Invoking Dispose after this line");
+        }
+    }
+
+    [Fact]
+    public async Task TestAsyncDispose() 
+    {
+        var client = NabtoClient.Create();
+        await using (var connection = client.CreateConnection()) {
+            // todo: use a mock framework and inject the nabto resources as dependencies to actually test; for now just put a breakpoint in the dispose impl
+            Console.WriteLine("Invoking AsyncDispose after this line");
+        }
+    }
+
+    [Fact]
+    public void TestSyncDoubleDisposeOk()
+    {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+
+        connection.Dispose();
+        
+        Exception ex = Record.Exception(() => connection.Dispose());
+        Assert.Null(ex);
+    }
+
+    [Fact]
+    public async void TestAsyncDoubleDisposalOk()
+    {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        
+        await connection.DisposeAsync();
+        
+        Exception ex = await Record.ExceptionAsync(async () => await connection.DisposeAsync());
+        Assert.Null(ex);
+    }
+
 }

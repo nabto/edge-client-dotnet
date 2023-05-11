@@ -34,7 +34,7 @@ public class ConnectionOptions {
  * Instances are created using <c>NabtoClient.createConnection()</c>.
  * </summary>
  */
-public interface Connection
+public interface Connection: IDisposable, IAsyncDisposable
 {
     public enum ConnectionEvent {
         Connected,
