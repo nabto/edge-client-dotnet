@@ -5,7 +5,7 @@ public class ShowPublicKeyFingerprintCommand : AbstractCommand
     public override string Help => "Show the fingerprint of the public key derived from the client's private key associated with this connection.";
 
     public override string Name => "fingerprint";
-    public override int NumArgs => 0;
+    public override int NumArgs => 1;
     
     public override void Execute(string[] args)
     {
