@@ -16,7 +16,7 @@ public class ConnectCommand : AbstractCommand
             string productId = args[0];
             string deviceId = args[1];
             string? sct = args.Length > 2 ? args[2] : null;        
-            ConnectionManager.Instance.Connect(deviceId: deviceId, productId: productId, sct: sct);
+            _connectionManager.Connect(deviceId: deviceId, productId: productId, sct: sct);
         }   
     }
 
@@ -44,7 +44,7 @@ public class ConnectCommand : AbstractCommand
 
         if (tokens.ContainsKey("p") && tokens.ContainsKey("d")) {
             string? sct = tokens.ContainsKey("sct") ? tokens["sct"] : null;
-            ConnectionManager.Instance.Connect(deviceId: tokens["d"], productId: tokens["p"], sct: sct);
+            _connectionManager.Connect(deviceId: tokens["d"], productId: tokens["p"], sct: sct);
         } else {
             Console.WriteLine("Invalid pairing string - either spcecify product-id and device-id or a valid pairing string.");
         }

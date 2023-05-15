@@ -2,6 +2,11 @@ public class CommandInvoker
 {
     private readonly Dictionary<string, ICommand> _commands = new Dictionary<string, ICommand>();
 
+    public CommandInvoker()
+    {
+        RegisterCommands();
+    }
+
     public List<ICommand> GetCommands() {  
         return _commands.Values.ToList().OrderBy(x => x).ToList();
     }
@@ -9,6 +14,19 @@ public class CommandInvoker
     public void RegisterCommand(ICommand command)
     {
         _commands[command.Name] = command;
+    }
+
+    private void RegisterCommands()
+    {
+        RegisterCommand(new VersionCommand());
+        RegisterCommand(new ListConnectionsCommand());
+        RegisterCommand(new ConnectCommand());
+        RegisterCommand(new ConnectAxisCommand());
+        RegisterCommand(new ShowPublicKeyFingerprintCommand());
+        RegisterCommand(new InvokeCoapCommand());
+        RegisterCommand(new GetDeviceInfoCoapRequest());
+        RegisterCommand(new StopCommand());
+        RegisterCommand(new HelpCommand(GetCommands()));
     }
 
     public void ExecuteCommand(string line)
@@ -26,6 +44,21 @@ public class CommandInvoker
         else
         {
             Console.WriteLine($"Unknown command: {name}");
+        }
+    }
+
+    public void Run() {
+        Console.WriteLine("Nabto Edge Interactive CLI");
+        Console.WriteLine("Write 'help' to see available commands and 'exit' to stop.");
+        while (true)
+        {
+            Console.Write("> ");
+            var line = Console.ReadLine();
+            if (line == "exit")
+            {
+                break;
+            }
+            ExecuteCommand(line);
         }
     }
 

@@ -15,7 +15,7 @@ public class ShowPublicKeyFingerprintCommand : AbstractCommand
             return;
         }
         Connection connection;
-        if (!ConnectionManager.Instance.GetConnection(id, out connection)) {
+        if (!_connectionManager.GetConnection(id, out connection)) {
             Console.WriteLine("No connection with id: {0}", id);
             return;
         }

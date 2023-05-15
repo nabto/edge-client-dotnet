@@ -13,6 +13,8 @@ public interface ICommand: IComparable<ICommand>
 
 public abstract class AbstractCommand : ICommand {
 
+    protected IConnectionManager _connectionManager;
+
     public abstract string Help { get; }
 
     public abstract string Name { get; }
@@ -34,4 +36,11 @@ public abstract class AbstractCommand : ICommand {
             return false;
         }
     }   
+
+    public AbstractCommand(IConnectionManager connectionManager) {
+        _connectionManager = connectionManager;
+    }
+
+    public AbstractCommand() {        
+    }
 }

@@ -6,7 +6,7 @@ public class ListConnectionsCommand: AbstractCommand {
 
     public override void Execute(string[] args) {
         Console.WriteLine("Established connections:");
-        var connectionEntries = ConnectionManager.Instance.GetConnectionEntries();
+        var connectionEntries = _connectionManager.GetConnectionEntries();
 
         if (connectionEntries.Count > 0) {
             var keys = connectionEntries.Keys.ToList().OrderBy(x => x);
