@@ -2,8 +2,10 @@
 invoker.RegisterCommand(new VersionCommand());
 invoker.RegisterCommand(new ListConnectionsCommand());
 invoker.RegisterCommand(new ConnectCommand());
+invoker.RegisterCommand(new ConnectAxisCommand());
 invoker.RegisterCommand(new ShowPublicKeyFingerprintCommand());
 invoker.RegisterCommand(new InvokeCoapCommand());
+invoker.RegisterCommand(new GetDeviceInfoCoapRequest());
 invoker.RegisterCommand(new HelpCommand(invoker.GetCommands()));
 
 Console.WriteLine("Nabto Edge Interactive CLI");

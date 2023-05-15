@@ -20,9 +20,6 @@ public class InvokeCoapCommand : AbstractCommand
             return;
         }
 
-        Console.WriteLine("XXX Client fingerprint: ");
-        Console.WriteLine(connection.GetClientFingerprint());        
-
         var request = connection.CreateCoapRequest(args[1], args[2]);
         if (args.Length > 3) {
             Console.WriteLine("TODO: set payload");
