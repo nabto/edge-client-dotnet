@@ -5,7 +5,7 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 
     private IntPtr _handle;
     private NabtoClientImpl _client;
-    private bool _disposedUnmanaged;
+    internal bool _disposedUnmanaged;
 
     public static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
     {

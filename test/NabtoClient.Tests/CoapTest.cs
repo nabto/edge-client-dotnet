@@ -25,4 +25,23 @@ public class CoapTest {
         Assert.Equal(0, contentFormat);
         Assert.True(payload.Length > 4);
     }
+
+    [Fact]
+    public async Task GracefullyHandleDisposeRequestBeforeResponse() {
+        var client = NabtoClient.Create();
+
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        await connection.ConnectAsync();
+
+        CoapResponse response;
+        using (var coapRequest = connection.CreateCoapRequest("GET", "/hello-world")) {
+            response = await coapRequest.ExecuteAsync();
+        }
+        Assert.Throws<ObjectDisposedException>(() => response.GetResponseStatusCode());
+    }
+
+
 }
