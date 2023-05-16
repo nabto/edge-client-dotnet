@@ -257,6 +257,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public void Dispose()
     {
+        Console.WriteLine("*** ConnectionImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -264,6 +265,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
+        Console.WriteLine("*** ConnectionImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -272,6 +274,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     ~ConnectionImpl()
     {
+        Console.WriteLine("*** ConnectionImpl finalizer called");
         DisposeUnmanaged();
     }
 

@@ -5,6 +5,7 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 
     private IntPtr _handle;
     private NabtoClientImpl _client;
+    private bool _disposedUnmanaged;
 
     public static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
     {
@@ -20,11 +21,6 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     {
         _handle = handle;
         _client = client;
-    }
-
-    ~CoapRequestImpl()
-    {
-        NabtoClientNative.nabto_client_coap_free(_handle);
     }
 
     public IntPtr GetHandle()
@@ -47,6 +43,8 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 
         var ec = await future.WaitAsync();
 
+        Console.WriteLine(" *** CoapRequestImpl.ExecuteAsync() done");
+
         if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
         {
 
@@ -56,5 +54,39 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
         {
             throw NabtoExceptionFactory.Create(ec);
         }
+
     }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Console.WriteLine("*** CoapRequestImpl Dispose called");
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        Console.WriteLine("*** CoapRequestImpl DisposeAsync called");
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~CoapRequestImpl()
+    {
+        Console.WriteLine("*** CoapRequestImpl finalizer called");
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            NabtoClientNative.nabto_client_coap_free(_handle);
+        }
+        _disposedUnmanaged = true;
+    }
+
+
 }

@@ -4,6 +4,8 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
+
         {
             "name": "MdnsScanner (console)",
             "type": "coreclr",
@@ -12,6 +14,17 @@
             "program": "${workspaceFolder}/samples/MdnsScanner/bin/Debug/net7.0/MdnsScanner.dll",
             "args": [],
             "cwd": "${workspaceFolder}/samples/MdnsScanner",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "InteractiveCli (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/samples/InteractiveCli/bin/Debug/net7.0/InteractiveCli.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/samples/InteractiveCli",
             "stopAtEntry": false,
             "console": "internalConsole"
         },
