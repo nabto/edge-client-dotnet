@@ -3,9 +3,15 @@ using System.Formats.Cbor;
 
 public class InvokeCoapCommand : AbstractCommand
 {
+    public InvokeCoapCommand(IConnectionManager connectionManager) : base(connectionManager)
+    {
+    }
+
     public override string Help => "Invoke CoAP request on a connection: coap <id> <method> <path> [<payload>]";
     public override string Name => "invoke";
     public override int NumArgs => 3;
+    
+
     
     public override void Execute(string[] args)
     {

@@ -39,7 +39,7 @@ public class InteractiveCli{
     {
         await using (var connectionManager = new ConnectionManager()) {
             connectionManager.Start();
-            CommandInvoker invoker = new CommandInvoker();
+            CommandInvoker invoker = new CommandInvoker(connectionManager);
             invoker.Run();
         }
         Console.WriteLine("Exiting.");

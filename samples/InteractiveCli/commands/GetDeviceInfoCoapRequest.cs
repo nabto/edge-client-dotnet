@@ -14,6 +14,10 @@ public class DeviceData
 
 public class GetDeviceInfoCoapRequest : AbstractCommand
 {
+    public GetDeviceInfoCoapRequest(IConnectionManager connectionManager) : base(connectionManager)
+    {
+    }
+
     public override string Help => "Invoke CoAP GET /iam/pairing to get device info: info <connection id>";
     public override string Name => "info";
     public override int NumArgs => 1;

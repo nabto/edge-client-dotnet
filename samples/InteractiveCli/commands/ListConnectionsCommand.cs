@@ -1,4 +1,7 @@
 public class ListConnectionsCommand: AbstractCommand {
+    public ListConnectionsCommand(IConnectionManager connectionManager) : base(connectionManager)
+    {
+    }
 
     public override string Name => "list";
     public override string Help => "List established connections";

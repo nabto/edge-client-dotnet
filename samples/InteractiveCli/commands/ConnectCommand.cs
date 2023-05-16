@@ -2,6 +2,10 @@ using Nabto.Edge.Client;
 
 public class ConnectCommand : AbstractCommand
 {
+    public ConnectCommand(IConnectionManager connectionManager) : base(connectionManager)
+    {
+    }
+
     public override string Help => "Connect to specified device: connect {<product-id> <device-id> [<sct>] | <pairing-string> }";
 
     public override string Name => "connect";
@@ -48,6 +52,7 @@ public class ConnectCommand : AbstractCommand
         } else {
             Console.WriteLine("Invalid pairing string - either spcecify product-id and device-id or a valid pairing string.");
         }
-
     }
+
+    
 }

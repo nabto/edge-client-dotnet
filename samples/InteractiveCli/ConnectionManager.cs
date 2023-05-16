@@ -191,12 +191,11 @@ public sealed class ConnectionManager : IDisposable, IAsyncDisposable, IConnecti
     }
 
     /// <inheritdoc/>
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         Console.WriteLine("*** ConnectionManager DisposeAsync called");
-        var result = StopAsync();
+        await StopAsync();
         GC.SuppressFinalize(this);
-        return result;
     }
 
     /// <inheritdoc/>

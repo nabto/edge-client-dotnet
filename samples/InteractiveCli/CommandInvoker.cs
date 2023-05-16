@@ -2,9 +2,9 @@ public class CommandInvoker
 {
     private readonly Dictionary<string, ICommand> _commands = new Dictionary<string, ICommand>();
 
-    public CommandInvoker()
+    public CommandInvoker(IConnectionManager connectionManager)
     {
-        RegisterCommands();
+        RegisterCommands(connectionManager);
     }
 
     public List<ICommand> GetCommands() {  
@@ -16,16 +16,16 @@ public class CommandInvoker
         _commands[command.Name] = command;
     }
 
-    private void RegisterCommands()
+    private void RegisterCommands(IConnectionManager connectionManager)
     {
         RegisterCommand(new VersionCommand());
-        RegisterCommand(new ListConnectionsCommand());
-        RegisterCommand(new ConnectCommand());
-        RegisterCommand(new ConnectAxisCommand());
-        RegisterCommand(new ShowPublicKeyFingerprintCommand());
-        RegisterCommand(new InvokeCoapCommand());
-        RegisterCommand(new GetDeviceInfoCoapRequest());
-        RegisterCommand(new StopCommand());
+        RegisterCommand(new ListConnectionsCommand(connectionManager));
+        RegisterCommand(new ConnectCommand(connectionManager));
+        RegisterCommand(new ConnectAxisCommand(connectionManager));
+        RegisterCommand(new ShowPublicKeyFingerprintCommand(connectionManager));
+        RegisterCommand(new InvokeCoapCommand(connectionManager));
+        RegisterCommand(new GetDeviceInfoCoapRequest(connectionManager));
+        RegisterCommand(new StopCommand(connectionManager));
         RegisterCommand(new HelpCommand(GetCommands()));
     }
 
