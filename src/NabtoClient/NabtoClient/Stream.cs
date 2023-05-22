@@ -2,14 +2,15 @@ namespace Nabto.Edge.Client;
 
 /**
  * <summary>
- * The Stream API.
  *
- * The Streaming API enables socket-like communication between client and device. The stream is
+ * <para>The Stream API.</para>
+ *
+ * <para>The Streaming API enables socket-like communication between client and device. The stream is
  * reliable and ensures data is received ordered and complete. If either of these conditions cannot be
- * met, the stream will be closed in such a way that it is detectable.
+ * met, the stream will be closed in such a way that it is detectable.</para>
  *
- * Stream instances are created using the Connection.createStream() factory method.
- * The Stream object must be kept alive while in use.
+ * <para>Stream instances are created using the Connection.createStream() factory method.
+ * The Stream object must be kept alive while in use.</para>
  *
  * </summary>
  */
@@ -17,8 +18,7 @@ public interface Stream {
 
     /**
      * <summary>
-     * Open a stream async.
-     * The returned task can fail with
+     * Open a stream asynchronously. The returned task can fail with
      * <list type="bullet">
      * <item>
      *   <description>
@@ -31,10 +31,9 @@ public interface Stream {
      *   </description>
      * </item>
      * </list>
-     *
      * </summary>
-     * <param name="streamPort">  The streamPort to use on the remote server, a</param>
-     * streamPort is a demultiplexing id.
+     * <param name="port">  The port to use on the remote server, a
+     * streamPort is a demultiplexing id.</param>
      * <returns>
      *     The Task that will complete once the stream is opened.
      * </returns>
@@ -104,9 +103,8 @@ public interface Stream {
     /**
      * <summary>
      * Write bytes to a stream.
-     *
      * </summary>
-     * <param name="bytes">  The bytes to write to the stream.</param>
+     * <param name="data">  The data to write to the stream.</param>
      * <returns>
      *     The Task that will complete once the operation is done.
      * </returns>
@@ -115,12 +113,12 @@ public interface Stream {
 
     /**
      * <summary>
-     * Close the write direction of the stream. This will make the
+     * <para>Close the write direction of the stream. This will make the
      * other end reach end of file when reading from a stream when all
-     * sent data has been received and acknowledged.
+     * sent data has been received and acknowledged.</para>
      *
-     * A call to close does not affect the read direction of the
-     * stream.
+     * <para>A call to close does not affect the read direction of the
+     * stream.</para>
      *
      * Close can fail with the with:
      * <list type="bullet">

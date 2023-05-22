@@ -1,10 +1,11 @@
 namespace Nabto.Edge.Client.Impl;
 
+/// <inheritdoc />
 public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
 {
     private CoapRequestImpl _request;
 
-    public CoapResponseImpl(CoapRequestImpl request)
+    internal CoapResponseImpl(CoapRequestImpl request)
     {
         _request = request;
     }
@@ -15,6 +16,7 @@ public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
         }
     }
 
+    /// <inheritdoc/>
     public ushort GetResponseStatusCode()
     {
         AssertRequestIsAlive();
@@ -28,6 +30,7 @@ public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
         return statusCode;
     }
 
+    /// <inheritdoc/>
     public ushort GetResponseContentFormat()
     {
         AssertRequestIsAlive();
@@ -40,6 +43,7 @@ public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
         return contentFormat;
     }
 
+    /// <inheritdoc/>
     public byte[] GetResponsePayload()
     {
         AssertRequestIsAlive();

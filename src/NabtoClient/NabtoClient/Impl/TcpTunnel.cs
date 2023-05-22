@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
+/// <inheritdoc/>
 public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
 {
 
@@ -9,7 +10,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
 
-    public static Nabto.Edge.Client.TcpTunnel Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
+    internal static Nabto.Edge.Client.TcpTunnel Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_tcp_tunnel_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)
@@ -19,18 +20,20 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         return new TcpTunnel(client, connection, ptr);
     }
 
-    public TcpTunnel(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
+    internal TcpTunnel(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
         _handle = handle;
     }
 
-    ~TcpTunnel()
+    /// <inheritdoc/>
+     ~TcpTunnel()
     {
         NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
     }
 
+    /// <inheritdoc/>
     public async Task OpenAsync(string service, ushort localPort)
     {
         TaskCompletionSource openTask = new TaskCompletionSource();
@@ -51,6 +54,8 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
             throw NabtoExceptionFactory.Create(ec);
         }
     }
+
+    /// <inheritdoc/>
     public async Task CloseAsync()
     {
         TaskCompletionSource closeTask = new TaskCompletionSource();
@@ -72,6 +77,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         }
     }
 
+    /// <inheritdoc/>
     public ushort GetLocalPort()
     {
         ushort localPort = 0;
@@ -82,4 +88,5 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         }
         return localPort;
     }
+
 }

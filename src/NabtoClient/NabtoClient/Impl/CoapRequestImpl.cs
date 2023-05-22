@@ -1,5 +1,6 @@
 namespace Nabto.Edge.Client.Impl;
 
+/// <inheritdoc />
 public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 {
 
@@ -25,7 +26,7 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
         }
     }
 
-    public static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
+    internal static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
     {
         AssertConnectionIsAlive(connection);
         IntPtr handle = NabtoClientNative.nabto_client_coap_new(connection.GetHandle(), method, path);
@@ -36,23 +37,25 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
         return new CoapRequestImpl(client, handle);
     }
 
-    public CoapRequestImpl(NabtoClientImpl client, IntPtr handle)
+    internal CoapRequestImpl(NabtoClientImpl client, IntPtr handle)
     {
         _handle = handle;
         _client = client;
     }
 
-    public IntPtr GetHandle()
+    internal IntPtr GetHandle()
     {
         return _handle;
     }
 
+    /// <inheritdoc />
     public void SetRequestPayload(ushort contentFormat, byte[] data)
     {
         AssertSelfIsAlive();
         int ec = NabtoClientNative.nabto_client_coap_set_request_payload(_handle, contentFormat, data);
     }
 
+    /// <inheritdoc />
     public async Task<Nabto.Edge.Client.CoapResponse> ExecuteAsync()
     {
         AssertClientIsAlive();
@@ -107,6 +110,5 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
         }
         _disposedUnmanaged = true;
     }
-
 
 }
