@@ -178,14 +178,6 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
     /// <inheritdoc />
-    ~ConnectionImpl()
-    {
-        _connectionEventsListener.Stop();
-        NabtoClientNative.nabto_client_connection_free(_handle);
-    }
-
-
-    /// <inheritdoc />
     public void DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent e)
     {
         ConnectionEventHandlers?.Invoke(e);
