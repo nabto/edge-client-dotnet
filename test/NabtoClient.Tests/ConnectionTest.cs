@@ -153,4 +153,30 @@ public class ConnectionTest {
         Assert.Null(ex);
     }
 
+    [Fact]
+    public async Task GracefullyHandleDisposeClientBeforeConnect()
+    {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
+
+        await client.DisposeAsync();
+        await Assert.ThrowsAsync<ObjectDisposedException>(async () => await connection.ConnectAsync());
+    }
+
+    [Fact]
+    public async Task GracefullyHandleDisposeClientBeforeCoapRequest() {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        await connection.ConnectAsync();
+        var coapRequest = connection.CreateCoapRequest("GET", "/hello-world");
+
+        await client.DisposeAsync();
+        await Assert.ThrowsAsync<ObjectDisposedException>(async () => await coapRequest.ExecuteAsync());
+    }
 }

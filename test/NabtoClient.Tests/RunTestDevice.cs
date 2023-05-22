@@ -268,11 +268,17 @@ public class TestDeviceRunner : IDisposable
         {
             StartInfo = info
         };
-        _deviceProcess.Start();
+        bool v = _deviceProcess.Start();
 
         _ = ReadOutputAsync(_deviceProcess.StandardError, _standardError);
         _ = ReadOutputAsync(_deviceProcess.StandardOutput, _standardOutput);
+        _deviceProcess.Exited += this.ProcessExited;
+        _deviceProcess.EnableRaisingEvents = true;
     }
+
+   public void ProcessExited(object? sender, EventArgs e) {
+      Console.WriteLine($"XXXXXXXXXXXX exited: {_deviceProcess.ExitCode}");
+   }
 
     public async Task ReadOutputAsync(StreamReader sr, StreamWriter sw)
     {
