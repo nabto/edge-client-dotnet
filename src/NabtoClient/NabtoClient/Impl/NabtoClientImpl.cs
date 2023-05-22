@@ -8,6 +8,8 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     private IntPtr _handle;
     private NabtoClientNative.LogCallbackFunc? _logCallback;
 
+    internal bool _disposedUnmanaged;
+
     public static NabtoClientImpl Create() {
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
         if (ptr == IntPtr.Zero) {
@@ -21,9 +23,37 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
         _handle = h;
     }
 
-    ~NabtoClientImpl() {
-        NabtoClientNative.nabto_client_free(_handle);
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Console.WriteLine("*** ClientImpl Dispose called");
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
     }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        Console.WriteLine("*** ClientImpl DisposeAsync called");
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~NabtoClientImpl()
+    {
+        Console.WriteLine("*** ClientImpl finalizer called");
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            NabtoClientNative.nabto_client_free(_handle);
+        }
+        _disposedUnmanaged = true;
+    }
+
 
     public IntPtr GetHandle() {
         return _handle;

@@ -7,8 +7,27 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     private NabtoClientImpl _client;
     internal bool _disposedUnmanaged;
 
+    private void AssertClientIsAlive() {
+        if (_client._disposedUnmanaged) {
+            throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this CoapRequest instance has been disposed.");
+        }
+    }
+
+    private static void AssertConnectionIsAlive(ConnectionImpl connection) {
+        if (connection._disposedUnmanaged) {
+            throw new ObjectDisposedException("Connection", "The Connection instance associated with this CoapRequest instance has been disposed.");
+        }
+    }
+
+    private void AssertSelfIsAlive() {
+        if (_disposedUnmanaged) {
+            throw new ObjectDisposedException("CoapRequest", "This CoapRequest has been disposed.");
+        }
+    }
+
     public static CoapRequestImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, string method, string path)
     {
+        AssertConnectionIsAlive(connection);
         IntPtr handle = NabtoClientNative.nabto_client_coap_new(connection.GetHandle(), method, path);
         if (handle == IntPtr.Zero)
         {
@@ -30,31 +49,32 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 
     public void SetRequestPayload(ushort contentFormat, byte[] data)
     {
+        AssertSelfIsAlive();
         int ec = NabtoClientNative.nabto_client_coap_set_request_payload(_handle, contentFormat, data);
     }
 
     public async Task<Nabto.Edge.Client.CoapResponse> ExecuteAsync()
     {
+        AssertClientIsAlive();
+        AssertSelfIsAlive();
+
         TaskCompletionSource<Nabto.Edge.Client.CoapResponse> executeTask = new TaskCompletionSource<Nabto.Edge.Client.CoapResponse>();
         var task = executeTask.Task;
-        FutureImpl future = FutureImpl.Create(_client);
+        await using (FutureImpl future = FutureImpl.Create(_client)) {
 
-        NabtoClientNative.nabto_client_coap_execute(_handle, future.GetHandle());
+            NabtoClientNative.nabto_client_coap_execute(_handle, future.GetHandle());
 
-        var ec = await future.WaitAsync();
+            var ec = await future.WaitAsync();
 
-        Console.WriteLine(" *** CoapRequestImpl.ExecuteAsync() done");
-
-        if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
-        {
-
-            return new CoapResponseImpl(this);
+            if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
+            {
+                return new CoapResponseImpl(this);
+            }
+            else
+            {
+                throw NabtoExceptionFactory.Create(ec);
+            }
         }
-        else
-        {
-            throw NabtoExceptionFactory.Create(ec);
-        }
-
     }
 
     /// <inheritdoc/>

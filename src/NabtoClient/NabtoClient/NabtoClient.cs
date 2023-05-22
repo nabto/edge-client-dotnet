@@ -14,7 +14,7 @@ namespace Nabto.Edge.Client;
  * The Client object must be kept alive for the duration of all connections created from it.
  * </summary>
  */
-public interface NabtoClient {
+public interface NabtoClient : IDisposable, IAsyncDisposable {
 
     /**
      * <summary>

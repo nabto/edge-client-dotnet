@@ -10,36 +10,48 @@ public class ConnectionEventHolder {
     public int ConnectionEvent;
 }
 
-public class ConnectionEventsListenerImpl
+public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
 {
     private System.WeakReference<ConnectionImpl> _connection;
 
-    private ListenerImpl _connectionEventslistener;
+    private ListenerImpl _connectionEventsListener;
 
     private FutureImpl _connectionEventsFuture;
 
     private Task _eventsListenerTask;
 
+    private bool _disposedUnmanaged;
+
+    private void AssertConnectionIsAlive(ConnectionImpl connection) {
+        if (connection._disposedUnmanaged) {
+            throw new ObjectDisposedException("Connection", "The Connection instance associated with this ConnectionEventsListener instance has been disposed.");
+        }
+    }
+
+    private void AssertListenerIsAlive() {
+        if (_connectionEventsListener._disposedUnmanaged) {
+            throw new ObjectDisposedException("ConnectionEventsListener", "The Listener instance associated with this ConnectionEventsListener instance has been disposed.");
+        }
+    }
 
 
     public ConnectionEventsListenerImpl(ConnectionImpl connection, Nabto.Edge.Client.Impl.NabtoClientImpl client)
     {
         _connection = new System.WeakReference<ConnectionImpl>(connection);
 
-        _connectionEventslistener = ListenerImpl.Create(client);
+        _connectionEventsListener = ListenerImpl.Create(client);
         _connectionEventsFuture = FutureImpl.Create(client);
 
-        NabtoClientNative.nabto_client_connection_events_init_listener(connection.GetHandle(), _connectionEventslistener.GetHandle());
+        AssertConnectionIsAlive(connection);
+        AssertListenerIsAlive();
+        
+        NabtoClientNative.nabto_client_connection_events_init_listener(connection.GetHandle(), _connectionEventsListener.GetHandle());
         _eventsListenerTask = Task.Run(startListenEvents);
-
-    }
-
-    ~ConnectionEventsListenerImpl() {
     }
 
     public void Stop()
     {
-        _connectionEventslistener.Stop();
+        _connectionEventsListener.Stop();
     }
 
 
@@ -52,7 +64,8 @@ public class ConnectionEventsListenerImpl
         GCHandle handle = GCHandle.Alloc(connectionEventHolder, GCHandleType.Pinned);
         while (true)
         {
-            NabtoClientNative.nabto_client_listener_connection_event(_connectionEventslistener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
+            AssertListenerIsAlive();
+            NabtoClientNative.nabto_client_listener_connection_event(_connectionEventsListener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
             var ec = await _connectionEventsFuture.WaitAsync();
             if (ec == 0)
             {
@@ -86,6 +99,39 @@ public class ConnectionEventsListenerImpl
         }
     }
 
+        /// <inheritdoc/>
+    public void Dispose()
+    {
+        Console.WriteLine("*** ConnectionEventsListenerImpl Dispose called");
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        Console.WriteLine("*** ConnectionEventsListenerImpl DisposeAsync called");
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~ConnectionEventsListenerImpl()
+    {
+        Console.WriteLine("*** ConnectionEventsListenerImpl finalizer called");
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            _connectionEventsListener.Stop();
+            _connectionEventsListener.Dispose();
+        }
+        _disposedUnmanaged = true;
+    }
+
+
 };
 
 public class ConnectionImpl : Nabto.Edge.Client.Connection
@@ -94,12 +140,19 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private ConnectionEventsListenerImpl _connectionEventsListener;
-    private bool _disposedUnmanaged;
+    internal bool _disposedUnmanaged;
 
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
-    public static ConnectionImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
+    private void AssertClientIsAlive() {
+        if (_client._disposedUnmanaged) {
+            throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this Connection instance has been disposed.");
+        }
+    }
+
+  public static ConnectionImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
     {
+
         IntPtr ptr = NabtoClientNative.nabto_client_connection_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
@@ -162,6 +215,8 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
 
     public async Task ConnectAsync()
     {
+        AssertClientIsAlive();
+
         TaskCompletionSource connectTask = new TaskCompletionSource();
         var task = connectTask.Task;
 
@@ -182,6 +237,8 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
 
     public async Task CloseAsync()
     {
+        AssertClientIsAlive();
+
         TaskCompletionSource closeTask = new TaskCompletionSource();
         var task = closeTask.Task;
 
@@ -202,6 +259,8 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
 
     public async Task PasswordAuthenticate(string username, string password)
     {
+        AssertClientIsAlive();
+
         TaskCompletionSource passwordAuthenticateTask = new TaskCompletionSource();
         var task = passwordAuthenticateTask.Task;
 
