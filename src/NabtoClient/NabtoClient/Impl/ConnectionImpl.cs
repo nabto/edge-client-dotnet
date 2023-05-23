@@ -17,7 +17,7 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
 {
     private System.WeakReference<ConnectionImpl> _connection;
 
-    private ListenerImpl _connectionEventsListener;
+    private ListenerImpl _listener;
 
     private FutureImpl _connectionEventsFuture;
 
@@ -32,7 +32,7 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     }
 
     private void AssertListenerIsAlive() {
-        if (_connectionEventsListener._disposedUnmanaged) {
+        if (_listener._disposedUnmanaged) {
             throw new ObjectDisposedException("ConnectionEventsListener", "The Listener instance associated with this ConnectionEventsListener instance has been disposed.");
         }
     }
@@ -43,20 +43,20 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     {
         _connection = new System.WeakReference<ConnectionImpl>(connection);
 
-        _connectionEventsListener = ListenerImpl.Create(client);
+        _listener = ListenerImpl.Create(client);
         _connectionEventsFuture = FutureImpl.Create(client);
 
         AssertConnectionIsAlive(connection);
         AssertListenerIsAlive();
 
-        NabtoClientNative.nabto_client_connection_events_init_listener(connection.GetHandle(), _connectionEventsListener.GetHandle());
+        NabtoClientNative.nabto_client_connection_events_init_listener(connection.GetHandle(), _listener.GetHandle());
         _eventsListenerTask = Task.Run(startListenEvents);
     }
 
     /// <inheritdoc />
     public void Stop()
     {
-        _connectionEventsListener.Stop();
+        _listener.Stop();
     }
 
     /// <inheritdoc />
@@ -69,7 +69,7 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
         while (true)
         {
             AssertListenerIsAlive();
-            NabtoClientNative.nabto_client_listener_connection_event(_connectionEventsListener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
+            NabtoClientNative.nabto_client_listener_connection_event(_listener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
             var ec = await _connectionEventsFuture.WaitAsync();
             if (ec == 0)
             {
@@ -106,7 +106,6 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
         /// <inheritdoc/>
     public void Dispose()
     {
-        Console.WriteLine("*** ConnectionEventsListenerImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -114,7 +113,6 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        Console.WriteLine("*** ConnectionEventsListenerImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -123,14 +121,28 @@ public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     ~ConnectionEventsListenerImpl()
     {
-        Console.WriteLine("*** ConnectionEventsListenerImpl finalizer called");
         DisposeUnmanaged();
     }
 
+
+    // public static void LogStack()
+    // {
+    //     var trace = new System.Diagnostics.StackTrace();
+    //     foreach (var frame in trace.GetFrames())
+    //     {
+    //         var method = frame.GetMethod();
+    //         if (method.Name.Equals("LogStack")) continue;
+    //         Console.WriteLine(string.Format("    {0}::{1}",
+    //             method.ReflectedType != null ? method.ReflectedType.Name : string.Empty,
+    //             method.Name));
+    //     }
+    // }
+
     private void DisposeUnmanaged() {
         if (!_disposedUnmanaged) {
-            _connectionEventsListener.Stop();
-            _connectionEventsListener.Dispose();
+//            LogStack();
+            _listener.Stop();
+            _listener.Dispose();
         }
         _disposedUnmanaged = true;
     }
@@ -362,7 +374,6 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public void Dispose()
     {
-        Console.WriteLine("*** ConnectionImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -370,7 +381,6 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        Console.WriteLine("*** ConnectionImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -379,7 +389,6 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     ~ConnectionImpl()
     {
-        Console.WriteLine("*** ConnectionImpl finalizer called");
         DisposeUnmanaged();
     }
 

@@ -83,7 +83,6 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     /// <inheritdoc/>
     public void Dispose()
     {
-        Console.WriteLine("*** CoapRequestImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -91,7 +90,6 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        Console.WriteLine("*** CoapRequestImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -100,7 +98,6 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     /// <inheritdoc/>
     ~CoapRequestImpl()
     {
-        Console.WriteLine("*** CoapRequestImpl finalizer called");
         DisposeUnmanaged();
     }
 

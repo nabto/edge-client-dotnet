@@ -78,7 +78,6 @@ class FutureImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        Console.WriteLine("*** FutureImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -86,7 +85,6 @@ class FutureImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        Console.WriteLine("*** FutureImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -95,7 +93,6 @@ class FutureImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     ~FutureImpl()
     {
-        Console.WriteLine("*** FutureImpl finalizer called");
         DisposeUnmanaged();
     }
 

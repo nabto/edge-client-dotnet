@@ -37,9 +37,9 @@ public class ConnectionTest {
     public async Task GetConnectionType() {
         var client = NabtoClient.Create();
 
-        using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
-        var logger = loggerFactory.CreateLogger<NabtoClient>();
-        client.SetLogger(logger);
+        // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
+        // var logger = loggerFactory.CreateLogger<NabtoClient>();
+        // client.SetLogger(logger);
 
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();

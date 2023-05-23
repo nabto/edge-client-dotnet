@@ -42,8 +42,11 @@ internal class ListenerImpl
 
     internal void Stop()
     {
-        AssertSelfIsAlive();
-        NabtoClientNative.nabto_client_listener_stop(_handle);
+        if (!_disposedUnmanaged) {
+            // just nop, don't throw ObjectDisposedException (this only happens when invoked internally); Stop() may be invoked from owner's finalizer 
+            // and this instance may itself have been disposed from a finalizer if both objects were eligible (no guarantee on ordering, despite owner having a reference)
+            NabtoClientNative.nabto_client_listener_stop(_handle);
+        }
     }
 
     public IntPtr GetHandle()
@@ -54,7 +57,6 @@ internal class ListenerImpl
             /// <inheritdoc/>
     public void Dispose()
     {
-        Console.WriteLine("*** ListenerImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -62,7 +64,6 @@ internal class ListenerImpl
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        Console.WriteLine("*** ListenerImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -71,12 +72,27 @@ internal class ListenerImpl
     /// <inheritdoc/>
     ~ListenerImpl()
     {
-        Console.WriteLine("*** ListenerImpl finalizer called");
         DisposeUnmanaged();
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
+    // public static void LogStack()
+    // {
+    //     var trace = new System.Diagnostics.StackTrace();
+    //     foreach (var frame in trace.GetFrames())
+    //     {
+    //         var method = frame.GetMethod();
+    //         if (method.Name.Equals("LogStack")) continue;
+    //         Console.WriteLine(string.Format("    {0}::{1}",
+    //             method.ReflectedType != null ? method.ReflectedType.Name : string.Empty,
+    //             method.Name));
+    //     }
+    // }
+
+    private void DisposeUnmanaged()
+    {
+        if (!_disposedUnmanaged) {            
+//            Console.WriteLine(" *** ListenerImpl.DisposeUnmanaged(); ${0}", this.GetHashCode());
+//            LogStack();
             NabtoClientNative.nabto_client_listener_free(_handle);
         }
         _disposedUnmanaged = true;

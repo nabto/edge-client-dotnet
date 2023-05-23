@@ -26,7 +26,6 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     /// <inheritdoc/>
     public void Dispose()
     {
-        Console.WriteLine("*** ClientImpl Dispose called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
     }
@@ -34,7 +33,6 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        Console.WriteLine("*** ClientImpl DisposeAsync called");
         DisposeUnmanaged();
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
@@ -43,7 +41,6 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     /// <inheritdoc/>
     ~NabtoClientImpl()
     {
-        Console.WriteLine("*** ClientImpl finalizer called");
         DisposeUnmanaged();
     }
 
