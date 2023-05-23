@@ -4,152 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace Nabto.Edge.Client.Impl;
 
-/**
- * <summary>This is used to hold a connection event such that we can pin the object, in turn such
- * that garbage collection does not change the address of the ConnectionEvent.</summary>
- */
-internal class ConnectionEventHolder {
-    internal int ConnectionEvent;
-}
-
-/// <inheritdoc />
-public class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
-{
-    private System.WeakReference<ConnectionImpl> _connection;
-
-    private ListenerImpl _listener;
-
-    private FutureImpl _connectionEventsFuture;
-
-    private Task _eventsListenerTask;
-
-    private bool _disposedUnmanaged;
-
-    private void AssertConnectionIsAlive(ConnectionImpl connection) {
-        if (connection._disposedUnmanaged) {
-            throw new ObjectDisposedException("Connection", "The Connection instance associated with this ConnectionEventsListener instance has been disposed.");
-        }
-    }
-
-    private void AssertListenerIsAlive() {
-        if (_listener._disposedUnmanaged) {
-            throw new ObjectDisposedException("ConnectionEventsListener", "The Listener instance associated with this ConnectionEventsListener instance has been disposed.");
-        }
-    }
-
-
-    /// <inheritdoc />
-    public ConnectionEventsListenerImpl(ConnectionImpl connection, Nabto.Edge.Client.Impl.NabtoClientImpl client)
-    {
-        _connection = new System.WeakReference<ConnectionImpl>(connection);
-
-        _listener = ListenerImpl.Create(client);
-        _connectionEventsFuture = FutureImpl.Create(client);
-
-        AssertConnectionIsAlive(connection);
-        AssertListenerIsAlive();
-
-        NabtoClientNative.nabto_client_connection_events_init_listener(connection.GetHandle(), _listener.GetHandle());
-        _eventsListenerTask = Task.Run(startListenEvents);
-    }
-
-    /// <inheritdoc />
-    public void Stop()
-    {
-        _listener.Stop();
-    }
-
-    /// <inheritdoc />
-    public async Task startListenEvents()
-    {
-        // Allocate the connectionEvent on the heap such that we can pin it such that the garbage collector is not moving around with the underlying address of the event.
-        var connectionEventHolder = new ConnectionEventHolder();
-
-        GCHandle handle = GCHandle.Alloc(connectionEventHolder, GCHandleType.Pinned);
-        while (true)
-        {
-            AssertListenerIsAlive();
-            NabtoClientNative.nabto_client_listener_connection_event(_listener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
-            var ec = await _connectionEventsFuture.WaitAsync();
-            if (ec == 0)
-            {
-                var connectionEvent = connectionEventHolder.ConnectionEvent;
-                ConnectionImpl? connection;
-                if (!_connection.TryGetTarget(out connection))
-                {
-                    return;
-                }
-                if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value())
-                {
-                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
-                }
-                else if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value())
-                {
-                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
-                }
-                else if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value())
-                {
-                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
-                }
-                else
-                {
-                    // TODO log error
-                }
-            }
-            else if (ec == Nabto.Edge.Client.NabtoClientError.STOPPED)
-            {
-                return;
-            }
-        }
-    }
-
-        /// <inheritdoc/>
-    public void Dispose()
-    {
-        DisposeUnmanaged();
-        GC.SuppressFinalize(this);
-    }
-
-    /// <inheritdoc/>
-    public ValueTask DisposeAsync()
-    {
-        DisposeUnmanaged();
-        GC.SuppressFinalize(this);
-        return ValueTask.CompletedTask;
-    }
-
-    /// <inheritdoc/>
-    ~ConnectionEventsListenerImpl()
-    {
-        DisposeUnmanaged();
-    }
-
-
-    // public static void LogStack()
-    // {
-    //     var trace = new System.Diagnostics.StackTrace();
-    //     foreach (var frame in trace.GetFrames())
-    //     {
-    //         var method = frame.GetMethod();
-    //         if (method.Name.Equals("LogStack")) continue;
-    //         Console.WriteLine(string.Format("    {0}::{1}",
-    //             method.ReflectedType != null ? method.ReflectedType.Name : string.Empty,
-    //             method.Name));
-    //     }
-    // }
-
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
-//            LogStack();
-            _listener.Stop();
-            _listener.Dispose();
-        }
-        _disposedUnmanaged = true;
-    }
-
-
-};
-
 /// <inheritdoc />
 public class ConnectionImpl : Nabto.Edge.Client.Connection
 {
@@ -162,15 +16,25 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
-    private void AssertClientIsAlive() {
-        if (_client._disposedUnmanaged) {
+    private static void AssertClientIsAlive(NabtoClientImpl client) {
+        if (client._disposedUnmanaged) {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this Connection instance has been disposed.");
+        }
+    }
+
+    private void AssertClientIsAlive() {
+        AssertClientIsAlive(_client);
+    }
+
+    private void AssertSelfIsAlive() {
+        if (_disposedUnmanaged) {
+            throw new ObjectDisposedException("Connection", "This Connection instance has been disposed.");
         }
     }
 
     internal static ConnectionImpl Create(Nabto.Edge.Client.Impl.NabtoClientImpl client)
     {
-
+        AssertClientIsAlive(client);
         IntPtr ptr = NabtoClientNative.nabto_client_connection_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
@@ -178,8 +42,6 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         }
         return new ConnectionImpl(client, ptr);
     }
-
-
 
     /// <inheritdoc />
     public ConnectionImpl(Nabto.Edge.Client.Impl.NabtoClientImpl client, IntPtr handle)
@@ -199,6 +61,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public void SetOptions(string json)
     {
+        AssertSelfIsAlive();
         int ec = NabtoClientNative.nabto_client_connection_set_options(_handle, json);
         if (ec != 0)
         {
@@ -219,6 +82,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public string GetDeviceFingerprint()
     {
+        AssertSelfIsAlive();
         string fingerprint;
         int ec = NabtoClientNative.nabto_client_connection_get_device_fingerprint(_handle, out fingerprint);
         if (ec != 0)
@@ -232,6 +96,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public string GetClientFingerprint()
     {
+        AssertSelfIsAlive();
         string fingerprint;
         int ec = NabtoClientNative.nabto_client_connection_get_client_fingerprint(_handle, out fingerprint);
         if (ec != 0)
@@ -245,7 +110,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public async Task ConnectAsync()
     {
-        AssertClientIsAlive();
+        AssertSelfIsAlive();
 
         TaskCompletionSource connectTask = new TaskCompletionSource();
         var task = connectTask.Task;
@@ -269,7 +134,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public async Task CloseAsync()
     {
-        AssertClientIsAlive();
+        AssertSelfIsAlive();
 
         TaskCompletionSource closeTask = new TaskCompletionSource();
         var task = closeTask.Task;
@@ -293,7 +158,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public async Task PasswordAuthenticate(string username, string password)
     {
-        AssertClientIsAlive();
+        AssertSelfIsAlive();
 
         TaskCompletionSource passwordAuthenticateTask = new TaskCompletionSource();
         var task = passwordAuthenticateTask.Task;
@@ -368,6 +233,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public IntPtr GetHandle()
     {
+        AssertSelfIsAlive();
         return _handle;
     }
 
@@ -401,3 +267,12 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
 }
+
+/**
+ * <summary>This is used to hold a connection event such that we can pin the object, in turn such
+ * that garbage collection does not change the address of the ConnectionEvent.</summary>
+ */
+internal class ConnectionEventHolder {
+    internal int ConnectionEvent;
+}
+
