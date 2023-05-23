@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 
@@ -250,7 +249,11 @@ public class TestDeviceRunner : IDisposable
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux";
+            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64) {
+               info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_arm64";
+            } else {
+               info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_x86-64";
+            }
 
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -275,9 +278,13 @@ public class TestDeviceRunner : IDisposable
         _deviceProcess.EnableRaisingEvents = true;
     }
 
-   public void ProcessExited(object? sender, EventArgs e) {
-      Console.WriteLine($"XXXXXXXXXXXX exited: {_deviceProcess.ExitCode}");
-   }
+    public void ProcessExited(object? sender, EventArgs e)
+    {
+      if (_deviceProcess.ExitCode != 0 &&
+          _deviceProcess.ExitCode != 137 /* killed with sigterm */ &&
+          _deviceProcess.ExitCode != 145 /* killed with sigkill */ )
+         Assert.Fail($"Unexpected exit from tcp tunnel, status was {_deviceProcess.ExitCode}");
+    }
 
     public async Task ReadOutputAsync(StreamReader sr, StreamWriter sw)
     {
