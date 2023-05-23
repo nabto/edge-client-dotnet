@@ -43,14 +43,16 @@ internal class ListenerImpl
     internal void Stop()
     {
         if (!_disposedUnmanaged) {
+            NabtoClientNative.nabto_client_listener_stop(_handle);
+        } else {
             // just nop, don't throw ObjectDisposedException (this only happens when invoked internally); Stop() may be invoked from owner's finalizer 
             // and this instance may itself have been disposed from a finalizer if both objects were eligible (no guarantee on ordering, despite owner having a reference)
-            NabtoClientNative.nabto_client_listener_stop(_handle);
         }
     }
 
     public IntPtr GetHandle()
     {
+        AssertSelfIsAlive();
         return _handle;
     }
 
