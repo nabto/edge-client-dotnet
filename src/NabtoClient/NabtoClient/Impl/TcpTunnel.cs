@@ -9,6 +9,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
+    private bool _disposedUnmanaged;
 
     internal static Nabto.Edge.Client.TcpTunnel Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
@@ -20,17 +21,18 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         return new TcpTunnel(client, connection, ptr);
     }
 
+    private IntPtr GetHandle() {
+        if (_disposedUnmanaged) {
+            throw new ObjectDisposedException("Stream", "The Stream instance has been disposed.");
+        }   
+        return _handle;
+    }
+
     internal TcpTunnel(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
         _handle = handle;
-    }
-
-    /// <inheritdoc/>
-     ~TcpTunnel()
-    {
-        NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
     }
 
     /// <inheritdoc/>
@@ -41,7 +43,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
 
         var future = FutureImpl.Create(_client);
 
-        NabtoClientNative.nabto_client_tcp_tunnel_open(_handle, future.GetHandle(), service, localPort);
+        NabtoClientNative.nabto_client_tcp_tunnel_open(GetHandle(), future.GetHandle(), service, localPort);
 
         var ec = await future.WaitAsync();
 
@@ -63,7 +65,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
 
         var future = FutureImpl.Create(_client);
 
-        NabtoClientNative.nabto_client_tcp_tunnel_close(_handle, future.GetHandle());
+        NabtoClientNative.nabto_client_tcp_tunnel_close(GetHandle(), future.GetHandle());
 
         var ec = await future.WaitAsync();
 
@@ -81,12 +83,41 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     public ushort GetLocalPort()
     {
         ushort localPort = 0;
-        int ec = NabtoClientNative.nabto_client_tcp_tunnel_get_local_port(_handle, out localPort);
+        int ec = NabtoClientNative.nabto_client_tcp_tunnel_get_local_port(GetHandle(), out localPort);
         if (ec != NabtoClientNative.NABTO_CLIENT_EC_OK_value())
         {
             throw NabtoExceptionFactory.Create(ec);
         }
         return localPort;
+    }
+
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~TcpTunnel()
+    {
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
+        }
+        _disposedUnmanaged = true;
     }
 
 }

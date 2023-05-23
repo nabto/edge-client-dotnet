@@ -54,6 +54,9 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
 
     /// <inheritdoc/>
     public IntPtr GetHandle() {
+        if (_disposedUnmanaged) {
+                throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance has been disposed.");
+        }
         return _handle;
     }
 

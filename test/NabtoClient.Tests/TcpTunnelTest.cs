@@ -64,4 +64,16 @@ public class TcpTunnelTest {
     //     var ex = await Assert.ThrowsAsync<NabtoException>(() => tunnel.OpenAsync("http", (ushort)localPort));
     //     Assert.Equal(NabtoClientError.PORT_IN_USE, ex.ErrorCode);
     // }
+
+    [Fact]
+    public async Task TestDisposeTunnel()
+    {
+        var connection = await CreateTcpTunnelDeviceConnectionAsync();
+        var tunnel = connection.CreateTcpTunnel();
+        ushort localPort = 0;
+        await tunnel.OpenAsync("http", localPort);
+        await tunnel.DisposeAsync();
+        Assert.Throws<ObjectDisposedException>(() => tunnel.GetLocalPort());
+    }
+
 }

@@ -21,6 +21,7 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     private ListenerImpl _listener;
     private FutureImpl _future;
     private string _subtype;
+    private bool _disposedUnmanaged;
 
     /// <inheritdoc/>
     public Nabto.Edge.Client.MdnsScanner.ResultHandler? Handlers { get; set; }
@@ -72,5 +73,34 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
                 return;
             }
         }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~MdnsScannerImpl()
+    {
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            _listener.Stop();
+            _listener.Dispose();
+        }
+        _disposedUnmanaged = true;
     }
 }

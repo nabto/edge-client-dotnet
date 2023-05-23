@@ -74,7 +74,7 @@ public class MdnsResult {
  * An MdnsScanner scans for local mDNS enabled devices.
  * </summary>
  */
-public interface MdnsScanner {
+public interface MdnsScanner : IDisposable, IAsyncDisposable {
 
     /**
      * <summary>

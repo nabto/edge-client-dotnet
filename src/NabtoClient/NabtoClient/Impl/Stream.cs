@@ -9,7 +9,6 @@ internal class ReadOperation
     internal UIntPtr ReadLength;
     internal UIntPtr BufferLength;
 
-
     internal ReadOperation(int bufferSize)
     {
         Buffer = Marshal.AllocHGlobal(bufferSize);
@@ -50,6 +49,7 @@ public class Stream : Nabto.Edge.Client.Stream
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
+    private bool _disposedUnmanaged;
 
     internal static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
@@ -61,18 +61,19 @@ public class Stream : Nabto.Edge.Client.Stream
         return new Stream(client, connection, ptr);
     }
 
+    private IntPtr GetHandle() {
+        if (_disposedUnmanaged) {
+            throw new ObjectDisposedException("Stream", "The Stream instance has been disposed.");
+        }   
+        return _handle;
+    }
+
     /// <inheritdoc/>
     public Stream(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
         _handle = handle;
-    }
-
-    /// <inheritdoc/>
-    ~Stream()
-    {
-        NabtoClientNative.nabto_client_stream_free(_handle);
     }
 
     /// <inheritdoc/>
@@ -83,7 +84,7 @@ public class Stream : Nabto.Edge.Client.Stream
 
         var future = FutureImpl.Create(_client);
 
-        NabtoClientNative.nabto_client_stream_open(_handle, future.GetHandle(), port);
+        NabtoClientNative.nabto_client_stream_open(GetHandle(), future.GetHandle(), port);
 
         var ec = await future.WaitAsync();
         if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
@@ -107,7 +108,7 @@ public class Stream : Nabto.Edge.Client.Stream
         var op = new ReadOperation(max);
         var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
 
-        NabtoClientNative.nabto_client_stream_read_some(_handle, future.GetHandle(), op.Buffer, op.BufferLength, out op.ReadLength);
+        NabtoClientNative.nabto_client_stream_read_some(GetHandle(), future.GetHandle(), op.Buffer, op.BufferLength, out op.ReadLength);
 
         var ec = await future.WaitAsync();
 
@@ -141,7 +142,7 @@ public class Stream : Nabto.Edge.Client.Stream
         var op = new ReadOperation(bytes);
         var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
 
-        NabtoClientNative.nabto_client_stream_read_all(_handle, future.GetHandle(), op.Buffer, op.BufferLength, out op.ReadLength);
+        NabtoClientNative.nabto_client_stream_read_all(GetHandle(), future.GetHandle(), op.Buffer, op.BufferLength, out op.ReadLength);
 
         var ec = await future.WaitAsync();
         if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
@@ -174,7 +175,7 @@ public class Stream : Nabto.Edge.Client.Stream
         var op = new WriteOperation(data);
         var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
 
-        NabtoClientNative.nabto_client_stream_write(_handle, future.GetHandle(), op.Buffer, op.BufferLength);
+        NabtoClientNative.nabto_client_stream_write(GetHandle(), future.GetHandle(), op.Buffer, op.BufferLength);
 
         var ec = await future.WaitAsync();
 
@@ -196,7 +197,7 @@ public class Stream : Nabto.Edge.Client.Stream
 
         var future = FutureImpl.Create(_client);
 
-        NabtoClientNative.nabto_client_stream_close(_handle, future.GetHandle());
+        NabtoClientNative.nabto_client_stream_close(GetHandle(), future.GetHandle());
 
         var ec = await future.WaitAsync();
 
@@ -208,5 +209,33 @@ public class Stream : Nabto.Edge.Client.Stream
         {
             throw NabtoExceptionFactory.Create(ec);
         }
+    }
+
+        /// <inheritdoc/>
+    public void Dispose()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        DisposeUnmanaged();
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~Stream()
+    {
+        DisposeUnmanaged();
+    }
+
+    private void DisposeUnmanaged() {
+        if (!_disposedUnmanaged) {
+            NabtoClientNative.nabto_client_stream_free(_handle);
+        }
+        _disposedUnmanaged = true;
     }
 }
