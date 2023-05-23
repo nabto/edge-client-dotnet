@@ -280,10 +280,20 @@ public class TestDeviceRunner : IDisposable
 
     public void ProcessExited(object? sender, EventArgs e)
     {
-      if (_deviceProcess.ExitCode != 0 &&
-          _deviceProcess.ExitCode != 137 /* killed with sigterm */ &&
-          _deviceProcess.ExitCode != 145 /* killed with sigkill */ )
-         Assert.Fail($"Unexpected exit from tcp tunnel, status was {_deviceProcess.ExitCode}");
+        bool ok = false;
+        if (_deviceProcess.ExitCode == 0) {
+            ok = true;
+        } else {
+            if (System.OperatingSystem.IsWindows()) {
+               ok = _deviceProcess.ExitCode == -1 /* killed */;
+            } else {
+               ok = _deviceProcess.ExitCode == 137 /* killed with sigterm */ ||
+                  _deviceProcess.ExitCode == 145 /* killed with sigkill */;
+            }
+        }
+        if (!ok) {
+            Assert.Fail($"Unexpected exit from tcp tunnel, status was {_deviceProcess.ExitCode}");
+        }
     }
 
     public async Task ReadOutputAsync(StreamReader sr, StreamWriter sw)
