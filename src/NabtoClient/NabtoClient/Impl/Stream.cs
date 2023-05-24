@@ -49,7 +49,7 @@ public class Stream : Nabto.Edge.Client.Stream
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
-    private bool _disposedUnmanaged;
+    private bool _disposed;
 
     internal static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
@@ -62,7 +62,7 @@ public class Stream : Nabto.Edge.Client.Stream
     }
 
     private IntPtr GetHandle() {
-        if (_disposedUnmanaged) {
+        if (_disposed) {
             throw new ObjectDisposedException("Stream", "The Stream instance has been disposed.");
         }   
         return _handle;
@@ -214,14 +214,14 @@ public class Stream : Nabto.Edge.Client.Stream
         /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -229,13 +229,14 @@ public class Stream : Nabto.Edge.Client.Stream
     /// <inheritdoc/>
     ~Stream()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
+    /// <summary>Do the actual resource disposal here</summary>
+    protected void Dispose(bool disposing) {
+        if (!_disposed) {
             NabtoClientNative.nabto_client_stream_free(_handle);
+            _disposed = true;
         }
-        _disposedUnmanaged = true;
     }
 }

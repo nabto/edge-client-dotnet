@@ -6,22 +6,22 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 
     private IntPtr _handle;
     private NabtoClientImpl _client;
-    internal bool _disposedUnmanaged;
+    internal bool _disposed;
 
     private void AssertClientIsAlive() {
-        if (_client._disposedUnmanaged) {
+        if (_client._disposed) {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this CoapRequest instance has been disposed.");
         }
     }
 
     private static void AssertConnectionIsAlive(ConnectionImpl connection) {
-        if (connection._disposedUnmanaged) {
+        if (connection._disposed) {
             throw new ObjectDisposedException("Connection", "The Connection instance associated with this CoapRequest instance has been disposed.");
         }
     }
 
     private void AssertSelfIsAlive() {
-        if (_disposedUnmanaged) {
+        if (_disposed) {
             throw new ObjectDisposedException("CoapRequest", "This CoapRequest has been disposed.");
         }
     }
@@ -83,14 +83,14 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -98,14 +98,15 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     /// <inheritdoc/>
     ~CoapRequestImpl()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
+    /// <summary>Do the actual resource disposal here</summary>
+    protected virtual void Dispose(bool disposing) {
+        if (!_disposed) {
             NabtoClientNative.nabto_client_coap_free(_handle);
+            _disposed = true;
         }
-        _disposedUnmanaged = true;
     }
 
 }

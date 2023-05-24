@@ -7,12 +7,12 @@ class FutureImpl : IDisposable, IAsyncDisposable
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private GCHandle? _gcHandle;
-    private bool _disposedUnmanaged;
+    private bool _disposed;
 
     TaskCompletionSource<int>? _waitTask;
 
     private static void AssertClientIsAlive(NabtoClientImpl client) {
-        if (client._disposedUnmanaged) {
+        if (client._disposed) {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this Future instance has been disposed.");
         }
     }
@@ -87,14 +87,14 @@ class FutureImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -102,14 +102,15 @@ class FutureImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     ~FutureImpl()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
+    /// <summary>Do the actual resource disposal here</summary>
+    protected void Dispose(bool disposing) {
+        if (!_disposed) {
             NabtoClientNative.nabto_client_future_free(_handle);
         }
-        _disposedUnmanaged = true;
+        _disposed = true;
     }
 
 }

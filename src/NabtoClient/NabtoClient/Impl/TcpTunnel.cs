@@ -9,7 +9,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
-    private bool _disposedUnmanaged;
+    private bool _disposed;
 
     internal static Nabto.Edge.Client.TcpTunnel Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
@@ -22,7 +22,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     }
 
     private IntPtr GetHandle() {
-        if (_disposedUnmanaged) {
+        if (_disposed) {
             throw new ObjectDisposedException("Stream", "The Stream instance has been disposed.");
         }   
         return _handle;
@@ -95,14 +95,14 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -110,14 +110,14 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     /// <inheritdoc/>
     ~TcpTunnel()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
+    private void Dispose(bool disposing) {
+        if (!_disposed) {
             NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
+            _disposed = true;
         }
-        _disposedUnmanaged = true;
     }
 
 }

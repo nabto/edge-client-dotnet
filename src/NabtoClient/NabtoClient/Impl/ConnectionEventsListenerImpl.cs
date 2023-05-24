@@ -13,16 +13,16 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
 
     private Task _eventsListenerTask;
 
-    private bool _disposedUnmanaged;
+    private bool _disposed;
 
     private void AssertConnectionIsAlive(ConnectionImpl connection) {
-        if (connection._disposedUnmanaged) {
+        if (connection._disposed) {
             throw new ObjectDisposedException("Connection", "The Connection instance associated with this ConnectionEventsListener instance has been disposed.");
         }
     }
 
     private void AssertListenerIsAlive() {
-        if (_listener._disposedUnmanaged) {
+        if (_listener._disposed) {
             throw new ObjectDisposedException("ConnectionEventsListener", "The Listener instance associated with this ConnectionEventsListener instance has been disposed.");
         }
     }
@@ -96,14 +96,14 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
         /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -111,30 +111,18 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc/>
     ~ConnectionEventsListenerImpl()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-
-    // public static void LogStack()
-    // {
-    //     var trace = new System.Diagnostics.StackTrace();
-    //     foreach (var frame in trace.GetFrames())
-    //     {
-    //         var method = frame.GetMethod();
-    //         if (method.Name.Equals("LogStack")) continue;
-    //         Console.WriteLine(string.Format("    {0}::{1}",
-    //             method.ReflectedType != null ? method.ReflectedType.Name : string.Empty,
-    //             method.Name));
-    //     }
-    // }
-
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
-//            LogStack();
-            _listener.Stop();
-            _listener.Dispose();
+    /// <summary>Do the actual resource disposal here</summary>
+    protected void Dispose(bool disposing) {
+        if (!_disposed) {
+            if (disposing) {
+                _listener.Stop();
+                _listener.Dispose();
+            }
+            _disposed = true;
         }
-        _disposedUnmanaged = true;
     }
 
 

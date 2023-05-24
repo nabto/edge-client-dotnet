@@ -11,7 +11,7 @@ public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
     }
 
     private void AssertRequestIsAlive() {
-        if (_request._disposedUnmanaged) {
+        if (_request._disposed) {
             throw new ObjectDisposedException("CoapRequest", "The CoapRequest used for generating this CoapResponse has been disposed.");
         }
     }

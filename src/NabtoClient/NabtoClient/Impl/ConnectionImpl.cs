@@ -11,13 +11,13 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     private IntPtr _handle;
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private ConnectionEventsListenerImpl _connectionEventsListener;
-    internal bool _disposedUnmanaged;
+    internal bool _disposed;
 
     /// <inheritdoc/>
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
     private static void AssertClientIsAlive(NabtoClientImpl client) {
-        if (client._disposedUnmanaged) {
+        if (client._disposed) {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this Connection instance has been disposed.");
         }
     }
@@ -27,7 +27,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
     private void AssertSelfIsAlive() {
-        if (_disposedUnmanaged) {
+        if (_disposed) {
             throw new ObjectDisposedException("Connection", "This Connection instance has been disposed.");
         }
     }
@@ -240,14 +240,14 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -255,15 +255,19 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     ~ConnectionImpl()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
-            _connectionEventsListener.Stop();
+    /// <summary>Do the actual resource disposal here</summary>
+    protected void Dispose(bool disposing) {
+        if (!_disposed) {
+            if (disposing) {
+                _connectionEventsListener.Stop();
+                _connectionEventsListener.Dispose();
+            }
             NabtoClientNative.nabto_client_connection_free(_handle);
+            _disposed = true;
         }
-        _disposedUnmanaged = true;
     }
 
 }

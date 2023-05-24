@@ -8,7 +8,7 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     private IntPtr _handle;
     private NabtoClientNative.LogCallbackFunc? _logCallback;
 
-    internal bool _disposedUnmanaged;
+    internal bool _disposed;
 
     internal static NabtoClientImpl Create() {
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
@@ -26,14 +26,14 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     /// <inheritdoc/>
     public void Dispose()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     /// <inheritdoc/>
     public ValueTask DisposeAsync()
     {
-        DisposeUnmanaged();
+        Dispose(true);
         GC.SuppressFinalize(this);
         return ValueTask.CompletedTask;
     }
@@ -41,20 +41,21 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     /// <inheritdoc/>
     ~NabtoClientImpl()
     {
-        DisposeUnmanaged();
+        Dispose(false);
     }
 
-    private void DisposeUnmanaged() {
-        if (!_disposedUnmanaged) {
+    /// <summary>Do the actual resource disposal here</summary>
+    protected void Dispose(bool disposing) {
+        if (!_disposed) {
             NabtoClientNative.nabto_client_free(_handle);
+            _disposed = true;
         }
-        _disposedUnmanaged = true;
     }
 
 
     /// <inheritdoc/>
     public IntPtr GetHandle() {
-        if (_disposedUnmanaged) {
+        if (_disposed) {
                 throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance has been disposed.");
         }
         return _handle;
