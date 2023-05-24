@@ -37,8 +37,7 @@ public class MdnsTest {
 
         MdnsScanner.ResultHandler handler = (MdnsResult result) => {};
         mdnsScanner.Handlers += handler;
-        mdnsScanner.Start();
         mdnsScanner.Dispose();
-        mdnsScanner.Handlers -= handler;
+        Assert.Throws<ObjectDisposedException>(() => mdnsScanner.Start());
     }
 }
