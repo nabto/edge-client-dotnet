@@ -43,7 +43,7 @@ internal class WriteOperation
 }
 
 /// <inheritdoc/>
-public class Stream : Nabto.Edge.Client.Stream
+public class StreamImpl : Nabto.Edge.Client.Stream
 {
 
     private IntPtr _handle;
@@ -58,7 +58,7 @@ public class Stream : Nabto.Edge.Client.Stream
         {
             throw new NullReferenceException();
         }
-        return new Stream(client, connection, ptr);
+        return new StreamImpl(client, connection, ptr);
     }
 
     private IntPtr GetHandle() {
@@ -69,7 +69,7 @@ public class Stream : Nabto.Edge.Client.Stream
     }
 
     /// <inheritdoc/>
-    public Stream(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
+    public StreamImpl(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
@@ -227,7 +227,7 @@ public class Stream : Nabto.Edge.Client.Stream
     }
 
     /// <inheritdoc/>
-    ~Stream()
+    ~StreamImpl()
     {
         Dispose(false);
     }

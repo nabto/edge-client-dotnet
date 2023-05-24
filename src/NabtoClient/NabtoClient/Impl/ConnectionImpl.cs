@@ -206,13 +206,13 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc />
     public Nabto.Edge.Client.Stream CreateStream()
     {
-        return Stream.Create(_client, this);
+        return StreamImpl.Create(_client, this);
     }
 
     /// <inheritdoc />
     public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel()
     {
-        return TcpTunnel.Create(_client, this);
+        return TcpTunnelImpl.Create(_client, this);
     }
 
     /// <inheritdoc />

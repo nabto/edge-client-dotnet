@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc/>
-public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
+public class TcpTunnelImpl : Nabto.Edge.Client.TcpTunnel
 {
 
     private IntPtr _handle;
@@ -18,7 +18,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         {
             throw new NullReferenceException();
         }
-        return new TcpTunnel(client, connection, ptr);
+        return new TcpTunnelImpl(client, connection, ptr);
     }
 
     private IntPtr GetHandle() {
@@ -28,7 +28,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
         return _handle;
     }
 
-    internal TcpTunnel(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
+    internal TcpTunnelImpl(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection, IntPtr handle)
     {
         _client = client;
         _connection = connection;
@@ -108,7 +108,7 @@ public class TcpTunnel : Nabto.Edge.Client.TcpTunnel
     }
 
     /// <inheritdoc/>
-    ~TcpTunnel()
+    ~TcpTunnelImpl()
     {
         Dispose(false);
     }
