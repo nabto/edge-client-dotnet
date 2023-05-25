@@ -51,7 +51,7 @@ public class ConnectionTest {
         var serializerOptions = new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
         var options = device.GetConnectOptions();
         string jsonString = JsonSerializer.Serialize(options, serializerOptions);
-        Console.WriteLine("Connection.options: {0}", jsonString);
+//        Console.WriteLine("Connection.options: {0}", jsonString);
 
         await connection.ConnectAsync();
         var type = connection.GetConnectionType();
@@ -143,7 +143,7 @@ public class ConnectionTest {
         var client = NabtoClient.Create();
         using (var connection = client.CreateConnection()) {            
             // todo: use a mock framework and inject the nabto resources as dependencies to actually test; for now just put a breakpoint in the dispose impl 
-            Console.WriteLine("Invoking Dispose after this line");
+//            Console.WriteLine("Invoking Dispose after this line");
         }
     }
 
@@ -153,7 +153,7 @@ public class ConnectionTest {
         var client = NabtoClient.Create();
         await using (var connection = client.CreateConnection()) {
             // todo: use a mock framework and inject the nabto resources as dependencies to actually test; for now just put a breakpoint in the dispose impl
-            Console.WriteLine("Invoking AsyncDispose after this line");
+//            Console.WriteLine("Invoking AsyncDispose after this line");
         }
     }
 
