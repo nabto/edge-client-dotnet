@@ -7,7 +7,8 @@ internal unsafe class NabtoClientNative
 {
     const string _dllName = "nabto_client";
 
-    internal enum NabtoClientConnectionType: int {
+    internal enum NabtoClientConnectionType : int
+    {
         Relay = 0,
         Direct
     }
@@ -207,7 +208,8 @@ internal unsafe class NabtoClientNative
     {
         int ec;
         UIntPtr length = (UIntPtr)payload.Length;
-        fixed(byte* start = &payload[0]) {
+        fixed (byte* start = &payload[0])
+        {
             ec = nabto_client_coap_set_request_payload_native(coap, contentFormat, start, length);
         }
         return ec;
@@ -233,10 +235,13 @@ internal unsafe class NabtoClientNative
         if (ec == 0)
         {
             payload = new byte[pLength];
-            for (int i = 0; i < ((uint)pLength); i++) {
+            for (int i = 0; i < ((uint)pLength); i++)
+            {
                 payload[i] = p[i];
             }
-        } else {
+        }
+        else
+        {
             payload = new byte[0];
         }
         return ec;

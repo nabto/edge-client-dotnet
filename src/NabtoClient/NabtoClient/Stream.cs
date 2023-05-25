@@ -14,7 +14,8 @@ namespace Nabto.Edge.Client;
  *
  * </summary>
  */
-public interface Stream : IDisposable, IAsyncDisposable {
+public interface Stream : IDisposable, IAsyncDisposable
+{
 
     /**
      * <summary>

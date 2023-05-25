@@ -244,7 +244,8 @@ public class NabtoClientError
      * </summary>
      * <param name="ec">The error code to map to a message</param>
      */
-    public static string GetErrorMessage(int ec) {
+    public static string GetErrorMessage(int ec)
+    {
         return Nabto.Edge.Client.Impl.NabtoClientNative.nabto_client_error_get_message(ec);
     }
 
@@ -254,7 +255,8 @@ public class NabtoClientError
      * </summary>
      * <param name="ec">The error code to map to a string</param>
      */
-    public static string GetErrorString(int ec) {
+    public static string GetErrorString(int ec)
+    {
         return Nabto.Edge.Client.Impl.NabtoClientNative.nabto_client_error_get_string(ec);
     }
 }

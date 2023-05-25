@@ -20,7 +20,8 @@ namespace Nabto.Edge.Client;
  * The TcpTunnel object must be kept alive while in use.</para>
  * </summary>
  */
-public interface TcpTunnel : IDisposable, IAsyncDisposable {
+public interface TcpTunnel : IDisposable, IAsyncDisposable
+{
 
     /**
      * <summary>

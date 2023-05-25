@@ -8,20 +8,26 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     private NabtoClientImpl _client;
     internal bool _disposed;
 
-    private void AssertClientIsAlive() {
-        if (_client._disposed) {
+    private void AssertClientIsAlive()
+    {
+        if (_client._disposed)
+        {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this CoapRequest instance has been disposed.");
         }
     }
 
-    private static void AssertConnectionIsAlive(ConnectionImpl connection) {
-        if (connection._disposed) {
+    private static void AssertConnectionIsAlive(ConnectionImpl connection)
+    {
+        if (connection._disposed)
+        {
             throw new ObjectDisposedException("Connection", "The Connection instance associated with this CoapRequest instance has been disposed.");
         }
     }
 
-    private void AssertSelfIsAlive() {
-        if (_disposed) {
+    private void AssertSelfIsAlive()
+    {
+        if (_disposed)
+        {
             throw new ObjectDisposedException("CoapRequest", "This CoapRequest has been disposed.");
         }
     }
@@ -63,7 +69,8 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
 
         TaskCompletionSource<Nabto.Edge.Client.CoapResponse> executeTask = new TaskCompletionSource<Nabto.Edge.Client.CoapResponse>();
         var task = executeTask.Task;
-        await using (FutureImpl future = FutureImpl.Create(_client)) {
+        await using (FutureImpl future = FutureImpl.Create(_client))
+        {
 
             NabtoClientNative.nabto_client_coap_execute(_handle, future.GetHandle());
 
@@ -102,8 +109,10 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected virtual void Dispose(bool disposing) {
-        if (!_disposed) {
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
             NabtoClientNative.nabto_client_coap_free(_handle);
             _disposed = true;
         }

@@ -61,10 +61,12 @@ public class StreamImpl : Nabto.Edge.Client.Stream
         return new StreamImpl(client, connection, ptr);
     }
 
-    private IntPtr GetHandle() {
-        if (_disposed) {
+    private IntPtr GetHandle()
+    {
+        if (_disposed)
+        {
             throw new ObjectDisposedException("Stream", "The Stream instance has been disposed.");
-        }   
+        }
         return _handle;
     }
 
@@ -211,7 +213,7 @@ public class StreamImpl : Nabto.Edge.Client.Stream
         }
     }
 
-        /// <inheritdoc/>
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose(true);
@@ -233,8 +235,10 @@ public class StreamImpl : Nabto.Edge.Client.Stream
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected void Dispose(bool disposing) {
-        if (!_disposed) {
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
             NabtoClientNative.nabto_client_stream_free(_handle);
             _disposed = true;
         }

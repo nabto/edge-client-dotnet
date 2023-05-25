@@ -97,9 +97,12 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected void Dispose(bool disposing) {
-        if (!_disposed) {
-            if (disposing) {
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
                 _listener.Stop();
                 _listener.Dispose();
             }

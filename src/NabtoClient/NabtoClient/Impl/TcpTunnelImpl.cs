@@ -21,10 +21,12 @@ public class TcpTunnelImpl : Nabto.Edge.Client.TcpTunnel
         return new TcpTunnelImpl(client, connection, ptr);
     }
 
-    private IntPtr GetHandle() {
-        if (_disposed) {
+    private IntPtr GetHandle()
+    {
+        if (_disposed)
+        {
             throw new ObjectDisposedException("Stream", "The Stream instance has been disposed.");
-        }   
+        }
         return _handle;
     }
 
@@ -113,8 +115,10 @@ public class TcpTunnelImpl : Nabto.Edge.Client.TcpTunnel
         Dispose(false);
     }
 
-    private void Dispose(bool disposing) {
-        if (!_disposed) {
+    private void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
             NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
             _disposed = true;
         }

@@ -16,18 +16,23 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     /// <inheritdoc/>
     public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
-    private static void AssertClientIsAlive(NabtoClientImpl client) {
-        if (client._disposed) {
+    private static void AssertClientIsAlive(NabtoClientImpl client)
+    {
+        if (client._disposed)
+        {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this Connection instance has been disposed.");
         }
     }
 
-    private void AssertClientIsAlive() {
+    private void AssertClientIsAlive()
+    {
         AssertClientIsAlive(_client);
     }
 
-    private void AssertSelfIsAlive() {
-        if (_disposed) {
+    private void AssertSelfIsAlive()
+    {
+        if (_disposed)
+        {
             throw new ObjectDisposedException("Connection", "This Connection instance has been disposed.");
         }
     }
@@ -220,10 +225,12 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     {
         int connectionType;
         int ec = NabtoClientNative.nabto_client_connection_get_type(GetHandle(), out connectionType);
-        if (ec != NabtoClientNative.NABTO_CLIENT_EC_OK_value()) {
+        if (ec != NabtoClientNative.NABTO_CLIENT_EC_OK_value())
+        {
             throw NabtoExceptionFactory.Create(ec);
         }
-        switch ((NabtoClientNative.NabtoClientConnectionType)connectionType) {
+        switch ((NabtoClientNative.NabtoClientConnectionType)connectionType)
+        {
             case NabtoClientNative.NabtoClientConnectionType.Direct: return Connection.ConnectionType.Direct;
             case NabtoClientNative.NabtoClientConnectionType.Relay: return Connection.ConnectionType.Relay;
             default: throw NabtoExceptionFactory.Create(NabtoClientNative.NABTO_CLIENT_EC_UNKNOWN_value());
@@ -259,9 +266,12 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected void Dispose(bool disposing) {
-        if (!_disposed) {
-            if (disposing) {
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
                 _connectionEventsListener.Stop();
                 _connectionEventsListener.Dispose();
             }
@@ -276,7 +286,8 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
  * <summary>This is used to hold a connection event such that we can pin the object, in turn such
  * that garbage collection does not change the address of the ConnectionEvent.</summary>
  */
-internal class ConnectionEventHolder {
+internal class ConnectionEventHolder
+{
     internal int ConnectionEvent;
 }
 

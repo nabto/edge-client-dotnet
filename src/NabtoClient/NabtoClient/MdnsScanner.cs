@@ -5,7 +5,8 @@ namespace Nabto.Edge.Client;
  * The result of an mDNS discovery request.
  * </summary>
  */
-public class MdnsResult {
+public class MdnsResult
+{
 
     /**
      * <summary>
@@ -30,7 +31,8 @@ public class MdnsResult {
      * </list>
      * </summary>
      */
-    public enum MdnsAction {
+    public enum MdnsAction
+    {
 
         /// <summary>Adding a new result</summary>
         ADD = 0,
@@ -74,7 +76,8 @@ public class MdnsResult {
  * An MdnsScanner scans for local mDNS enabled devices.
  * </summary>
  */
-public interface MdnsScanner : IDisposable, IAsyncDisposable {
+public interface MdnsScanner : IDisposable, IAsyncDisposable
+{
 
     /**
      * <summary>

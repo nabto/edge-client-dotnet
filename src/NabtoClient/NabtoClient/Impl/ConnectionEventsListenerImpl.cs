@@ -15,14 +15,18 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
 
     private bool _disposed;
 
-    private void AssertConnectionIsAlive(ConnectionImpl connection) {
-        if (connection._disposed) {
+    private void AssertConnectionIsAlive(ConnectionImpl connection)
+    {
+        if (connection._disposed)
+        {
             throw new ObjectDisposedException("Connection", "The Connection instance associated with this ConnectionEventsListener instance has been disposed.");
         }
     }
 
-    private void AssertListenerIsAlive() {
-        if (_listener._disposed) {
+    private void AssertListenerIsAlive()
+    {
+        if (_listener._disposed)
+        {
             throw new ObjectDisposedException("ConnectionEventsListener", "The Listener instance associated with this ConnectionEventsListener instance has been disposed.");
         }
     }
@@ -93,7 +97,7 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
         }
     }
 
-        /// <inheritdoc/>
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose(true);
@@ -115,9 +119,12 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected void Dispose(bool disposing) {
-        if (!_disposed) {
-            if (disposing) {
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
                 _listener.Stop();
                 _listener.Dispose();
             }

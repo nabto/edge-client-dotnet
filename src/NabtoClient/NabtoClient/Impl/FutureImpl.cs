@@ -1,7 +1,7 @@
 namespace Nabto.Edge.Client.Impl;
 using System.Runtime.InteropServices;
 
-class FutureImpl : IDisposable, IAsyncDisposable 
+class FutureImpl : IDisposable, IAsyncDisposable
 {
 
     private IntPtr _handle;
@@ -11,13 +11,16 @@ class FutureImpl : IDisposable, IAsyncDisposable
 
     TaskCompletionSource<int>? _waitTask;
 
-    private static void AssertClientIsAlive(NabtoClientImpl client) {
-        if (client._disposed) {
+    private static void AssertClientIsAlive(NabtoClientImpl client)
+    {
+        if (client._disposed)
+        {
             throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance associated with this Future instance has been disposed.");
         }
     }
 
-    private void AssertClientIsAlive() {
+    private void AssertClientIsAlive()
+    {
         AssertClientIsAlive(_client);
     }
 
@@ -106,8 +109,10 @@ class FutureImpl : IDisposable, IAsyncDisposable
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected void Dispose(bool disposing) {
-        if (!_disposed) {
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
             NabtoClientNative.nabto_client_future_free(_handle);
         }
         _disposed = true;

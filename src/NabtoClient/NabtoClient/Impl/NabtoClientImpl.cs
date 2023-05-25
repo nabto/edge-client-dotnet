@@ -4,15 +4,18 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc/>
-public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
+public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient
+{
     private IntPtr _handle;
     private NabtoClientNative.LogCallbackFunc? _logCallback;
 
     internal bool _disposed;
 
-    internal static NabtoClientImpl Create() {
+    internal static NabtoClientImpl Create()
+    {
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
-        if (ptr == IntPtr.Zero) {
+        if (ptr == IntPtr.Zero)
+        {
             throw new NullReferenceException();
         }
         return new NabtoClientImpl(ptr);
@@ -45,8 +48,10 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     }
 
     /// <summary>Do the actual resource disposal here</summary>
-    protected void Dispose(bool disposing) {
-        if (!_disposed) {
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
             NabtoClientNative.nabto_client_free(_handle);
             _disposed = true;
         }
@@ -54,15 +59,18 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
 
 
     /// <inheritdoc/>
-    public IntPtr GetHandle() {
-        if (_disposed) {
-                throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance has been disposed.");
+    public IntPtr GetHandle()
+    {
+        if (_disposed)
+        {
+            throw new ObjectDisposedException("NabtoClient", "The NabtoClient instance has been disposed.");
         }
         return _handle;
     }
 
     /// <inheritdoc/>
-    public string GetVersion() {
+    public string GetVersion()
+    {
         return NabtoClientNative.nabto_client_version();
     }
 
@@ -71,7 +79,8 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     {
         string privateKey;
         int ec = NabtoClientNative.nabto_client_create_private_key(GetHandle(), out privateKey);
-        if (ec != 0) {
+        if (ec != 0)
+        {
             throw NabtoExceptionFactory.Create(ec);
         }
         return privateKey;
@@ -101,7 +110,8 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
 
     private LogLevel NabtoLogLevelToLogLevel(int level)
     {
-        switch(level) {
+        switch (level)
+        {
             case 0: return LogLevel.Error;
             case 1: return LogLevel.Warning;
             case 2: return LogLevel.Information;
@@ -115,10 +125,12 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient {
     public void SetLogger(ILogger logger)
     {
         int ec = NabtoClientNative.nabto_client_set_log_level(GetHandle(), "trace");
-        if (ec != 0) {
+        if (ec != 0)
+        {
             throw NabtoExceptionFactory.Create(ec);
         }
-        _logCallback =  (IntPtr logMessage, IntPtr ptr) => {
+        _logCallback = (IntPtr logMessage, IntPtr ptr) =>
+        {
             LogLevel l = NabtoLogLevelToLogLevel(NabtoClientNative.nabto_client_log_message_get_severity(logMessage));
             string message = NabtoClientNative.nabto_client_log_message_get_message(logMessage);
             Microsoft.Extensions.Logging.LoggerExtensions.Log(logger, l, message);

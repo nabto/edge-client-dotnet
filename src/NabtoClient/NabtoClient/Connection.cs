@@ -3,7 +3,8 @@ namespace Nabto.Edge.Client;
 /**
  * <summary>Options that can be set on a connection. Alternative to passing a JSON string.</summary>
  */
-public class ConnectionOptions {
+public class ConnectionOptions
+{
 
     /**
      * <summary>PEM encoded EC private key.</summary>
@@ -71,7 +72,7 @@ public class ConnectionOptions {
      * <summary>Set the timeout for getting the first DTLS packet back from the device. This is used to make a connection attempt fail faster if a route to the device is believed to be open, when in fact it is not. Eg. if the device lost its connection to the Nabto Server, but the server has yet to detect the disconnect. Value in milliseconds, default 10000.</summary>
      */
     public int? DtlsHelloTimeout { get; set; }
-    
+
     /**
      * <summary>Enable/disable local connections (default enabled).</summary>
      */
@@ -103,12 +104,13 @@ public class ConnectionOptions {
  *
  * </summary>
  */
-public interface Connection: IDisposable, IAsyncDisposable
+public interface Connection : IDisposable, IAsyncDisposable
 {
     /**
      * <summary>Connection life cycle events.</summary>
      */
-    public enum ConnectionEvent {
+    public enum ConnectionEvent
+    {
         /**
          * <summary>Connection is established.</summary>
          */
@@ -163,7 +165,8 @@ public interface Connection: IDisposable, IAsyncDisposable
     /**
      * <summary>The type of this connection - relay or direct (local or p2p).</summary>
      */
-    public enum ConnectionType {
+    public enum ConnectionType
+    {
         /// <summary>local or p2p connection</summary>
         Direct,
         /// <summary>relay through basestation</summary>
@@ -174,7 +177,7 @@ public interface Connection: IDisposable, IAsyncDisposable
      * <summary>Get the type of this connection.</summary>
      * <returns>The type of this connection.</returns>
      */
-     public ConnectionType GetConnectionType();
+    public ConnectionType GetConnectionType();
 
     /**
      * <summary>
@@ -444,5 +447,5 @@ public interface Connection: IDisposable, IAsyncDisposable
      * <returns>The created TCP tunnel.</returns>
      */
     public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
-    
+
 }
