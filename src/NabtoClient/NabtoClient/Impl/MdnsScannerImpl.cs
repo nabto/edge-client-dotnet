@@ -23,6 +23,8 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     private string _subtype;
     private bool _disposed;
 
+    private bool _stopped;
+
     /// <inheritdoc/>
     public Nabto.Edge.Client.MdnsScanner.ResultHandler? Handlers { get; set; }
 
@@ -52,6 +54,14 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
         StartListen();
     }
 
+    public void Stop() {
+        if (_stopped) {
+            return;
+        }
+        _stopped = true;
+        _listener.Stop();
+    }
+
     private async void StartListen()
     {
         // make sure the underlying pointer of the mdnsResult stay the same.
@@ -70,6 +80,8 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
             }
             else if (ec == NabtoClientError.STOPPED)
             {
+                _listener.Dispose();
+                _future.Dispose();
                 return;
             }
         }
@@ -103,8 +115,7 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
         {
             if (disposing)
             {
-                _listener.Stop();
-                _listener.Dispose();
+                Stop();
             }
             _disposed = true;
         }

@@ -290,4 +290,3 @@ internal class ConnectionEventHolder
 {
     internal int ConnectionEvent;
 }
-

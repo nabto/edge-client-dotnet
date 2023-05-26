@@ -14,6 +14,7 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     private Task _eventsListenerTask;
 
     private bool _disposed;
+    private bool _stopped = false;
 
     private void AssertConnectionIsAlive(ConnectionImpl connection)
     {
@@ -50,6 +51,10 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc />
     public void Stop()
     {
+        if (_stopped) {
+            return;
+        }
+        _stopped = true;
         _listener.Stop();
     }
 
@@ -92,6 +97,8 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
             }
             else if (ec == Nabto.Edge.Client.NabtoClientError.STOPPED)
             {
+                _listener.Dispose();
+                _connectionEventsFuture.Dispose();
                 return;
             }
         }
@@ -125,8 +132,7 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
         {
             if (disposing)
             {
-                _listener.Stop();
-                _listener.Dispose();
+                Stop();
             }
             _disposed = true;
         }

@@ -47,7 +47,7 @@ public class MdnsResult
      * The service instance name. Can be considered a globally unique primary key for the announced service and used for maintaining a service cache in the client, identifying each entry. The provided action in the result specifies how the cache should be updated for this service.
      * </summary>
      */
-    public string? ServiceInstanceName { get; set; }
+    public string ServiceInstanceName { get; set; } = string.Empty;
 
     /**
      * <summary>
