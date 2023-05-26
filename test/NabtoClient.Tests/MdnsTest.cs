@@ -30,7 +30,7 @@ public class MdnsTest {
         mdnsScanner.Handlers -= handler;
     }
 
-    [Fact]  
+    [Fact]
     public void TestDisposeMdnsScanner() {
         var client = Nabto.Edge.Client.NabtoClient.Create();
         var mdnsScanner = client.CreateMdnsScanner();
