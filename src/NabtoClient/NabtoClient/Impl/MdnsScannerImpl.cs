@@ -21,6 +21,9 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     private ListenerImpl _listener;
     private FutureImpl _future;
     private string _subtype;
+    private bool _disposed;
+
+    private bool _stopped;
 
     /// <inheritdoc/>
     public Nabto.Edge.Client.MdnsScanner.ResultHandler? Handlers { get; set; }
@@ -43,12 +46,23 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     /// <inheritdoc/>
     public void Start()
     {
+        if (_disposed) {
+            throw new ObjectDisposedException("MdnsScanner", "The MdnsScanner has been disposed.");
+        }
         int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(), _listener.GetHandle(), _subtype);
         if (ec != 0)
         {
             throw NabtoExceptionFactory.Create(ec);
         }
         StartListen();
+    }
+
+    public void Stop() {
+        if (_stopped) {
+            return;
+        }
+        _stopped = true;
+        _listener.Stop();
     }
 
     private async void StartListen()
@@ -69,8 +83,44 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
             }
             else if (ec == NabtoClientError.STOPPED)
             {
+                _listener.Dispose();
+                _future.Dispose();
                 return;
             }
+        }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc/>
+    public ValueTask DisposeAsync()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+        return ValueTask.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    ~MdnsScannerImpl()
+    {
+        Dispose(false);
+    }
+
+    /// <summary>Do the actual resource disposal here</summary>
+    protected void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                Stop();
+            }
+            _disposed = true;
         }
     }
 }

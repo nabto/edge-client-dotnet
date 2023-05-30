@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
 
@@ -250,7 +249,11 @@ public class TestDeviceRunner : IDisposable
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux";
+            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64) {
+               info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_arm64";
+            } else {
+               info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_x86-64";
+            }
 
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -267,10 +270,30 @@ public class TestDeviceRunner : IDisposable
         {
             StartInfo = info
         };
-        _deviceProcess.Start();
+        bool v = _deviceProcess.Start();
 
         _ = ReadOutputAsync(_deviceProcess.StandardError, _standardError);
         _ = ReadOutputAsync(_deviceProcess.StandardOutput, _standardOutput);
+        _deviceProcess.Exited += this.ProcessExited;
+        _deviceProcess.EnableRaisingEvents = true;
+    }
+
+    public void ProcessExited(object? sender, EventArgs e)
+    {
+        bool ok = false;
+        if (_deviceProcess.ExitCode == 0) {
+            ok = true;
+        } else {
+            if (System.OperatingSystem.IsWindows()) {
+               ok = _deviceProcess.ExitCode == -1 /* killed */;
+            } else {
+               ok = _deviceProcess.ExitCode == 137 /* killed with sigterm */ ||
+                  _deviceProcess.ExitCode == 145 /* killed with sigkill */;
+            }
+        }
+        if (!ok) {
+            Assert.Fail($"Unexpected exit from tcp tunnel, status was {_deviceProcess.ExitCode}");
+        }
     }
 
     public async Task ReadOutputAsync(StreamReader sr, StreamWriter sw)

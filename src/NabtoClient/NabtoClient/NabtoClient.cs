@@ -16,14 +16,16 @@ namespace Nabto.Edge.Client;
  *
  * </summary>
  */
-public interface NabtoClient {
+public interface NabtoClient : IDisposable, IAsyncDisposable
+{
 
     /**
      * <summary>
      * Create a new instance of the Nabto Edge client.
      * </summary>
      */
-    public static NabtoClient Create() {
+    public static NabtoClient Create()
+    {
         return Impl.NabtoClientImpl.Create();
     }
 
