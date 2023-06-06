@@ -1,4 +1,4 @@
-﻿// public class FooProgram
+// public class FooProgram
 // {
 //     public static async Task Main()
 //     {
