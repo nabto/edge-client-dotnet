@@ -132,7 +132,7 @@ public class ConnectionTest {
         connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
         await connection.ConnectAsync();
         Assert.NotNull(device.Password);
-        await connection.PasswordAuthenticate("", device.Password);
+        await connection.PasswordAuthenticateAsync("", device.Password);
         await connection.CloseAsync();
     }
 

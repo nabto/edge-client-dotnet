@@ -161,7 +161,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
 
 
     /// <inheritdoc />
-    public async Task PasswordAuthenticate(string username, string password)
+    public async Task PasswordAuthenticateAsync(string username, string password)
     {
         AssertSelfIsAlive();
 

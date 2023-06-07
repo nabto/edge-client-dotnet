@@ -310,7 +310,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * </summary>
      * <returns>Task completed when the close succeeds or fails.</returns>
      */
-    public Task PasswordAuthenticate(string username, string password);
+    public Task PasswordAuthenticateAsync(string username, string password);
 
     /**
      * <summary>

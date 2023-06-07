@@ -38,7 +38,7 @@ public class GetDeviceInfoCoapRequest : AbstractCommand
         }
 
         AsyncInvoker invoker = new AsyncInvoker(connection, "GET", "/iam/pairing");
-        invoker.Execute().Wait();
+        invoker.ExecuteAsync().Wait();
     }
 
 
@@ -57,7 +57,7 @@ public class GetDeviceInfoCoapRequest : AbstractCommand
             _path = path;
         }
 
-        public async Task Execute()
+        public async Task ExecuteAsync()
         {
             await using (var request = _connection.CreateCoapRequest(_method, _path))
             {

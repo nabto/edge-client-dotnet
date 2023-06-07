@@ -47,7 +47,7 @@ public class Pairing {
     {
         try
         {
-            await connection.PasswordAuthenticate(username, password);
+            await connection.PasswordAuthenticateAsync(username, password);
         } catch (NabtoException e) {
             if (e.ErrorCode == NabtoClientError.UNAUTHORIZED) {
                 throw new IamException(IamError.AUTHENTICATION_ERROR);
@@ -64,7 +64,7 @@ public class Pairing {
     {
         try
         {
-            await connection.PasswordAuthenticate("", password);
+            await connection.PasswordAuthenticateAsync("", password);
         } catch (NabtoException e) {
             if (e.ErrorCode == NabtoClientError.UNAUTHORIZED) {
                 throw new IamException(IamError.AUTHENTICATION_ERROR);
