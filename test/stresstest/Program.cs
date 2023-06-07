@@ -1,4 +1,4 @@
-﻿using Nabto.Edge.Client;
+using Nabto.Edge.Client;
 using Microsoft.Extensions.Logging;
 using Nabto.Edge.Client.Tests;
 
