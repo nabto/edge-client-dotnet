@@ -185,7 +185,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * </summary>
      *
      * <param name="json"> The options to set as a JSON-string</param>
-     * <exception cref="ArgumentException">If input is invalid</exception>
+     * <exception cref="NabtoException">Thrown with error code: `INVALID_ARGUMENT` if input is invalid</exception>
      */
     public void SetOptions(string json);
 
@@ -195,7 +195,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * </summary>
      *
      * <param name="options"> The options to set as ConnectionOptions object</param>
-     * <exception cref="ArgumentException">If input is invalid</exception>
+     * <exception cref="NabtoException">Thrown with error code: `INVALID_ARGUMENT` if input is invalid</exception>
      */
     public void SetOptions(ConnectionOptions options);
 

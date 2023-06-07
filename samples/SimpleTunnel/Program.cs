@@ -1,4 +1,4 @@
-using Nabto.Edge.Client;
+﻿using Nabto.Edge.Client;
 using System.CommandLine;
 using Microsoft.Extensions.Logging;
 
