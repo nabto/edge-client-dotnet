@@ -30,7 +30,7 @@ class FutureImpl : IDisposable, IAsyncDisposable
         IntPtr ptr = NabtoClientNative.nabto_client_future_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate Future");
         }
         return new FutureImpl(client, ptr);
     }

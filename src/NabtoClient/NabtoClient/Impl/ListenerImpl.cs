@@ -31,7 +31,7 @@ internal class ListenerImpl
         IntPtr ptr = NabtoClientNative.nabto_client_listener_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate Listener");
         }
         return new ListenerImpl(client, ptr);
     }

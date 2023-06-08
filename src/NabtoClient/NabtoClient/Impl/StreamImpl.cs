@@ -56,7 +56,7 @@ public class StreamImpl : Nabto.Edge.Client.Stream
         IntPtr ptr = NabtoClientNative.nabto_client_stream_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate Stream");
         }
         return new StreamImpl(client, connection, ptr);
     }

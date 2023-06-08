@@ -43,7 +43,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         IntPtr ptr = NabtoClientNative.nabto_client_connection_new(client.GetHandle());
         if (ptr == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate Connection");
         }
         return new ConnectionImpl(client, ptr);
     }

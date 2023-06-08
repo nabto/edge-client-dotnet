@@ -4,6 +4,11 @@ internal class NabtoExceptionFactory
 {
     internal static Exception Create(int ec)
     {
-        return new Nabto.Edge.Client.NabtoException(ec);
+        if (ec == NabtoClientError.INVALID_ARGUMENT)
+        {
+            return new ArgumentException();
+        } else {
+            return new Nabto.Edge.Client.NabtoException(ec);
+        }
     }
 }

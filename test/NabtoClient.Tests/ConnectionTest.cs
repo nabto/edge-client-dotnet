@@ -21,8 +21,7 @@ public class ConnectionTest {
     public void InvalidFormattedJsonToConnectOptionsThrowsArgumentException() {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
-        var ex = Assert.Throws<NabtoException>(() => connection.SetOptions("Invalid json"));
-        Assert.Equal(NabtoClientError.INVALID_ARGUMENT, ex.ErrorCode);
+        var ex = Assert.Throws<ArgumentException>(() => connection.SetOptions("Invalid json"));
     }
 
     [Fact] 
