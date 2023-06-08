@@ -16,7 +16,7 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient
         IntPtr ptr = Impl.NabtoClientNative.nabto_client_new();
         if (ptr == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate NabtoClient");
         }
         return new NabtoClientImpl(ptr);
     }

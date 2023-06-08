@@ -38,7 +38,7 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
         IntPtr handle = NabtoClientNative.nabto_client_coap_new(connection.GetHandle(), method, path);
         if (handle == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate CoapRequest");
         }
         return new CoapRequestImpl(client, handle);
     }

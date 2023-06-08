@@ -16,7 +16,7 @@ public class TcpTunnelImpl : Nabto.Edge.Client.TcpTunnel
         IntPtr ptr = NabtoClientNative.nabto_client_tcp_tunnel_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)
         {
-            throw new NullReferenceException();
+            throw new AllocationException("Could not allocate TcpTunnel");
         }
         return new TcpTunnelImpl(client, connection, ptr);
     }

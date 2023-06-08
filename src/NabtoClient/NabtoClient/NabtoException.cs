@@ -39,3 +39,19 @@ public class NotConnectedException : Exception
     {
     }
 }
+
+/**
+ * <summary>
+ * This exception is thrown if an allocation fails in the underlying Nabto Edge Client SDK. This is most likely due to memory exhaustion.
+ * </summary>
+ */
+public class AllocationException : Exception
+{
+    /**
+     * <summary>Create an AllocationException</summary>
+     */
+    public AllocationException(string message) :
+        base(message)
+    {
+    }
+}
