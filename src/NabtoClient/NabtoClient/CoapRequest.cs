@@ -21,7 +21,7 @@ public interface CoapRequest : IDisposable, IAsyncDisposable
      * </summary>
      * <param name="contentFormat"> See https://www.iana.org/assignments/core-parameters/core-parameters.xhtml, some often used values are defined in ContentFormat.</param>
      * <param name="data"> Data for the request encoded as specified in the `contentFormat` parameter.</param>
-     * <exception cref="NabtoException">FAILED if payload could not be set</exception>
+     * <exception cref="NabtoException">Thrown with error code `FAILED` if payload could not be set</exception>
      */
     public void SetRequestPayload(ushort contentFormat, byte[] data);
 
@@ -41,6 +41,9 @@ public interface CoapRequest : IDisposable, IAsyncDisposable
      * <returns>
      *     Task which completes with a CoapResponse when the async operation completes
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `TIMEOUT` if the request timed out.</exception>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the coap request or a parent object is stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NOT_CONNECTED` if the connection is not established yet.</exception>
      */
     public Task<CoapResponse> ExecuteAsync();
 }

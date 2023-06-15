@@ -3,6 +3,9 @@ namespace Nabto.Edge.ClientIam.Impl;
 using PeterO.Cbor;
 using Nabto.Edge.Client;
 
+/**
+ * <summary>This class contains detailed information about a Nabto Edge Embedded device.</summary>
+ */
 public class DeviceInfo
 {
 
@@ -60,6 +63,12 @@ public class DeviceInfo
         return dd;
     }
 
+    /**
+     * <summary>Retrieve device information that typically does not need a paired user.</summary>
+     * <param name="connection">An established connection to the device.</param>
+     * <returns>A DeviceDetails object containing the device information.</returns>
+     * <exception cref=""></exception>
+     */
     public static async Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/pairing");
@@ -77,6 +86,11 @@ public class DeviceInfo
         return dd;
     }
 
+    /**
+     * <summary>Retrieve device information that typically does not need a paired user.</summary>
+     * <param name="connection">An established connection to the device.</param>
+     * <returns>A DeviceDetails object containing the device information.</returns>
+     */
     public static async Task UpdateDeviceInfoAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
     {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/device-info/{setting}");

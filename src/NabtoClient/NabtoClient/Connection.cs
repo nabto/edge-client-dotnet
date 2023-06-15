@@ -175,6 +175,8 @@ public interface Connection : IDisposable, IAsyncDisposable
 
     /**
      * <summary>Get the type of this connection.</summary>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_NOT_CONNECTED` if the connection is not established.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_NOT_STOPPED` if the connection or client is stopped or closed.</exception>
      * <returns>The type of this connection.</returns>
      */
     public ConnectionType GetConnectionType();
@@ -206,8 +208,10 @@ public interface Connection : IDisposable, IAsyncDisposable
      * the identity of the remote device.
      * </summary>
      *
-     * <exception cref="NabtoException">Thrown with error code: `INVALID_STATE` if the connection is not established.</exception>
-     * <returns type="string">The fingerprint encoded as hex.</returns>
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE` if the connection is not established.</exception>     
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the connection or the parent client instance are stopped.</exception>     
+     * <exception cref="NabtoException">Thrown with error code `NONE` if no fingerprint is available.</exception>     
+     * <returns type="string">The fingerprint encoded as hex.</returns>     
      */
     public string GetDeviceFingerprint();
 
@@ -216,86 +220,26 @@ public interface Connection : IDisposable, IAsyncDisposable
      * Get the fingerprint of the client public key used for this connection.
      * </summary>
      * <returns>The fingerprint encoded as hex.</returns>
-     * <exception cref="NabtoException">Thrown with error code: `INVALID_STATE` if the connection is not established.</exception>
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE` if no private key set on connection.</exception>
      */
     public string GetClientFingerprint();
 
     /**
-     * <summary>
-     * Establish this connection asynchronously.
-     *
-     * The returned task is completed with an error if an error occurs.
-     *
-     *
-     * <list type="bullet">
-     *   <item>
-     *     <description>
-     *       `UNAUTHORIZED`: If the authentication options do not match the basestation configuration for this
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `TOKEN_REJECTED`: If the basestation could not validate the specified token
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `STOPPED`: If the client instance was stopped
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NO_CHANNELS`: If all parameters input were accepted but a connection could not be
-     * established. Details about what went wrong are available as the
-     * associated localError and remoteError.
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NO_CHANNELS.remoteError.NOT_ATTACHED`: If the target remote device is not attached to the basestation
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NO_CHANNELS.remoteError.FORBIDDEN`: If the basestation request is rejected
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NO_CHANNELS.remoteError.NONE`: If remote relay was not enabled
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NO_CHANNELS.localError.NONE`: If mDNS discovery was not enabled
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NO_CHANNELS.localError.NOT_FOUND`: If no local device was found
-     *     </description>
-     *   </item>
-     * </list>
-     * </summary>
-     *
+     * <summary>Establish this connection asynchronously.</summary>
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE` if the connection is missing required options, for instance a valid private key.</exception>
+     * <exception cref="NabtoException">Thrown with error code `TIMEOUT` if the channel to the device was created but the dtls connection to the device timed out.</exception>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the client instance was stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `DEVICE_INTERNAL_ERROR` the device encountered an internal error during the dtls connect attempt. This is most likely due to no more connection resources available in the device.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NO_CHANNELS` if all parameters input were accepted but a connection could not be established for some reason. The specific reason can be retrieved using `GetLocalChannelErrorCode()` and `GetRemoteChannelErrorCode()`.</exception>
      * <returns>Task completed when the connect attempt succeeds or fails.</returns>
      */
     public Task ConnectAsync();
 
     /**
-     * <summary>
-     * Close this connection asynchronously.
-     *
-     * The returned Task completes with an error if an error occurs.
-     * <list type="bullet">
-     *   <item>
-     *     <description>
-     *       `NabtoClientError`: If an error occurs during close.
-     *     </description>
-     *   </item>
-     * </list>
-     * </summary>
-     *
+     * <summary>Close this connection asynchronously.</summary>
+     * <exception cref="NabtoException">Thrown with error code `OPERATION_IN_PROGRESS` if another close is in progreess.</exception>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the client instance was stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NOT_CONNECTED` if the connection is not established.</exception>
      * <returns>Task completed when the close succeeds or fails.</returns>
      */
     public Task CloseAsync();
@@ -308,30 +252,40 @@ public interface Connection : IDisposable, IAsyncDisposable
      *
      * <para>A specific use case for the password authentication is to prove the identity of a device which identity is not already known, e.g. in a pairing scenario.</para>
      * </summary>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_UNAUTHORIZED` if the username and/or password is invalid.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_NOT_FOUND` if the password authentication feature is not available on the device.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_NOT_CONNECTED` if the connection is not established.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_OPERATION_IN_PROGRESS` if a password authentication request is already in progress on the connection.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_TOO_MANY_REQUESTS` if too many password attempts has been made.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NABTO_CLIENT_EC_STOPPED` if the client or connection is stopped.</exception>
      * <returns>Task completed when the close succeeds or fails.</returns>
      */
     public Task PasswordAuthenticateAsync(string username, string password);
 
     /**
      * <summary>
-     * Get underlying error code on local channel.
+     * Get underlying error code on local channel.     *
      *
      * Possible local channel error code are:
      *
      * <list type="bullet">
      *   <item>
      *     <description>
-     *       `NOT_FOUND`: If the device was not found locally
+     *       `NONE`: if mDNS discovery was not enabled for the connection.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `NONE`: If mDNS discovery was not enabled
+     *       `NOT_FOUND`: if mDNS was enabled but the device was not found.
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `OPERATION_IN_PROGRESS`: if scanning is still in progress.
      *     </description>
      *   </item>
      * </list>
      * </summary>
-     *
      * <returns>the local channel error code</returns>
      */
     public int GetLocalChannelErrorCode();
@@ -345,7 +299,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <list type="bullet">
      *   <item>
      *     <description>
-     *       `NOT_ATTACHED`: If the target remote device is not attached to the basestation
+     *       `NOT_ATTACHED`: If the target remote device is not attached to the basestation (the device is offline).
      *     </description>
      *   </item>
      *   <item>
@@ -355,37 +309,52 @@ public interface Connection : IDisposable, IAsyncDisposable
      *   </item>
      *   <item>
      *     <description>
-     *       `FORBIDDEN`: If the basestation request is rejected
+     *       `FORBIDDEN`: If the basestation request is rejected.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `TOKEN_REJECTED`: If the basestation rejected based on an invalid SCT or JWT
+     *       `TOKEN_REJECTED`: If the basestation rejected based on an invalid SCT or JWT.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `DNS`: If the server URL failed to resolve
+     *       `DNS`: If the server URL failed to resolve.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `UNKNOWN_SERVER_KEY`: If the provided server key was not known by the basestation
+     *       `UNKNOWN_SERVER_KEY`: If the provided server key was not known by the basestation.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `UNKNOWN_PRODUCT_ID`: If the provided product ID was not known by the basestation
+     *       `UNKNOWN_PRODUCT_ID`: If the provided product ID was not known by the basestation.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `UNKNOWN_DEVICE_ID`: If the provided device ID was not known by the basestation
+     *       `UNKNOWN_DEVICE_ID`: If the provided device ID was not known by the basestation.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `NONE`: If remote relay was not enabled
+     *       `NONE`: If remote relay was not enabled.
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `OPERATION_IN_PROGRESS`: if the opening of the channel is still in progress.
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `INVALID_STATE`:  if required options are missing for the remote connection
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `CONNECTION_REFUSED`: if the client could not connect to the basestation.
      *     </description>
      *   </item>
      * </list>
@@ -404,17 +373,26 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <list type="bullet">
      *   <item>
      *     <description>
-     *       `NOT_FOUND`: If no responses was received on any added direct channels
+     *       `OK`: if a direct candidate was found.
      *     </description>
      *   </item>
      *   <item>
      *     <description>
-     *       `NONE`: If direct channels was not enabled
+     *       `NONE`: if direct connection was not enabled (no candidates added).
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `NOT_FOUND`: if no direct candidates resulted in UDP ping responses.
+     *     </description>
+     *   </item>
+     *   <item>
+     *     <description>
+     *       `OPERATION_IN_PROGRESS`: if opening of a direct candidate is in progress.
      *     </description>
      *   </item>
      * </list>
      * </summary>
-     *
      * <returns>the direct channel error code</returns>
      */
     public int GetDirectCandidatesChannelErrorCode();
@@ -426,6 +404,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      *
      * <param name="method"> CoAP request method e.g. GET, POST or PUT</param>
      * <param name="path"> CoAP request path e.g. /hello-world</param>
+     * <exception cref="AllocationException"> if the underlying SDK failed to create the request</exception>
      * <returns>the created CoapRequest object.</returns>
      */
     public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path);
@@ -434,7 +413,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <summary>
      * Create stream. The returned Stream object must be kept alive while in use.
      * </summary>
-     *
+     * <exception cref="AllocationException"> if the underlying SDK failed to create the stream</exception>     *
      * <returns>The created stream.</returns>
      */
     public Nabto.Edge.Client.Stream CreateStream();
@@ -443,7 +422,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <summary>
      * Create a TCP tunnel. The returned TcpTunnel object must be kept alive while in use.
      * </summary>
-     *
+     * <exception cref="AllocationException"> if the underlying SDK failed to create the tunnel</exception>     *
      * <returns>The created TCP tunnel.</returns>
      */
     public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
