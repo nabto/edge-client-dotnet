@@ -63,7 +63,7 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      * <para>The created connection can then be configured and opened. Returned object must be kept alive while in use.</para>
      *
      * </summary>
-     * <exception cref="NabtoException">ALLOCATION_ERROR if the underlying SDK fails creating a connection object</exception>
+     * <exception cref="AllocationException"> if the underlying SDK fails creating a connection object</exception>
      */
     public Connection CreateConnection();
 
@@ -73,7 +73,7 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      * </summary>
      * <param name="subtype"> the mDNS subtype to scan for: If the empty string, the mDNS subtype
      * `_nabto._udp.local` is located; if subtype is specified, `[subtype]._sub._nabto._udp.local` is located.</param>
-     * <exception cref="NabtoException">NabtoEdgeClientError</exception>
+     * <exception cref="NabtoException"></exception>
      * <returns>
      *     The MdnsScanner
      * </returns>

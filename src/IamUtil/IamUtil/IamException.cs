@@ -2,6 +2,9 @@ namespace Nabto.Edge.ClientIam;
 
 using System.Text;
 
+/**
+ * <summary>The IamException class is used to represent errors reported from the IAM CoAP interface on the Nabto Edge Embedded Device.</summary>
+ */
 public class IamException : Exception
 {
     public IamError Error { get; }

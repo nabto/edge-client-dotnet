@@ -388,6 +388,7 @@ internal unsafe class NabtoClientNative
     [DllImport(_dllName)] internal static extern int NABTO_CLIENT_EC_UNKNOWN_SERVER_KEY_value();
     [DllImport(_dllName)] internal static extern int NABTO_CLIENT_EC_CONNECTION_REFUSED_value();
     [DllImport(_dllName)] internal static extern int NABTO_CLIENT_EC_PRIVILEGED_PORT_value();
+    [DllImport(_dllName)] internal static extern int NABTO_CLIENT_EC_DEVICE_INTERNAL_ERROR_value();
 
     internal static string nabto_client_error_get_message(int ec)
     {

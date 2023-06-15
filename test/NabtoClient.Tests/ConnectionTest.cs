@@ -32,6 +32,18 @@ public class ConnectionTest {
         Assert.Equal(NabtoClientError.INVALID_STATE, exception.ErrorCode);
     }
 
+    [Fact] 
+    public async Task ConnectNoChannelsException() {
+        var client = NabtoClient.Create();
+        var device = TestDevices.GetCoapDevice();
+        device.DeviceId = "foo";
+        var connection = client.CreateConnection();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        var exception = await Assert.ThrowsAsync<NabtoException>(() => connection.ConnectAsync());
+        Assert.Equal(NabtoClientError.NO_CHANNELS, exception.ErrorCode);
+    }
+
     [Fact]
     public async Task GetConnectionType() {
         var client = NabtoClient.Create();

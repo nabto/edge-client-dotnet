@@ -84,7 +84,8 @@ public class NabtoClientError
 
     /**
      * <summary>
-     * The connection failed for some unspecified reason.
+     * <para>An operation was attempted that requires an open connection.</para>
+     * <para>If for instance a stream is opened or a CoAP request is executed on a connection that is not yet opened.</para>
      * </summary>
      */
     public static int NOT_CONNECTED = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_NOT_CONNECTED_value();
@@ -238,6 +239,12 @@ public class NabtoClientError
      */
     public static int PRIVILEGED_PORT = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_PRIVILEGED_PORT_value();
 
+    /**
+     * <summary>
+     * The device encountered an internal error during the dtls connect attempt. This is most likely due to no more connection resources available in the device.
+     * </summary>
+     */
+    public static int DEVICE_INTERNAL_ERROR = Nabto.Edge.Client.Impl.NabtoClientNative.NABTO_CLIENT_EC_DEVICE_INTERNAL_ERROR_value();
     /**
      * <summary>
      * Map an error code to an English description.

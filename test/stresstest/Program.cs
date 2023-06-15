@@ -1,4 +1,4 @@
-using Nabto.Edge.Client;
+﻿using Nabto.Edge.Client;
 using Microsoft.Extensions.Logging;
 using Nabto.Edge.Client.Tests;
 
@@ -35,7 +35,9 @@ class Scanner
             await Task.Delay(timeout);
             List<FoundDevice> devices = new List<FoundDevice>();
             foreach (var d in _devices.Values) {
-                devices.Add(new FoundDevice { DeviceId = d.DeviceId });
+                if (d.DeviceId != null) {
+                    devices.Add(new FoundDevice { DeviceId = d.DeviceId }); 
+                }
             }
             return devices;
         }

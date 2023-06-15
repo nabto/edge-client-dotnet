@@ -19,6 +19,7 @@ public interface CoapResponse
      * <returns>
      *     the CoAP response status code.
      * </returns>
+     * <exception cref="NabtoException">INVALID_STATE if there is no response yet.</exception>
      */
     public ushort GetResponseStatusCode();
 
@@ -31,6 +32,8 @@ public interface CoapResponse
      * <returns>
      *     the CoAP response content format.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `NO_DATA` if the response does not have a content format.</exception>
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE` if no response is ready.</exception>
      */
     public ushort GetResponseContentFormat();
 
@@ -43,6 +46,8 @@ public interface CoapResponse
      * <returns>
      *     the CoAP response payload.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `NO_DATA` if the response does not have a payload.</exception>
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE` if no response is ready.</exception>
      */
     public byte[] GetResponsePayload();
 }
