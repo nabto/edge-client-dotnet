@@ -3,7 +3,8 @@ using Xunit;
 
 namespace Nabto.Edge.Client.Tests;
 
-public class NabtoClientTest {
+public class NabtoClientTest
+{
     [Fact]
     public void GetVersion()
     {
@@ -13,8 +14,10 @@ public class NabtoClientTest {
     }
 
     [Fact]
-    public void CreateDestroyClient() {
-        for (int i = 0; i < 100; i++) {
+    public void CreateDestroyClient()
+    {
+        for (int i = 0; i < 100; i++)
+        {
             var client = NabtoClient.Create();
         }
     }

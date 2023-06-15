@@ -3,15 +3,17 @@ using Xunit;
 
 namespace Nabto.Edge.Client.Tests;
 
-public class CoapTest {
+public class CoapTest
+{
     [Fact]
-    public async Task GetCoapHelloWorld() {
+    public async Task GetCoapHelloWorld()
+    {
         var client = NabtoClient.Create();
 
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());
-        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
         await connection.ConnectAsync();
 
         var coapRequest = connection.CreateCoapRequest("GET", "/hello-world");
@@ -27,23 +29,26 @@ public class CoapTest {
     }
 
     [Fact]
-    public async Task GracefullyHandleDisposeRequestBeforeResponse() {
+    public async Task GracefullyHandleDisposeRequestBeforeResponse()
+    {
         var client = NabtoClient.Create();
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());
-        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
         await connection.ConnectAsync();
 
         CoapResponse response;
-        using (var coapRequest = connection.CreateCoapRequest("GET", "/hello-world")) {
+        using (var coapRequest = connection.CreateCoapRequest("GET", "/hello-world"))
+        {
             response = await coapRequest.ExecuteAsync();
         }
         Assert.Throws<ObjectDisposedException>(() => response.GetResponseStatusCode());
     }
 
     [Fact]
-    public async Task GracefullyHandleDisposeConnectionBeforeRequest() {
+    public async Task GracefullyHandleDisposeConnectionBeforeRequest()
+    {
         var client = NabtoClient.Create();
 
         // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
@@ -51,10 +56,11 @@ public class CoapTest {
         // client.SetLogger(logger);
 
         CoapRequest request;
-        using (var connection = client.CreateConnection()) {
+        using (var connection = client.CreateConnection())
+        {
             var device = TestDevices.GetCoapDevice();
             connection.SetOptions(device.GetConnectOptions());
-            connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+            connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
             await connection.ConnectAsync();
             request = connection.CreateCoapRequest("GET", "/hello-world");
         }

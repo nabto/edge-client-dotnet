@@ -16,7 +16,8 @@ public class UserSettings
 
         var statusCode = response.GetResponseStatusCode();
 
-        if (errorHandler != null) {
+        if (errorHandler != null)
+        {
             errorHandler(statusCode, response);
         }
 

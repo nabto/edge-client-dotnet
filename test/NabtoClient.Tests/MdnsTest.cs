@@ -3,14 +3,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Nabto.Edge.Client.Tests;
 
-public class MdnsTest {
+public class MdnsTest
+{
 
     [Fact]
-    public void TestMdnsScanner() {
+    public void TestMdnsScanner()
+    {
         var client = Nabto.Edge.Client.NabtoClient.Create();
         var mdnsScanner = client.CreateMdnsScanner();
 
-        MdnsScanner.ResultHandler handler = (MdnsResult result) => {};
+        MdnsScanner.ResultHandler handler = (MdnsResult result) => { };
 
         mdnsScanner.Handlers += handler;
 
@@ -18,11 +20,12 @@ public class MdnsTest {
     }
 
     [Fact]
-    public void TestMdnsScannerSetHandlerToNull() {
+    public void TestMdnsScannerSetHandlerToNull()
+    {
         var client = Nabto.Edge.Client.NabtoClient.Create();
         var mdnsScanner = client.CreateMdnsScanner();
 
-        MdnsScanner.ResultHandler handler = (MdnsResult result) => {};
+        MdnsScanner.ResultHandler handler = (MdnsResult result) => { };
 
         mdnsScanner.Handlers = null;
 
@@ -31,11 +34,12 @@ public class MdnsTest {
     }
 
     [Fact]
-    public void TestDisposeMdnsScanner() {
+    public void TestDisposeMdnsScanner()
+    {
         var client = Nabto.Edge.Client.NabtoClient.Create();
         var mdnsScanner = client.CreateMdnsScanner();
 
-        MdnsScanner.ResultHandler handler = (MdnsResult result) => {};
+        MdnsScanner.ResultHandler handler = (MdnsResult result) => { };
         mdnsScanner.Handlers += handler;
         mdnsScanner.Dispose();
         Assert.Throws<ObjectDisposedException>(() => mdnsScanner.Start());

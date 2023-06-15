@@ -11,7 +11,8 @@ public class IamUtil
         return Pairing.PairLocalInitialAsync(connection);
     }
 
-    public static Task PairLocalOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername) {
+    public static Task PairLocalOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername)
+    {
         return Pairing.PairLocalOpenAsync(connection, desiredUsername);
     }
 

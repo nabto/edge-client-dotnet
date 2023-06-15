@@ -5,22 +5,27 @@ using Nabto.Edge.Client.Tests;
 using System.Collections.Generic;
 //using System.CommandLine;
 
-class FoundDevice {
+class FoundDevice
+{
     public string DeviceId = "";
 }
 
 class Scanner
 {
     private Dictionary<string, MdnsResult> _devices = new Dictionary<string, MdnsResult>();
-    public Scanner() {
+    public Scanner()
+    {
 
     }
 
     void ResultHandler(MdnsResult mdnsResult)
     {
-        if (mdnsResult.Action == MdnsResult.MdnsAction.ADD || mdnsResult.Action == MdnsResult.MdnsAction.UPDATE) {
+        if (mdnsResult.Action == MdnsResult.MdnsAction.ADD || mdnsResult.Action == MdnsResult.MdnsAction.UPDATE)
+        {
             _devices[mdnsResult.ServiceInstanceName] = mdnsResult;
-        } else if (mdnsResult.Action == MdnsResult.MdnsAction.REMOVE) {
+        }
+        else if (mdnsResult.Action == MdnsResult.MdnsAction.REMOVE)
+        {
             _devices.Remove(mdnsResult.ServiceInstanceName);
         }
 
@@ -34,9 +39,11 @@ class Scanner
             scanner.Start();
             await Task.Delay(timeout);
             List<FoundDevice> devices = new List<FoundDevice>();
-            foreach (var d in _devices.Values) {
-                if (d.DeviceId != null) {
-                    devices.Add(new FoundDevice { DeviceId = d.DeviceId }); 
+            foreach (var d in _devices.Values)
+            {
+                if (d.DeviceId != null)
+                {
+                    devices.Add(new FoundDevice { DeviceId = d.DeviceId });
                 }
             }
             return devices;
@@ -158,12 +165,14 @@ class Program
             for (int j = 0; j < 100; j++)
             {
                 var k = j;
-                tasks.Add(Task.Run(() => DoConnections(k,100)));
+                tasks.Add(Task.Run(() => DoConnections(k, 100)));
                 //tasks.Add(Task.Run(() => DoMdnsScanAsync(k,100)));
             }
 
             await Task.WhenAll(tasks);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Console.WriteLine(e);
         }
     }

@@ -3,12 +3,14 @@ namespace Nabto.Edge.ClientIam.Impl;
 using PeterO.Cbor;
 using Nabto.Edge.Client;
 
-public class Pairing {
+public class Pairing
+{
     private static void HandlePairingResponse(Nabto.Edge.Client.CoapResponse response)
     {
         var statusCode = response.GetResponseStatusCode();
 
-        switch (statusCode) {
+        switch (statusCode)
+        {
             case 201: break;
             case 400: throw IamExceptionImpl.Create(IamError.INVALID_INPUT, response);
             case 403: throw IamExceptionImpl.Create(IamError.BLOCKED_BY_DEVICE_CONFIGURATION, response);
@@ -24,14 +26,16 @@ public class Pairing {
         var response = await coapRequest.ExecuteAsync();
 
         var statusCode = response.GetResponseStatusCode();
-        if (statusCode == 409) {
+        if (statusCode == 409)
+        {
             throw new IamException(IamError.INITIAL_USER_ALREADY_PAIRED);
         }
 
         HandlePairingResponse(response);
     }
 
-    public static async Task PairLocalOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername) {
+    public static async Task PairLocalOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername)
+    {
         var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/local-open");
 
         var cbor = CBORObject.NewMap().Add("Username", desiredUsername);
@@ -48,8 +52,11 @@ public class Pairing {
         try
         {
             await connection.PasswordAuthenticateAsync(username, password);
-        } catch (NabtoException e) {
-            if (e.ErrorCode == NabtoClientError.UNAUTHORIZED) {
+        }
+        catch (NabtoException e)
+        {
+            if (e.ErrorCode == NabtoClientError.UNAUTHORIZED)
+            {
                 throw new IamException(IamError.AUTHENTICATION_ERROR);
             }
             throw;
@@ -65,8 +72,11 @@ public class Pairing {
         try
         {
             await connection.PasswordAuthenticateAsync("", password);
-        } catch (NabtoException e) {
-            if (e.ErrorCode == NabtoClientError.UNAUTHORIZED) {
+        }
+        catch (NabtoException e)
+        {
+            if (e.ErrorCode == NabtoClientError.UNAUTHORIZED)
+            {
                 throw new IamException(IamError.AUTHENTICATION_ERROR);
             }
             throw;

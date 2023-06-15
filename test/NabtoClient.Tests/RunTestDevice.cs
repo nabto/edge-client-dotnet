@@ -249,10 +249,13 @@ public class TestDeviceRunner : IDisposable
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64) {
-               info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_arm64";
-            } else {
-               info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_x86-64";
+            if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            {
+                info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_arm64";
+            }
+            else
+            {
+                info.FileName = "../../../../../test-devices/tcp_tunnel_device_linux_x86-64";
             }
 
         }
@@ -281,17 +284,24 @@ public class TestDeviceRunner : IDisposable
     public void ProcessExited(object? sender, EventArgs e)
     {
         bool ok = false;
-        if (_deviceProcess.ExitCode == 0) {
+        if (_deviceProcess.ExitCode == 0)
+        {
             ok = true;
-        } else {
-            if (System.OperatingSystem.IsWindows()) {
-               ok = _deviceProcess.ExitCode == -1 /* killed */;
-            } else {
-               ok = _deviceProcess.ExitCode == 137 /* killed with sigterm */ ||
-                  _deviceProcess.ExitCode == 145 /* killed with sigkill */;
+        }
+        else
+        {
+            if (System.OperatingSystem.IsWindows())
+            {
+                ok = _deviceProcess.ExitCode == -1 /* killed */;
+            }
+            else
+            {
+                ok = _deviceProcess.ExitCode == 137 /* killed with sigterm */ ||
+                   _deviceProcess.ExitCode == 145 /* killed with sigkill */;
             }
         }
-        if (!ok) {
+        if (!ok)
+        {
             Assert.Fail($"Unexpected exit from tcp tunnel, status was {_deviceProcess.ExitCode}");
         }
     }

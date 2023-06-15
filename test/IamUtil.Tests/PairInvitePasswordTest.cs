@@ -4,7 +4,8 @@ using Nabto.Edge.Client.Tests;
 using Nabto.Edge.Client;
 
 
-public class PairInvitePasswordTest : LocalAllowAllIamFixture {
+public class PairInvitePasswordTest : LocalAllowAllIamFixture
+{
     [Fact]
     public async Task PairSuccess()
     {

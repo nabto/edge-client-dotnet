@@ -5,7 +5,8 @@ using Xunit;
 public class DeviceDetailsTest : LocalAllowAllIamFixture
 {
     [Fact]
-    public async Task GetDeviceDetails() {
+    public async Task GetDeviceDetails()
+    {
         var details = await IamUtil.GetDeviceDetailsAsync(_connection);
         Assert.NotNull(details.AppName);
         //Assert.NotNull(details.AppVersion); // AppVersion is not set in default tunnel
@@ -17,7 +18,8 @@ public class DeviceDetailsTest : LocalAllowAllIamFixture
     }
 
     [Fact]
-    public async Task SetDeviceFriendlyName() {
+    public async Task SetDeviceFriendlyName()
+    {
         var displayName = TestUtil.RandomString(16);
         await IamUtil.UpdateDeviceFriendlyNameAsync(_connection, displayName);
 
