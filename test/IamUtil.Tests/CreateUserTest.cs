@@ -1,11 +1,13 @@
 namespace Nabto.Edge.ClientIam.Tests;
 
-public class CreateUserTest : LocalAllowAllIamFixture {
+public class CreateUserTest : LocalAllowAllIamFixture
+{
 
     [Fact]
-    public async void CreateUser() {
+    public async void CreateUser()
+    {
         var username = TestUtil.UniqueUsername();
-        await IamUtil.CreateUserAsync(_connection, new IamUser{Username = username});
+        await IamUtil.CreateUserAsync(_connection, new IamUser { Username = username });
 
         // ensure we are not paired
         IamException ex = await Assert.ThrowsAsync<IamException>(async () => { await IamUtil.GetCurrentUserAsync(_connection); });

@@ -5,7 +5,8 @@ using System.Net.Sockets;
 
 namespace Nabto.Edge.Client.Tests;
 
-public class TcpTunnelTest {
+public class TcpTunnelTest
+{
 
     private static async Task<Nabto.Edge.Client.Connection> CreateTcpTunnelDeviceConnectionAsync()
     {
@@ -16,7 +17,7 @@ public class TcpTunnelTest {
         var connection = client.CreateConnection();
         var device = TestDevices.GetTcpTunnelDevice();
         connection.SetOptions(device.GetConnectOptions());
-        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
         await connection.ConnectAsync();
         return connection;
     }
@@ -43,7 +44,7 @@ public class TcpTunnelTest {
         ushort boundPort = tunnel.GetLocalPort();
         HttpClient client = new HttpClient();
 
-        using HttpResponseMessage response = await client.GetAsync("http://127.0.0.1:"+ boundPort + "/");
+        using HttpResponseMessage response = await client.GetAsync("http://127.0.0.1:" + boundPort + "/");
         response.EnsureSuccessStatusCode();
         string responseBody = await response.Content.ReadAsStringAsync();
         await tunnel.CloseAsync();

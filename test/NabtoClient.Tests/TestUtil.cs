@@ -1,6 +1,8 @@
-public class TestUtil {
+public class TestUtil
+{
 
-    public static string UniqueUsername() {
+    public static string UniqueUsername()
+    {
         const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         const int length = 10;
 
@@ -10,8 +12,9 @@ public class TestUtil {
         return randomString;
     }
 
-    public static string RandomFingerprint() {
-      const string chars = "0123456789abcdef";
+    public static string RandomFingerprint()
+    {
+        const string chars = "0123456789abcdef";
         const int length = 64;
 
         Random random = new Random();
@@ -20,7 +23,8 @@ public class TestUtil {
         return randomString;
     }
 
-    public static string RandomString(int length) {
+    public static string RandomString(int length)
+    {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
         Random random = new Random();
@@ -29,7 +33,8 @@ public class TestUtil {
         return randomString;
     }
 
-    public static string RandomProductId() {
+    public static string RandomProductId()
+    {
         const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         const int length = 8;
 
@@ -39,7 +44,8 @@ public class TestUtil {
 
         return "pr-" + randomString;
     }
-    public static string RandomDeviceId() {
+    public static string RandomDeviceId()
+    {
         const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         const int length = 8;
 

@@ -46,7 +46,8 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     /// <inheritdoc/>
     public void Start()
     {
-        if (_disposed) {
+        if (_disposed)
+        {
             throw new ObjectDisposedException("MdnsScanner", "The MdnsScanner has been disposed.");
         }
         int ec = NabtoClientNative.nabto_client_mdns_resolver_init_listener(_client.GetHandle(), _listener.GetHandle(), _subtype);
@@ -57,8 +58,10 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
         StartListen();
     }
 
-    public void Stop() {
-        if (_stopped) {
+    public void Stop()
+    {
+        if (_stopped)
+        {
             return;
         }
         _stopped = true;

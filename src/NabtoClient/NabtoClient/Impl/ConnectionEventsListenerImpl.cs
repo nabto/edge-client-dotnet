@@ -51,7 +51,8 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     /// <inheritdoc />
     public void Stop()
     {
-        if (_stopped) {
+        if (_stopped)
+        {
             return;
         }
         _stopped = true;

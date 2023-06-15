@@ -1,6 +1,7 @@
 namespace Nabto.Edge.Client.Tests;
 
-public class TestDevice {
+public class TestDevice
+{
 
     public string? ProductId { get; set; }
     public string? DeviceId { get; set; }
@@ -17,24 +18,29 @@ public class TestDevice {
 
     public bool? P2p { get; set; }
 
-    public ConnectionOptions GetConnectOptions() {
-        var co = new ConnectionOptions {
+    public ConnectionOptions GetConnectOptions()
+    {
+        var co = new ConnectionOptions
+        {
             ProductId = ProductId,
             DeviceId = DeviceId,
             ServerUrl = ServerUrl,
             ServerKey = ServerKey,
             ServerConnectToken = ServerConnectToken
         };
-        if ((Local != null)) {
+        if ((Local != null))
+        {
             co.Local = Local;
         }
 
-        if ((Remote != null)) {
+        if ((Remote != null))
+        {
             co.Remote = Remote;
         }
 
-        if ((P2p != null)) {
-            co.Rendezvous = P2p; 
+        if ((P2p != null))
+        {
+            co.Rendezvous = P2p;
         }
 
         return co;

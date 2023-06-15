@@ -17,16 +17,18 @@ public class LocalAllowAllIamFixture : IAsyncLifetime, IDisposable
     {
         _client = Nabto.Edge.Client.NabtoClient.Create();
         _connection = _client.CreateConnection();
-        _connection.SetOptions(new ConnectionOptions{ProductId = _testDevice.ProductId, DeviceId = _testDevice.DeviceId, Local = true, Remote = false });
+        _connection.SetOptions(new ConnectionOptions { ProductId = _testDevice.ProductId, DeviceId = _testDevice.DeviceId, Local = true, Remote = false });
         _connection.SetOptions(new ConnectionOptions { PrivateKey = _client.CreatePrivateKey() });
     }
 
-    public void Dispose() {
+    public void Dispose()
+    {
         _testDevice.Dispose();
     }
 
-    public ConnectionOptions GetConnectionOptions() {
-        return new ConnectionOptions{ProductId = _testDevice.ProductId, DeviceId = _testDevice.DeviceId, Local = true, Remote = false};
+    public ConnectionOptions GetConnectionOptions()
+    {
+        return new ConnectionOptions { ProductId = _testDevice.ProductId, DeviceId = _testDevice.DeviceId, Local = true, Remote = false };
     }
 
     public Task DisposeAsync()
@@ -39,7 +41,8 @@ public class LocalAllowAllIamFixture : IAsyncLifetime, IDisposable
         await _connection.ConnectAsync();
     }
 
-    public async Task<string> CreateDefaultUser() {
+    public async Task<string> CreateDefaultUser()
+    {
         var username = TestUtil.UniqueUsername();
         await IamUtil.CreateUserAsync(_connection, new IamUser { Username = username, Role = "Administrator", DisplayName = "displayname", Fingerprint = _connection.GetClientFingerprint() });
         return username;

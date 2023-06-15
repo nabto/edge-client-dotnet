@@ -6,7 +6,8 @@ namespace Nabto.Edge.ClientIam.Impl;
 
 using PeterO.Cbor;
 
-public class IamSettings {
+public class IamSettings
+{
 
     public static Nabto.Edge.ClientIam.IamSettings DecodeIamSettings(CBORObject settings)
     {
@@ -20,23 +21,28 @@ public class IamSettings {
 
         var iamSettings = new Nabto.Edge.ClientIam.IamSettings();
 
-        if (passwordOpenPairing != null) {
+        if (passwordOpenPairing != null)
+        {
             iamSettings.PasswordOpenPairing = passwordOpenPairing.AsBoolean();
         }
 
-        if (passwordInvitePairing != null) {
+        if (passwordInvitePairing != null)
+        {
             iamSettings.PasswordInvitePairing = passwordInvitePairing.AsBoolean();
         }
 
-        if (localOpenPairing != null) {
+        if (localOpenPairing != null)
+        {
             iamSettings.LocalOpenPairing = localOpenPairing.AsBoolean();
         }
 
-        if (passwordOpenSct != null) {
+        if (passwordOpenSct != null)
+        {
             iamSettings.PasswordOpenSct = passwordOpenSct.AsString();
         }
 
-        if (passwordOpenPassword != null) {
+        if (passwordOpenPassword != null)
+        {
             iamSettings.PasswordOpenPassword = passwordOpenPassword.AsString();
         }
 

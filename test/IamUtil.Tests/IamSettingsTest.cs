@@ -2,10 +2,12 @@ namespace Nabto.Edge.ClientIam.Tests;
 
 using Xunit;
 
-public class IamSettingsTest : LocalAllowAllIamFixture {
+public class IamSettingsTest : LocalAllowAllIamFixture
+{
 
     [Fact]
-    public async Task GetIamSettings() {
+    public async Task GetIamSettings()
+    {
         var iamSettings = await IamUtil.GetIamSettingsAsync(_connection);
 
         Assert.NotNull(iamSettings.LocalOpenPairing);
@@ -16,7 +18,8 @@ public class IamSettingsTest : LocalAllowAllIamFixture {
     }
 
     [Fact]
-    public async Task UpdateIamSettings() {
+    public async Task UpdateIamSettings()
+    {
 
         // TODO This disables pairing modes which other tests are using.
         // await IamUtil.UpdateIamSettingsLocalOpenPairingAsync(_connection, false);

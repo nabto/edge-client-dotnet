@@ -3,7 +3,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Nabto.Edge.Client.Tests;
 
-public class StreamTest {
+public class StreamTest
+{
 
     private static async Task<Nabto.Edge.Client.Connection> CreateStreamDeviceConnectionAsync()
     {
@@ -14,7 +15,7 @@ public class StreamTest {
         var connection = client.CreateConnection();
         var device = TestDevices.GetStreamDevice();
         connection.SetOptions(device.GetConnectOptions());
-        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() } );
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
         await connection.ConnectAsync();
         return connection;
     }
@@ -59,7 +60,7 @@ public class StreamTest {
 
     }
 
-   [Fact]
+    [Fact]
     public async Task TestStreamDispose()
     {
         var connection = await CreateStreamDeviceConnectionAsync();

@@ -9,7 +9,8 @@ using Nabto.Edge.Client;
 public class DeviceInfo
 {
 
-    private static Nabto.Edge.ClientIam.DeviceDetails DecodeDeviceDetails(CBORObject cbor) {
+    private static Nabto.Edge.ClientIam.DeviceDetails DecodeDeviceDetails(CBORObject cbor)
+    {
         var pairingModes = cbor["Modes"];
 
         var nabtoVersion = cbor["NabtoVersion"];
@@ -23,11 +24,14 @@ public class DeviceInfo
 
         var dd = new DeviceDetails();
 
-        if (pairingModes != null) {
+        if (pairingModes != null)
+        {
             var values = pairingModes.Values;
-            foreach (var v in values) {
+            foreach (var v in values)
+            {
                 var pairingMode = v.AsString();
-                switch (pairingMode) {
+                switch (pairingMode)
+                {
                     case "LocalOpen": dd.Modes.Add(PairingMode.LOCAL_OPEN); break;
                     case "PasswordOpen": dd.Modes.Add(PairingMode.PASSWORD_OPEN); break;
                     case "LocalInitial": dd.Modes.Add(PairingMode.LOCAL_INITIAL); break;
@@ -37,27 +41,33 @@ public class DeviceInfo
             }
         }
 
-        if (nabtoVersion != null) {
+        if (nabtoVersion != null)
+        {
             dd.NabtoVersion = nabtoVersion.AsString();
         }
 
-        if (appVersion != null) {
+        if (appVersion != null)
+        {
             dd.AppVersion = appVersion.AsString();
         }
 
-        if (appName != null) {
+        if (appName != null)
+        {
             dd.AppName = appName.AsString();
         }
 
-        if (productId != null) {
+        if (productId != null)
+        {
             dd.ProductId = productId.AsString();
         }
 
-        if (deviceId != null) {
+        if (deviceId != null)
+        {
             dd.DeviceId = deviceId.AsString();
         }
 
-        if (friendlyName != null) {
+        if (friendlyName != null)
+        {
             dd.FriendlyName = friendlyName.AsString();
         }
         return dd;
@@ -75,7 +85,8 @@ public class DeviceInfo
         var response = await coapRequest.ExecuteAsync();
 
         var statusCode = response.GetResponseStatusCode();
-        if (statusCode == 404) {
+        if (statusCode == 404)
+        {
             throw new IamException(IamError.IAM_NOT_SUPPORTED);
         }
 
@@ -101,11 +112,12 @@ public class DeviceInfo
         IamExceptionImpl.HandleDefaultCoap(response);
     }
 
-    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName) {
+    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName)
+    {
         return UpdateDeviceInfoAsync(connection, "friendly-name", CBORObject.FromObject(friendlyName));
     }
 
-     public static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
+    public static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
         var response = await coapRequest.ExecuteAsync();
@@ -114,7 +126,8 @@ public class DeviceInfo
 
         CBORObject cborObject = CBORObject.DecodeFromBytes(data);
         List<string> roles = new List<string>();
-        foreach (CBORObject i in cborObject.Values) {
+        foreach (CBORObject i in cborObject.Values)
+        {
             roles.Add(i.AsString());
         }
 
@@ -131,7 +144,8 @@ public class DeviceInfo
 
         CBORObject cborObject = CBORObject.DecodeFromBytes(data);
         List<string> roles = new List<string>();
-        foreach (CBORObject i in cborObject.Values) {
+        foreach (CBORObject i in cborObject.Values)
+        {
             roles.Add(i.AsString());
         }
 

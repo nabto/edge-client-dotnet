@@ -7,7 +7,9 @@ internal class NabtoExceptionFactory
         if (ec == NabtoClientError.INVALID_ARGUMENT)
         {
             return new ArgumentException();
-        } else {
+        }
+        else
+        {
             return new Nabto.Edge.Client.NabtoException(ec);
         }
     }

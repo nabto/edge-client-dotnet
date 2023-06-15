@@ -4,16 +4,18 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
 {
     protected string _testUser1;
     protected string _testUser2;
-    public UpdateUserTest() : base() {
+    public UpdateUserTest() : base()
+    {
         _testUser1 = TestUtil.UniqueUsername();
         _testUser2 = TestUtil.UniqueUsername();
     }
 
-    public new async Task InitializeAsync() {
+    public new async Task InitializeAsync()
+    {
         await base.InitializeAsync();
 
-        await IamUtil.CreateUserAsync(_connection, new IamUser{Username = _testUser1});
-        await IamUtil.CreateUserAsync(_connection, new IamUser{Username = _testUser2});
+        await IamUtil.CreateUserAsync(_connection, new IamUser { Username = _testUser1 });
+        await IamUtil.CreateUserAsync(_connection, new IamUser { Username = _testUser2 });
     }
 
     [Fact]
@@ -68,7 +70,7 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     [Fact]
     public async Task UpdateUserNotificationCategories()
     {
-        await IamUtil.UpdateUserNotificationCategoriesAsync(_connection, _testUser1, new List<string>{});
+        await IamUtil.UpdateUserNotificationCategoriesAsync(_connection, _testUser1, new List<string> { });
 
         var user = await IamUtil.GetUserAsync(_connection, _testUser1);
 

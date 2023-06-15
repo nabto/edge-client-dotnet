@@ -1,6 +1,7 @@
 namespace Nabto.Edge.ClientIam;
 
-public class IamSettings {
+public class IamSettings
+{
     public bool? PasswordOpenPairing;
     public bool? PasswordInvitePairing;
     public bool? LocalOpenPairing;
