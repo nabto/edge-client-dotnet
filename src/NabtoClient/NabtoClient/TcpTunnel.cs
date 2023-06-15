@@ -26,24 +26,6 @@ public interface TcpTunnel : IDisposable, IAsyncDisposable
     /**
      * <summary>
      * Open this tunnel without blocking. The returned task can fail with:
-     * <list type="bullet">
-     * <item>
-     *   <description>
-     *     `FORBIDDEN` if the device did not allow opening the tunnel.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `STOPPED` if the tunnel or a parent object is stopped.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `NOT_CONNECTED` if the connection is not established yet.
-     *   </description>
-     * </item>
-     * </list>
-     *
      * </summary>
      * <param name="service"> The service to connect to on the remote device (as defined in the device's
      * configuration), e.g. "http", "http-admin", "ssh", "rtsp".</param>
@@ -52,6 +34,11 @@ public interface TcpTunnel : IDisposable, IAsyncDisposable
      * <returns>
      *     The Task that will complete once the tunnel is opened.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `NOT_FOUND` if requesting an unknown service. </exception>
+     * <exception cref="NabtoException">Thrown with error code `FORBIDDEN` if target device did not allow opening a tunnel to specified service for the current client.</exception>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the tunnel is stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NOT_CONNECTED` if the connection is not established yet..</exception>     
+     * <exception cref="NabtoException">Thrown with error code `PRIVILEGED_PORT` if the connection is not established because the port is privileged and the user does not have access to start a listening socket on that port number.</exception>     
      */
     public Task OpenAsync(string service, ushort localPort);
 
@@ -63,6 +50,8 @@ public interface TcpTunnel : IDisposable, IAsyncDisposable
      * <returns>
      *     The Task that will complete once the tunnel is closed.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the tunnel is stopped.</exception>     
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE`  if the tunnel has not been opened yet.</exception>     
      */
     public Task CloseAsync();
 
@@ -74,6 +63,7 @@ public interface TcpTunnel : IDisposable, IAsyncDisposable
      * <returns>
      *     the local port number used.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `INVALID_STATE`  if the tunnel has not been opened ye..</exception>     
      */
     public ushort GetLocalPort();
 }
