@@ -23,6 +23,7 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      * <summary>
      * Create a new instance of the Nabto Edge client.
      * </summary>
+     * <exception cref="AllocationException"> if the underlying SDK failed to create the client</exception>     
      */
     public static NabtoClient Create()
     {
@@ -73,7 +74,8 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      * </summary>
      * <param name="subtype"> the mDNS subtype to scan for: If the empty string, the mDNS subtype
      * `_nabto._udp.local` is located; if subtype is specified, `[subtype]._sub._nabto._udp.local` is located.</param>
-     * <exception cref="NabtoException"></exception>
+     *     
+     * <exception cref="AllocationException"> if the underlying SDK fails allocating resources needed.</exception>
      * <returns>
      *     The MdnsScanner
      * </returns>

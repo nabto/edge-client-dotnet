@@ -19,25 +19,15 @@ public interface Stream : IDisposable, IAsyncDisposable
 
     /**
      * <summary>
-     * Open a stream asynchronously. The returned task can fail with
-     * <list type="bullet">
-     * <item>
-     *   <description>
-     *     `STOPPED` if the stream or a parent object was stopped.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `NOT_CONNECTED` if the connection is not established yet.
-     *   </description>
-     * </item>
-     * </list>
+     * Open a stream asynchronously. 
      * </summary>
      * <param name="port">  The port to use on the remote server, a
      * streamPort is a demultiplexing id.</param>
      * <returns>
      *     The Task that will complete once the stream is opened.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the stream could not be created, e.g. the handshake is stopped/aborted or the connection or client context is stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `NOT_CONNECTED` if the connection is not established yet.</exception>
      */
     public Task OpenAsync(UInt32 port);
 
@@ -68,36 +58,23 @@ public interface Stream : IDisposable, IAsyncDisposable
      * <returns>
      *     The Task that will complete when the bytes are ready.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the stream was stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `OPERATION_IN_PROGRESS` if another read is in progress.</exception>
+     * <exception cref="NabtoException">Thrown with error code `EOF` if eof is reached.</exception>
      */
     public Task<byte[]> ReadSomeAsync(int max);
 
     /**
      * <summary>
      * Read an exact amount of bytes from a stream.
-     * The returned Task can fail with:
-     * <list type="bullet">
-     * <item>
-     *   <description>
-     *     `STOPPED` if the stream was stopped.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `OPERATION_IN_PROGRESS` if another read is in progress.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `EOF` if eof is reached
-     *   </description>
-     * </item>
-     * </list>
-     *
      * </summary>
      * <param name="bytes"> The number of bytes to read</param>
      * <returns>
      *     The Task that will complete when the bytes are ready.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the stream was stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `OPERATION_IN_PROGRESS` if another read is in progress.</exception>
+     * <exception cref="NabtoException">Thrown with error code `EOF` if eof is reached.</exception>
      */
     public Task<byte[]> ReadAllAsync(int bytes);
 
@@ -109,6 +86,10 @@ public interface Stream : IDisposable, IAsyncDisposable
      * <returns>
      *     The Task that will complete once the operation is done.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `CLOSED` if the stream is closed for writing.</exception>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the stream was stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `OPERATION_IN_PROGRESS` if another write is in progress.</exception>
+     * <exception cref="NabtoException">Thrown with error code `EOF` if eof is reached.</exception>
      */
     public Task WriteAsync(byte[] data);
 
@@ -120,30 +101,13 @@ public interface Stream : IDisposable, IAsyncDisposable
      *
      * <para>A call to close does not affect the read direction of the
      * stream.</para>
-     *
-     * Close can fail with the with:
-     * <list type="bullet">
-     * <item>
-     *   <description>
-     *     `STOPPED` if the stream is stopped.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `OPERATION_IN_PROGRESS` if another stop is in progress.
-     *   </description>
-     * </item>
-     * <item>
-     *   <description>
-     *     `INVALID_STATE` if the stream is not opened yet.
-     *   </description>
-     * </item>
-     * </list>
-     *
      * </summary>
      * <returns>
      *     The Task that will complete once the operation is done.
      * </returns>
+     * <exception cref="NabtoException">Thrown with error code `STOPPED` if the stream was stopped.</exception>
+     * <exception cref="NabtoException">Thrown with error code `OPERATION_IN_PROGRESS` if a stream close or stream write is in progress.</exception>
+     * <exception cref="NabtoException">Thrown with error code `EOF` if eof is reached.</exception>
      */
     public Task CloseAsync();
 }
