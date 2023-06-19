@@ -26,22 +26,6 @@ public class NabtoException : Exception
 
 /**
  * <summary>
- * This exception is thrown from a function requiring a Connection to be connected but it was not.
- * </summary>
- */
-public class NotConnectedException : Exception
-{
-    /**
-     * <summary>Create a NotConnectedException</summary>
-     */
-    public NotConnectedException() :
-        base("The connection is not connected")
-    {
-    }
-}
-
-/**
- * <summary>
  * This exception is thrown if an allocation fails in the underlying Nabto Edge Client SDK. This is most likely due to memory exhaustion.
  * </summary>
  */
