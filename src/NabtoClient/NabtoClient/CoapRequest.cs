@@ -29,14 +29,6 @@ public interface CoapRequest : IDisposable, IAsyncDisposable
      * <summary>
      * <para>Execute a CoAP request asynchronously.</para>
      *
-     * <para>The specified closure is invoked when the response is ready or an early error occurs.</para>
-     *
-     * <para>If a response is available, the first parameter in the CoapResponseReceiver closure
-     * invocation is OK and the second parameter is set to the created CoapResponse.</para>
-     *
-     * <para>If an early error occurs, the first parameter is set to an appropriate NabtoEdgeClientError
-     * and the second parameter is nil.</para>
-     *
      * </summary>
      * <returns>
      *     Task which completes with a CoapResponse when the async operation completes
