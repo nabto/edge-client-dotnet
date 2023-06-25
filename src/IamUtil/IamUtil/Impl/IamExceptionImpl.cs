@@ -65,6 +65,7 @@ public class IamExceptionImpl
             case 400: throw Create(IamError.INVALID_INPUT, r);
             case 401: throw Create(IamError.AUTHENTICATION_ERROR, r);
             case 403: throw Create(IamError.FORBIDDEN, r);
+            case 404: throw Create(IamError.IAM_NOT_SUPPORTED, r); // more specific interpretations of 404 are handled before invoking this default handler
             default: throw Create(IamError.FAILED, r, statusCode);
         }
     }

@@ -47,7 +47,7 @@ public class Pairing
         HandlePairingResponse(response);
     }
 
-    public static async Task PairInvitePasswordAsync(Nabto.Edge.Client.Connection connection, string username, string password)
+    public static async Task PairPasswordInviteAsync(Nabto.Edge.Client.Connection connection, string username, string password)
     {
         try
         {
