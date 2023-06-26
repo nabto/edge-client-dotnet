@@ -135,7 +135,7 @@ public class DeviceInfo
 
     }
 
-    public static async Task<List<string>> ListNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
+    public static async Task<List<string>> GetNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
         var response = await coapRequest.ExecuteAsync();

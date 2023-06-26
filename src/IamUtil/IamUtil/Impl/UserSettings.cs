@@ -77,6 +77,6 @@ public class UserSettings
 
     public static async Task UpdateUserUsernameAsync(Nabto.Edge.Client.Connection connection, string username, string newUsername)
     {
-        await UpdateUserSettingAsync(connection, username, "username", CBORObject.FromObject(newUsername));
+        await UpdateUserSettingAsync(connection, username, "username", CBORObject.FromObject(newUsername), (statusCode, response) => { if (statusCode == 409) { throw IamExceptionImpl.Create(IamError.USERNAME_EXISTS, response); } });
     }
 }
