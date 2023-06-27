@@ -6,7 +6,7 @@ namespace Nabto.Edge.ClientIam.Impl;
 
 using PeterO.Cbor;
 
-public class IamSettings
+internal class IamSettings
 {
 
     public static Nabto.Edge.ClientIam.IamSettings DecodeIamSettings(CBORObject settings)

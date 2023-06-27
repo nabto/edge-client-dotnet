@@ -3,7 +3,7 @@ namespace Nabto.Edge.ClientIam.Impl;
 using PeterO.Cbor;
 using Nabto.Edge.Client;
 
-public class User
+internal class User
 {
 
     public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, IamUser user)

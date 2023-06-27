@@ -32,7 +32,7 @@ public enum PairingMode
  */
 public class DeviceDetails
 {
-    /*
+    /**
      * <summary>Pairing modes supported by the device.</summary>
      */
     public HashSet<PairingMode> Modes = new HashSet<PairingMode>();

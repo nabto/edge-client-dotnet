@@ -3,7 +3,7 @@ namespace Nabto.Edge.ClientIam.Impl;
 using PeterO.Cbor;
 using Nabto.Edge.Client;
 
-public class Pairing
+internal class Pairing
 {
     private static void HandlePairingResponse(Nabto.Edge.Client.CoapResponse response)
     {

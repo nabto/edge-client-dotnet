@@ -3,7 +3,7 @@ namespace Nabto.Edge.ClientIam.Impl;
 using Nabto.Edge.Client;
 using System.Text;
 
-public class IamExceptionImpl
+internal class IamExceptionImpl
 {
     private static string GetMessage(IamError e, Nabto.Edge.Client.CoapResponse r)
     {

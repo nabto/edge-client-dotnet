@@ -3,7 +3,7 @@ namespace Nabto.Edge.ClientIam.Impl;
 using PeterO.Cbor;
 using Nabto.Edge.Client;
 
-public class UserSettings
+internal class UserSettings
 {
     public static async Task UpdateUserSettingAsync(Nabto.Edge.Client.Connection connection, string username, string coapParameterPath, CBORObject value, Action<ushort, Nabto.Edge.Client.CoapResponse>? errorHandler = null)
     {
