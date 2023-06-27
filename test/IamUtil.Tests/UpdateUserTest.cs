@@ -97,7 +97,7 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
     [Fact]
     public async Task UpdateUserRole()
     {
-        var roles = await IamUtil.ListRolesAsync(_connection);
+        var roles = await IamUtil.GetRolesAsync(_connection);
         var role = roles[0];
         await IamUtil.UpdateUserRoleAsync(_connection, _testUser1, role);
         var user = await IamUtil.GetUserAsync(_connection, _testUser1);
@@ -120,6 +120,13 @@ public class UpdateUserTest : LocalAllowAllIamFixture, IAsyncLifetime
         await IamUtil.UpdateUserUsernameAsync(_connection, _testUser1, newUsername);
         var user = await IamUtil.GetUserAsync(_connection, newUsername);
         Assert.Equal(newUsername, user.Username);
+    }
+
+    [Fact]
+    public async Task UpdateUserUsernameNotUniqueAsync()
+    {
+        var e = await Assert.ThrowsAsync<IamException>(async () => { await IamUtil.UpdateUserUsernameAsync(_connection, _testUser1, _testUser2); });
+        Assert.Equal(IamError.USERNAME_EXISTS, e.Error);
     }
 
 

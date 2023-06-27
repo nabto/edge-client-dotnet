@@ -6,7 +6,7 @@ using Nabto.Edge.Client;
 /**
  * <summary>This class contains detailed information about a Nabto Edge Embedded device.</summary>
  */
-public class DeviceInfo
+internal class DeviceInfo
 {
 
     private static Nabto.Edge.ClientIam.DeviceDetails DecodeDeviceDetails(CBORObject cbor)
@@ -72,14 +72,7 @@ public class DeviceInfo
         }
         return dd;
     }
-
-    /**
-     * <summary>Retrieve device information that typically does not need a paired user.</summary>
-     * <param name="connection">An established connection to the device.</param>
-     * <returns>A DeviceDetails object containing the device information.</returns>
-     * <exception cref=""></exception>
-     */
-    public static async Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.Connection connection)
+    internal static async Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/pairing");
         var response = await coapRequest.ExecuteAsync();
@@ -97,12 +90,7 @@ public class DeviceInfo
         return dd;
     }
 
-    /**
-     * <summary>Retrieve device information that typically does not need a paired user.</summary>
-     * <param name="connection">An established connection to the device.</param>
-     * <returns>A DeviceDetails object containing the device information.</returns>
-     */
-    public static async Task UpdateDeviceInfoAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
+    internal static async Task UpdateDeviceInfoAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
     {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/device-info/{setting}");
 
@@ -112,12 +100,12 @@ public class DeviceInfo
         IamExceptionImpl.HandleDefaultCoap(response);
     }
 
-    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName)
+    internal static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName)
     {
         return UpdateDeviceInfoAsync(connection, "friendly-name", CBORObject.FromObject(friendlyName));
     }
 
-    public static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
+    internal static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
         var response = await coapRequest.ExecuteAsync();
@@ -135,7 +123,7 @@ public class DeviceInfo
 
     }
 
-    public static async Task<List<string>> ListNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
+    internal static async Task<List<string>> GetNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
         var response = await coapRequest.ExecuteAsync();

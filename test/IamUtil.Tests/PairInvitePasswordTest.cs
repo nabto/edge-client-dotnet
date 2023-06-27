@@ -21,7 +21,7 @@ public class PairInvitePasswordTest : LocalAllowAllIamFixture
 
         await c.ConnectAsync();
 
-        await IamUtil.PairInvitePasswordAsync(c, username, password);
+        await IamUtil.PairPasswordInviteAsync(c, username, password);
 
         var user = await IamUtil.GetCurrentUserAsync(c);
         Assert.Equal(username, user.Username);

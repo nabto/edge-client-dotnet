@@ -9,14 +9,14 @@ public class DeviceInfoTest : LocalAllowAllIamFixture
     public async Task ListRoles()
     {
 
-        var roles = await IamUtil.ListRolesAsync(_connection);
+        var roles = await IamUtil.GetRolesAsync(_connection);
         Assert.True(roles.Count > 0);
     }
 
     [Fact]
     public async Task ListNotificationCategories()
     {
-        var categories = await IamUtil.ListNotificationCategoriesAsync(_connection);
+        var categories = await IamUtil.GetNotificationCategoriesAsync(_connection);
         Assert.Empty(categories);
     }
 }

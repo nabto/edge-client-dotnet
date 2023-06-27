@@ -3,7 +3,7 @@ namespace Nabto.Edge.ClientIam.Impl;
 using PeterO.Cbor;
 using Nabto.Edge.Client;
 
-public class Pairing
+internal class Pairing
 {
     private static void HandlePairingResponse(Nabto.Edge.Client.CoapResponse response)
     {
@@ -47,7 +47,7 @@ public class Pairing
         HandlePairingResponse(response);
     }
 
-    public static async Task PairInvitePasswordAsync(Nabto.Edge.Client.Connection connection, string username, string password)
+    public static async Task PairPasswordInviteAsync(Nabto.Edge.Client.Connection connection, string username, string password)
     {
         try
         {
