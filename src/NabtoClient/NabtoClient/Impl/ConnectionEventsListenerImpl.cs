@@ -100,6 +100,7 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
             {
                 _listener.Dispose();
                 _connectionEventsFuture.Dispose();
+                handle.Free();
                 return;
             }
         }
