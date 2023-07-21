@@ -142,6 +142,11 @@ public sealed class ConnectionManager : IDisposable, IAsyncDisposable, IConnecti
         lock (_connections)
         {
             var id = _idCounter++;
+            Console.WriteLine("Adding connection [{0}]", id);
+            connection.Connection.ConnectionEventHandlers += ((e) =>
+            {
+                Console.WriteLine("Got connection event {0} on connection [{1}]", e, id);
+            });
             _connections[id] = connection;
             return id;
         }

@@ -26,6 +26,7 @@ public class CommandInvoker
         RegisterCommand(new InvokeCoapCommand(connectionManager));
         RegisterCommand(new GetDeviceInfoCoapRequest(connectionManager));
         RegisterCommand(new StopCommand(connectionManager));
+        RegisterCommand(new CloseCommand(connectionManager));
         RegisterCommand(new HelpCommand(GetCommands()));
     }
 
