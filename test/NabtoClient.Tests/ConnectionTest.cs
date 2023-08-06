@@ -229,4 +229,17 @@ public class ConnectionTest
         await client.DisposeAsync();
         await Assert.ThrowsAsync<ObjectDisposedException>(async () => await coapRequest.ExecuteAsync());
     }
+
+    [Fact]
+    public void TestGetOptions()
+    {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        var uid = Guid.NewGuid().ToString();
+        connection.SetOptions(new ConnectionOptions { AppName = uid });
+        var options = connection.GetOptions();
+        Assert.Equal(options.AppName, uid);
+    }
+
+
 }

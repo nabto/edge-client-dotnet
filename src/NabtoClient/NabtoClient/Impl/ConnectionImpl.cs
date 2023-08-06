@@ -74,13 +74,45 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         }
     }
 
-
     /// <inheritdoc />
     public void SetOptions(ConnectionOptions options)
     {
         var serializerOptions = new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
         string jsonString = JsonSerializer.Serialize(options, serializerOptions);
         SetOptions(jsonString);
+    }
+
+    /// <inheritdoc />
+    public string GetOptionsAsJson()
+    {
+        AssertSelfIsAlive();
+        string options;
+        int ec = NabtoClientNative.nabto_client_connection_get_options(_handle, out options);
+        if (ec != 0)
+        {
+            throw NabtoExceptionFactory.Create(ec);
+        }
+        return options;
+    }
+
+    /// <inheritdoc />
+    public ConnectionOptions GetOptions()
+    {
+        AssertSelfIsAlive();
+        string json = GetOptionsAsJson();
+        try
+        {
+            var options = JsonSerializer.Deserialize<ConnectionOptions>(json);
+            if (options == null)
+            {
+                throw NabtoExceptionFactory.Create(NabtoClientError.PARSE);
+            }
+            return options;
+        }
+        catch (JsonException)
+        {
+            throw NabtoExceptionFactory.Create(NabtoClientError.PARSE);
+        }
     }
 
 

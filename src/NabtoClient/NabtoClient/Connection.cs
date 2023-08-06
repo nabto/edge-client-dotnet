@@ -201,6 +201,21 @@ public interface Connection : IDisposable, IAsyncDisposable
      */
     public void SetOptions(ConnectionOptions options);
 
+    /**
+     * <summary>
+     * Get options currently set on a connection, represented as a JSON string.
+     * </summary>
+     * <returns type="string">The connection options as a JSON string.</returns>
+     */
+    public string GetOptionsAsJson();
+
+    /**
+     * <summary>
+     * Get options currently set on a connection.
+     * </summary>
+     * <returns type="ConnectionOptions">The connection options.</returns>
+     */
+    public ConnectionOptions GetOptions();
 
     /**
      * <summary>

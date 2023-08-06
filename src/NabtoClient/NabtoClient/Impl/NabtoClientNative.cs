@@ -84,6 +84,10 @@ internal unsafe class NabtoClientNative
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     internal static extern int nabto_client_connection_set_options(IntPtr connection, [MarshalAs(UnmanagedType.LPUTF8Str)] string options);
 
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    internal static extern int nabto_client_connection_get_options(IntPtr connection, [MarshalAs(UnmanagedType.LPUTF8Str)] out string options);
+
+
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true, EntryPoint = "nabto_client_connection_get_client_fingerprint")]
     internal static extern int nabto_client_connection_get_client_fingerprint_native(IntPtr connection, out byte* fingerprint);
 
