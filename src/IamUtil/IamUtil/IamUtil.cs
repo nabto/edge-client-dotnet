@@ -92,24 +92,24 @@ public class IamUtil
         return Pairing.PairPasswordOpenAsync(connection, desiredUsername, password);
     }
 
-   /**
-     * <summary>
-     * <para>Perform <see href="https://docs.nabto.com/developer/guides/iam/pairing.html#invite">Password Invite pairing</see>, authenticating with the specified username and password.</para>
-     *
-     * <para>In the Password invite pairing mode a user is required in the system to be able to pair: An existing user (or
-     * the system autonomously) creates a username and password that is somehow passed to the new user (an invitation).</para>
-     * </summary>
-     *
-     * <param name="connection"> An established connection to the device this client should be paired with</param>
-     * <param name="username"> Username for the invited user</param>
-     * <param name="password"> Password for the invited user</param>
-     *
-     * <exception cref="IamException">Thrown with <see cref="IamError">`AUTHENTICATION_ERROR`</see> if authentication failed using the specified username/password combination for the device.</exception>
-     * <exception cref="IamException">Thrown with <see cref="IamError">`BLOCKED_BY_DEVICE_CONFIGURATION`</see> if the device configuration does not support local open pairing (the `IAM:PairingPasswordInvite` action is not set for the Unpaired role or the device does not support the pairing mode at all).</exception>
-     * <exception cref="IamException">Thrown with <see cref="IamError">`PAIRING_MODE_DISABLED`</see> if the pairing mode is configured on the device but is disabled at runtime.</exception>
-     * <exception cref="IamException">Thrown with <see cref="IamError">`TOO_MANY_WRONG_PASSWORD_ATTEMPTS`</see> if the client has attempted to authenticate too many times with a wrong password (try again after 10 seconds).</exception>
-     * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
-     */
+    /**
+      * <summary>
+      * <para>Perform <see href="https://docs.nabto.com/developer/guides/iam/pairing.html#invite">Password Invite pairing</see>, authenticating with the specified username and password.</para>
+      *
+      * <para>In the Password invite pairing mode a user is required in the system to be able to pair: An existing user (or
+      * the system autonomously) creates a username and password that is somehow passed to the new user (an invitation).</para>
+      * </summary>
+      *
+      * <param name="connection"> An established connection to the device this client should be paired with</param>
+      * <param name="username"> Username for the invited user</param>
+      * <param name="password"> Password for the invited user</param>
+      *
+      * <exception cref="IamException">Thrown with <see cref="IamError">`AUTHENTICATION_ERROR`</see> if authentication failed using the specified username/password combination for the device.</exception>
+      * <exception cref="IamException">Thrown with <see cref="IamError">`BLOCKED_BY_DEVICE_CONFIGURATION`</see> if the device configuration does not support local open pairing (the `IAM:PairingPasswordInvite` action is not set for the Unpaired role or the device does not support the pairing mode at all).</exception>
+      * <exception cref="IamException">Thrown with <see cref="IamError">`PAIRING_MODE_DISABLED`</see> if the pairing mode is configured on the device but is disabled at runtime.</exception>
+      * <exception cref="IamException">Thrown with <see cref="IamError">`TOO_MANY_WRONG_PASSWORD_ATTEMPTS`</see> if the client has attempted to authenticate too many times with a wrong password (try again after 10 seconds).</exception>
+      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
+      */
     public static Task PairPasswordInviteAsync(Nabto.Edge.Client.Connection connection, string username, string password)
     {
         return Pairing.PairPasswordInviteAsync(connection, username, password);

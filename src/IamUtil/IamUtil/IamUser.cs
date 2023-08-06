@@ -46,16 +46,16 @@ public class IamUser
 
     /**
      * <summary>The single role this user is assigned.</summary>
-     */    
+     */
     public string? Role { get; set; }
 
     /**
      * <summary>The <see cref="Fcm"/> configuration for the user.</summary>
-     */ 
+     */
     public Fcm? Fcm { get; set; }
 
     /**
      * <summary>The push notification categories the user is subscribed to.</summary>
-     */ 
+     */
     public List<string>? NotificationCategories { get; set; }
 }
