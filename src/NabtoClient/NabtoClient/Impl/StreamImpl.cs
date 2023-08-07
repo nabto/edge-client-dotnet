@@ -244,6 +244,7 @@ public class StreamImpl : Nabto.Edge.Client.Stream
     {
         if (!_disposed)
         {
+            Stop();
             NabtoClientNative.nabto_client_stream_free(_handle);
             _disposed = true;
         }
