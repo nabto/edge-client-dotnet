@@ -260,6 +260,11 @@ public interface Connection : IDisposable, IAsyncDisposable
     public Task CloseAsync();
 
     /**
+     * <summary>Stop pending connect or close on a connection. After stop has been called the connection should not be used any more. Stop can be used if the user cancels a connect/close request.</summary>
+     */
+    public void Stop();
+
+    /**
      * <summary>
      * <para>Do a password authentication exchange with a device. Blocks until authentication attempt is complete.</para>
      *

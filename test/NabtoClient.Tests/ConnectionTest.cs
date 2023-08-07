@@ -241,5 +241,19 @@ public class ConnectionTest
         Assert.Equal(options.AppName, uid);
     }
 
+    [Fact]
+    public async Task TestStop() {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
+        await connection.ConnectAsync();
+        connection.Stop();
+        var coapRequest = connection.CreateCoapRequest("GET", "/hello-world");
+        var ex = await Assert.ThrowsAsync<NabtoException>(() => coapRequest.ExecuteAsync());
+        Assert.Equal(NabtoClientError.STOPPED, ex.ErrorCode);
+    }
+
 
 }

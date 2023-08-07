@@ -192,6 +192,11 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
 
+    /// <inheritdoc/>
+    public void Stop() {
+        NabtoClientNative.nabto_client_connection_stop(GetHandle());
+    }
+
     /// <inheritdoc />
     public async Task PasswordAuthenticateAsync(string username, string password)
     {
@@ -307,6 +312,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
                 _connectionEventsListener.Stop();
                 _connectionEventsListener.Dispose();
             }
+            Stop();
             NabtoClientNative.nabto_client_connection_free(_handle);
             _disposed = true;
         }
