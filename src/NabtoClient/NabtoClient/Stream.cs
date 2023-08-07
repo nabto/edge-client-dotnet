@@ -110,4 +110,9 @@ public interface Stream : IDisposable, IAsyncDisposable
      * <exception cref="NabtoException">Thrown with error code `EOF` if eof is reached.</exception>
      */
     public Task CloseAsync();
+
+    /**
+     * <summary>All pending read operations are stopped. The write direction is also closed.</summary>
+     */
+    public void Stop();
 }

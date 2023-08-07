@@ -82,6 +82,9 @@ internal unsafe class NabtoClientNative
     internal static extern void nabto_client_connection_free(IntPtr connection);
 
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
+    internal static extern void nabto_client_connection_stop(IntPtr connection);
+
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
     internal static extern int nabto_client_connection_set_options(IntPtr connection, [MarshalAs(UnmanagedType.LPUTF8Str)] string options);
 
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]

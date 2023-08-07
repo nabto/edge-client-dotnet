@@ -72,4 +72,18 @@ public class StreamTest
         await Assert.ThrowsAsync<ObjectDisposedException>(async () => await stream.WriteAsync(data));
     }
 
+    [Fact]
+    public async Task TestStreamStop()
+    {
+        var connection = await CreateStreamDeviceConnectionAsync();
+        var stream = connection.CreateStream();
+        UInt32 streamPort = 42;
+        await stream.OpenAsync(streamPort);
+        stream.Stop();
+        var data = System.Text.UTF8Encoding.UTF8.GetBytes("hello");
+        var ex = await Assert.ThrowsAsync<NabtoException>(() => stream.WriteAsync(data));
+        Assert.Equal(NabtoClientError.STOPPED, ex.ErrorCode);
+    }
+
+
 }
