@@ -38,7 +38,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError"/>`INITIAL_USER_ALREADY_PAIRED` if the initial user was already paired.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError"/>`IAM_NOT_SUPPORTED` if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task PairLocalInitialAsync(Nabto.Edge.Client.Connection connection)
+    public static Task PairLocalInitialAsync(Nabto.Edge.Client.IConnection connection)
     {
         return Pairing.PairLocalInitialAsync(connection);
     }
@@ -61,7 +61,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError"/>`PAIRING_MODE_DISABLED` if the pairing mode is configured on the device but is disabled at runtime.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError"/>`IAM_NOT_SUPPORTED` if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task PairLocalOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername)
+    public static Task PairLocalOpenAsync(Nabto.Edge.Client.IConnection connection, string desiredUsername)
     {
         return Pairing.PairLocalOpenAsync(connection, desiredUsername);
     }
@@ -87,7 +87,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`PAIRING_MODE_DISABLED`</see> if the pairing mode is configured on the device but is disabled at runtime.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task PairPasswordOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername, string password)
+    public static Task PairPasswordOpenAsync(Nabto.Edge.Client.IConnection connection, string desiredUsername, string password)
     {
         return Pairing.PairPasswordOpenAsync(connection, desiredUsername, password);
     }
@@ -110,7 +110,7 @@ public class IamUtil
       * <exception cref="IamException">Thrown with <see cref="IamError">`TOO_MANY_WRONG_PASSWORD_ATTEMPTS`</see> if the client has attempted to authenticate too many times with a wrong password (try again after 10 seconds).</exception>
       * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
       */
-    public static Task PairPasswordInviteAsync(Nabto.Edge.Client.Connection connection, string username, string password)
+    public static Task PairPasswordInviteAsync(Nabto.Edge.Client.IConnection connection, string username, string password)
     {
         return Pairing.PairPasswordInviteAsync(connection, username, password);
     }
@@ -123,7 +123,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      * <returns>A DeviceDetails object containing the device information.</returns>
      */
-    public static Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.Connection connection)
+    public static Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.IConnection connection)
     {
         return DeviceInfo.GetDeviceDetailsAsync(connection);
     }
@@ -136,7 +136,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName)
+    public static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.IConnection connection, string friendlyName)
     {
         return DeviceInfo.UpdateDeviceFriendlyNameAsync(connection, friendlyName);
     }
@@ -148,7 +148,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      * <returns>An IamSettings object.</returns>
      */
-    public static Task<IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.Connection connection)
+    public static Task<IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.IConnection connection)
     {
         return Nabto.Edge.ClientIam.Impl.IamSettings.GetIamSettingsAsync(connection);
     }
@@ -160,7 +160,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
+    public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.IConnection connection, bool enabled)
     {
         return Nabto.Edge.ClientIam.Impl.IamSettings.UpdateIamSettingsPasswordOpenPairingAsync(connection, enabled);
     }
@@ -172,7 +172,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task UpdateIamSettingsPasswordInvitePairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
+    public static Task UpdateIamSettingsPasswordInvitePairingAsync(Nabto.Edge.Client.IConnection connection, bool enabled)
     {
         return Nabto.Edge.ClientIam.Impl.IamSettings.UpdateIamSettingsPasswordInvitePairingAsync(connection, enabled);
     }
@@ -184,7 +184,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      */
-    public static Task UpdateIamSettingsLocalOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
+    public static Task UpdateIamSettingsLocalOpenPairingAsync(Nabto.Edge.Client.IConnection connection, bool enabled)
     {
         return Nabto.Edge.ClientIam.Impl.IamSettings.UpdateIamSettingsLocalOpenPairingAsync(connection, enabled);
     }
@@ -196,7 +196,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      * <returns>A list of roles available on the device.</returns>
      */
-    public static Task<List<string>> GetRolesAsync(Nabto.Edge.Client.Connection connection)
+    public static Task<List<string>> GetRolesAsync(Nabto.Edge.Client.IConnection connection)
     {
         return DeviceInfo.ListRolesAsync(connection);
     }
@@ -208,7 +208,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`IAM_NOT_SUPPORTED`</see> if Nabto Edge IAM is not supported by the device.</exception>
      * <returns>A list of notification categories available on the device.</returns>
      */
-    public static Task<List<string>> GetNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
+    public static Task<List<string>> GetNotificationCategoriesAsync(Nabto.Edge.Client.IConnection connection)
     {
         return DeviceInfo.GetNotificationCategoriesAsync(connection);
     }
@@ -219,7 +219,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      * <returns>An IamUser instance describing the current user.</returns>
      */
-    public static Task<IamUser> GetCurrentUserAsync(Nabto.Edge.Client.Connection connection)
+    public static Task<IamUser> GetCurrentUserAsync(Nabto.Edge.Client.IConnection connection)
     {
         return User.GetCurrentUserAsync(connection);
     }
@@ -233,7 +233,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      * <returns>An IamUser instance describing the current user.</returns>
      */
-    public static Task<IamUser> GetUserAsync(Nabto.Edge.Client.Connection connection, string username)
+    public static Task<IamUser> GetUserAsync(Nabto.Edge.Client.IConnection connection, string username)
     {
         return User.GetUserAsync(connection, username);
     }
@@ -245,7 +245,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the current user is not allowed to perform this operation.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_OR_ROLE_DOES_NOT_EXISTS`</see> if the role specified in the IamUser object does not exist on the device.</exception>
      */
-    public static async Task CreateUserAsync(Nabto.Edge.Client.Connection connection, IamUser user)
+    public static async Task CreateUserAsync(Nabto.Edge.Client.IConnection connection, IamUser user)
     {
         await User.CreateUserAsync(connection, user);
     }
@@ -258,7 +258,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserFingerprintAsync(Nabto.Edge.Client.Connection connection, string username, string fingerprint)
+    public static Task UpdateUserFingerprintAsync(Nabto.Edge.Client.IConnection connection, string username, string fingerprint)
     {
         return UserSettings.UpdateUserFingerprintAsync(connection, username, fingerprint);
     }
@@ -271,7 +271,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserPasswordAsync(Nabto.Edge.Client.Connection connection, string username, string password)
+    public static Task UpdateUserPasswordAsync(Nabto.Edge.Client.IConnection connection, string username, string password)
     {
         return UserSettings.UpdateUserPasswordAsync(connection, username, password);
     }
@@ -284,7 +284,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_OR_ROLE_DOES_NOT_EXISTS`</see> if the specified user or role does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserRoleAsync(Nabto.Edge.Client.Connection connection, string username, string role)
+    public static Task UpdateUserRoleAsync(Nabto.Edge.Client.IConnection connection, string username, string role)
     {
         return UserSettings.UpdateUserRoleAsync(connection, username, role);
     }
@@ -297,7 +297,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserSctAsync(Nabto.Edge.Client.Connection connection, string username, string sct)
+    public static Task UpdateUserSctAsync(Nabto.Edge.Client.IConnection connection, string username, string sct)
     {
         return UserSettings.UpdateUserSctAsync(connection, username, sct);
     }
@@ -311,7 +311,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USERNAME_EXISTS`</see> if the desired new username already is in use on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserUsernameAsync(Nabto.Edge.Client.Connection connection, string username, string newUsername)
+    public static Task UpdateUserUsernameAsync(Nabto.Edge.Client.IConnection connection, string username, string newUsername)
     {
         return UserSettings.UpdateUserUsernameAsync(connection, username, newUsername);
     }
@@ -324,7 +324,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.Connection connection, string username, string displayName)
+    public static Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.IConnection connection, string username, string displayName)
     {
         return UserSettings.UpdateUserDisplayNameAsync(connection, username, displayName);
     }
@@ -336,7 +336,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task DeleteUserAsync(Nabto.Edge.Client.Connection connection, string username)
+    public static Task DeleteUserAsync(Nabto.Edge.Client.IConnection connection, string username)
     {
         return User.DeleteUserAsync(connection, username);
     }
@@ -350,7 +350,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserFcmAsync(Nabto.Edge.Client.Connection connection, string username, string fcmProjectId, string fcmToken)
+    public static Task UpdateUserFcmAsync(Nabto.Edge.Client.IConnection connection, string username, string fcmProjectId, string fcmToken)
     {
         return UserSettings.UpdateUserFcmAsync(connection, username, fcmProjectId, fcmToken);
     }
@@ -363,7 +363,7 @@ public class IamUtil
      * <exception cref="IamException">Thrown with <see cref="IamError">`USER_DOES_NOT_EXIST`</see> if the user does not exist on the device.</exception>
      * <exception cref="IamException">Thrown with <see cref="IamError">`FORBIDDEN`</see> if the user is not allowed to perform this operation.</exception>
      */
-    public static Task UpdateUserNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection, string username, List<string> categories)
+    public static Task UpdateUserNotificationCategoriesAsync(Nabto.Edge.Client.IConnection connection, string username, List<string> categories)
     {
         return UserSettings.UpdateUserNotificationCategoriesAsync(connection, username, categories);
     }

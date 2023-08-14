@@ -224,7 +224,7 @@ public class TestDeviceRunner : IDisposable
 
     public void WriteKey(string keysDir)
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         string privateKey = client.CreatePrivateKey();
         var sw = new StreamWriter(Path.Combine(keysDir, "device.key"));
         sw.Write(privateKey);

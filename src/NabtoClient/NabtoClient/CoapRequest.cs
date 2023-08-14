@@ -12,7 +12,7 @@ namespace Nabto.Edge.Client;
  * CoAP.</para>
  * </summary>
  */
-public interface CoapRequest : IDisposable, IAsyncDisposable
+public interface ICoapRequest : IDisposable, IAsyncDisposable
 {
 
     /**

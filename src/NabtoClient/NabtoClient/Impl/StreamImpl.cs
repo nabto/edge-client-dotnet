@@ -43,7 +43,7 @@ internal class WriteOperation
 }
 
 /// <inheritdoc/>
-public class StreamImpl : Nabto.Edge.Client.Stream
+public class StreamImpl : Nabto.Edge.Client.IStream
 {
 
     private IntPtr _handle;
@@ -51,7 +51,7 @@ public class StreamImpl : Nabto.Edge.Client.Stream
     private Nabto.Edge.Client.Impl.ConnectionImpl _connection;
     private bool _disposed;
 
-    internal static Nabto.Edge.Client.Stream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
+    internal static Nabto.Edge.Client.IStream Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, Nabto.Edge.Client.Impl.ConnectionImpl connection)
     {
         IntPtr ptr = NabtoClientNative.nabto_client_stream_new(connection.GetHandle());
         if (ptr == IntPtr.Zero)

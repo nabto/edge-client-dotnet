@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc />
-public class ConnectionImpl : Nabto.Edge.Client.Connection
+public class ConnectionImpl : Nabto.Edge.Client.IConnection
 {
 
     private IntPtr _handle;
@@ -14,7 +14,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     internal bool _disposed;
 
     /// <inheritdoc/>
-    public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
+    public Nabto.Edge.Client.IConnection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
     private static void AssertClientIsAlive(NabtoClientImpl client)
     {
@@ -57,7 +57,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
     /// <inheritdoc />
-    public void DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent e)
+    public void DispatchConnectionEvent(Nabto.Edge.Client.IConnection.ConnectionEvent e)
     {
         ConnectionEventHandlers?.Invoke(e);
     }
@@ -240,25 +240,25 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
 
 
     /// <inheritdoc />
-    public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path)
+    public Nabto.Edge.Client.ICoapRequest CreateCoapRequest(string method, string path)
     {
         return CoapRequestImpl.Create(_client, this, method, path);
     }
 
     /// <inheritdoc />
-    public Nabto.Edge.Client.Stream CreateStream()
+    public Nabto.Edge.Client.IStream CreateStream()
     {
         return StreamImpl.Create(_client, this);
     }
 
     /// <inheritdoc />
-    public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel()
+    public Nabto.Edge.Client.ITcpTunnel CreateTcpTunnel()
     {
         return TcpTunnelImpl.Create(_client, this);
     }
 
     /// <inheritdoc />
-    public Connection.ConnectionType GetConnectionType()
+    public IConnection.ConnectionType GetConnectionType()
     {
         int connectionType;
         int ec = NabtoClientNative.nabto_client_connection_get_type(GetHandle(), out connectionType);
@@ -268,8 +268,8 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         }
         switch ((NabtoClientNative.NabtoClientConnectionType)connectionType)
         {
-            case NabtoClientNative.NabtoClientConnectionType.Direct: return Connection.ConnectionType.Direct;
-            case NabtoClientNative.NabtoClientConnectionType.Relay: return Connection.ConnectionType.Relay;
+            case NabtoClientNative.NabtoClientConnectionType.Direct: return IConnection.ConnectionType.Direct;
+            case NabtoClientNative.NabtoClientConnectionType.Relay: return IConnection.ConnectionType.Relay;
             default: throw NabtoExceptionFactory.Create(NabtoClientNative.NABTO_CLIENT_EC_UNKNOWN_value());
         }
     }

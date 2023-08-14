@@ -8,9 +8,9 @@ namespace Nabto.Edge.Client.Tests;
 public class TcpTunnelTest
 {
 
-    private static async Task<Nabto.Edge.Client.Connection> CreateTcpTunnelDeviceConnectionAsync()
+    private static async Task<Nabto.Edge.Client.IConnection> CreateTcpTunnelDeviceConnectionAsync()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
         // var logger = loggerFactory.CreateLogger<NabtoClient>();
         // client.SetLogger(logger);

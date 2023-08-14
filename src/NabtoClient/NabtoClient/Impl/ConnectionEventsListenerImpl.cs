@@ -81,15 +81,15 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
                 }
                 if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CONNECTED_value())
                 {
-                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.Connected);
+                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.IConnection.ConnectionEvent.Connected);
                 }
                 else if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CLOSED_value())
                 {
-                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.Closed);
+                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.IConnection.ConnectionEvent.Closed);
                 }
                 else if (connectionEvent == NabtoClientNative.NABTO_CLIENT_CONNECTION_EVENT_CHANNEL_CHANGED_value())
                 {
-                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent.ChannelChanged);
+                    connection?.DispatchConnectionEvent(Nabto.Edge.Client.IConnection.ConnectionEvent.ChannelChanged);
                 }
                 else
                 {

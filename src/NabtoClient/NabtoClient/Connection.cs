@@ -104,7 +104,7 @@ public class ConnectionOptions
  *
  * </summary>
  */
-public interface Connection : IDisposable, IAsyncDisposable
+public interface IConnection : IDisposable, IAsyncDisposable
 {
     /**
      * <summary>Connection life cycle events.</summary>
@@ -427,7 +427,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <exception cref="AllocationException"> if the underlying SDK failed to create the request</exception>
      * <returns>the created CoapRequest object.</returns>
      */
-    public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path);
+    public Nabto.Edge.Client.ICoapRequest CreateCoapRequest(string method, string path);
 
     /**
      * <summary>
@@ -436,7 +436,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <exception cref="AllocationException"> if the underlying SDK failed to create the stream</exception>     *
      * <returns>The created stream.</returns>
      */
-    public Nabto.Edge.Client.Stream CreateStream();
+    public Nabto.Edge.Client.IStream CreateStream();
 
     /**
      * <summary>
@@ -445,6 +445,6 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <exception cref="AllocationException"> if the underlying SDK failed to create the tunnel</exception>     *
      * <returns>The created TCP tunnel.</returns>
      */
-    public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
+    public Nabto.Edge.Client.ITcpTunnel CreateTcpTunnel();
 
 }

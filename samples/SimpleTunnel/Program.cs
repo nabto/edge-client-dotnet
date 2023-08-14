@@ -14,11 +14,11 @@ class Program
     public static async Task Main(string[] args)
     {
 
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
 
         //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
         using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-        var logger = loggerFactory.CreateLogger<NabtoClient>();
+        var logger = loggerFactory.CreateLogger<INabtoClient>();
         client.SetLogger(logger);
 
         var productIdOption = new Option<string?>(

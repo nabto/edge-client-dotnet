@@ -15,7 +15,7 @@ internal class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
     }
 }
 
-internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
+internal class MdnsScannerImpl : Nabto.Edge.Client.IMdnsScanner
 {
     private Nabto.Edge.Client.Impl.NabtoClientImpl _client;
     private ListenerImpl _listener;
@@ -26,9 +26,9 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
     private bool _stopped;
 
     /// <inheritdoc/>
-    public Nabto.Edge.Client.MdnsScanner.ResultHandler? Handlers { get; set; }
+    public Nabto.Edge.Client.IMdnsScanner.ResultHandler? Handlers { get; set; }
 
-    internal static Nabto.Edge.Client.MdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, string subtype)
+    internal static Nabto.Edge.Client.IMdnsScanner Create(Nabto.Edge.Client.Impl.NabtoClientImpl client, string subtype)
     {
         var listener = ListenerImpl.Create(client);
         var future = FutureImpl.Create(client);

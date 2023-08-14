@@ -1,7 +1,7 @@
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc />
-public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
+public class CoapRequestImpl : Nabto.Edge.Client.ICoapRequest
 {
 
     private IntPtr _handle;

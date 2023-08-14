@@ -1,9 +1,9 @@
 using Nabto.Edge.Client;
 using Microsoft.Extensions.Logging;
 
-var client = Nabto.Edge.Client.NabtoClient.Create();
+var client = Nabto.Edge.Client.INabtoClient.Create();
 using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
-var logger = loggerFactory.CreateLogger<NabtoClient>();
+var logger = loggerFactory.CreateLogger<INabtoClient>();
 client.SetLogger(logger);
 var connection = client.CreateConnection();
 connection.SetOptions(new ConnectionOptions { ProductId = "...", DeviceId = "...", ServerConnectToken = "...", PrivateKey = "..." });

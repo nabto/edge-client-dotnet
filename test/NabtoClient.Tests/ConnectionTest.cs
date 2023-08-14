@@ -12,7 +12,7 @@ public class ConnectionTest
     [Fact]
     public void createDestroyConnection()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         for (int i = 0; i < 100; i++)
         {
             var connection = client.CreateConnection();
@@ -22,7 +22,7 @@ public class ConnectionTest
     [Fact]
     public void InvalidFormattedJsonToConnectOptionsThrowsArgumentException()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var ex = Assert.Throws<ArgumentException>(() => connection.SetOptions("Invalid json"));
     }
@@ -30,7 +30,7 @@ public class ConnectionTest
     [Fact]
     public async Task ConnectFails()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var exception = await Assert.ThrowsAsync<NabtoException>(() => connection.ConnectAsync());
         Assert.Equal(NabtoClientError.INVALID_STATE, exception.ErrorCode);
@@ -39,7 +39,7 @@ public class ConnectionTest
     [Fact]
     public async Task ConnectNoChannelsException()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var device = TestDevices.GetCoapDevice();
         device.DeviceId = "foo";
         var connection = client.CreateConnection();
@@ -52,7 +52,7 @@ public class ConnectionTest
     [Fact]
     public async Task GetConnectionType()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
 
         // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
         // var logger = loggerFactory.CreateLogger<NabtoClient>();
@@ -72,14 +72,14 @@ public class ConnectionTest
 
         await connection.ConnectAsync();
         var type = connection.GetConnectionType();
-        Assert.Equal(Connection.ConnectionType.Relay, type);
+        Assert.Equal(IConnection.ConnectionType.Relay, type);
     }
 
 
     [Fact]
     public async Task ConnectOk()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
 
         //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
         //var logger = loggerFactory.CreateLogger<NabtoClient>();
@@ -97,7 +97,7 @@ public class ConnectionTest
     [Fact]
     public async Task AsyncClose()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
 
         //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
         //var logger = loggerFactory.CreateLogger<NabtoClient>();
@@ -116,7 +116,7 @@ public class ConnectionTest
     {
         var connected = new TaskCompletionSource<bool>();
         var closed = new TaskCompletionSource<bool>();
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
         //var logger = loggerFactory.CreateLogger<NabtoClient>();
         //client.SetLogger(logger);
@@ -124,7 +124,7 @@ public class ConnectionTest
         connection.ConnectionEventHandlers += ((e) =>
         {
             //Console.WriteLine("event {0}", e);
-            if (e == Connection.ConnectionEvent.Connected) { connected.SetResult(true); } else if (e == Connection.ConnectionEvent.Closed) { closed.SetResult(true); }
+            if (e == IConnection.ConnectionEvent.Connected) { connected.SetResult(true); } else if (e == IConnection.ConnectionEvent.Closed) { closed.SetResult(true); }
         });
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());
@@ -142,7 +142,7 @@ public class ConnectionTest
     {
         var connected = new TaskCompletionSource<bool>();
         var closed = new TaskCompletionSource<bool>();
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
         //var logger = loggerFactory.CreateLogger<NabtoClient>();
         //client.SetLogger(logger);
@@ -159,7 +159,7 @@ public class ConnectionTest
     [Fact]
     public void TestSyncDispose()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         using (var connection = client.CreateConnection())
         {
             // todo: use a mock framework and inject the nabto resources as dependencies to actually test; for now just put a breakpoint in the dispose impl 
@@ -170,7 +170,7 @@ public class ConnectionTest
     [Fact]
     public async Task TestAsyncDispose()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         await using (var connection = client.CreateConnection())
         {
             // todo: use a mock framework and inject the nabto resources as dependencies to actually test; for now just put a breakpoint in the dispose impl
@@ -181,7 +181,7 @@ public class ConnectionTest
     [Fact]
     public void TestSyncDoubleDisposeOk()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
 
         connection.Dispose();
@@ -193,7 +193,7 @@ public class ConnectionTest
     [Fact]
     public async void TestAsyncDoubleDisposalOk()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
 
         await connection.DisposeAsync();
@@ -205,7 +205,7 @@ public class ConnectionTest
     [Fact]
     public async Task GracefullyHandleDisposeClientBeforeConnect()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());
@@ -218,7 +218,7 @@ public class ConnectionTest
     [Fact]
     public async Task GracefullyHandleDisposeClientBeforeCoapRequest()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());
@@ -233,7 +233,7 @@ public class ConnectionTest
     [Fact]
     public void TestGetOptions()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var uid = Guid.NewGuid().ToString();
         connection.SetOptions(new ConnectionOptions { AppName = uid });
@@ -243,7 +243,7 @@ public class ConnectionTest
 
     [Fact]
     public async Task TestStop() {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();
         connection.SetOptions(device.GetConnectOptions());

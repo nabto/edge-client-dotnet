@@ -6,9 +6,9 @@ namespace Nabto.Edge.Client.Tests;
 public class StreamTest
 {
 
-    private static async Task<Nabto.Edge.Client.Connection> CreateStreamDeviceConnectionAsync()
+    private static async Task<Nabto.Edge.Client.IConnection> CreateStreamDeviceConnectionAsync()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
         // var logger = loggerFactory.CreateLogger<NabtoClient>();
         // client.SetLogger(logger);
