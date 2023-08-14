@@ -386,39 +386,6 @@ public interface IConnection : IDisposable, IAsyncDisposable
 
     /**
      * <summary>
-     * Get the direct channel error code.
-     *
-     * Possible direct channel error code are:
-     *
-     * <list type="bullet">
-     *   <item>
-     *     <description>
-     *       `OK`: if a direct candidate was found.
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NONE`: if direct connection was not enabled (no candidates added).
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NOT_FOUND`: if no direct candidates resulted in UDP ping responses.
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `OPERATION_IN_PROGRESS`: if opening of a direct candidate is in progress.
-     *     </description>
-     *   </item>
-     * </list>
-     * </summary>
-     * <returns>the direct channel error code</returns>
-     */
-    public int GetDirectCandidatesChannelErrorCode();
-
-    /**
-     * <summary>
      * Create a coap request object. The returned CoapRequest object must be kept alive while in use.
      * </summary>
      *

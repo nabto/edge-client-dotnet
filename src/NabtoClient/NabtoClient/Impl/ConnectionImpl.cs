@@ -233,13 +233,6 @@ public class ConnectionImpl : Nabto.Edge.Client.IConnection
     }
 
     /// <inheritdoc />
-    public int GetDirectCandidatesChannelErrorCode()
-    {
-        return NabtoClientNative.nabto_client_connection_get_direct_candidates_channel_error_code(GetHandle());
-    }
-
-
-    /// <inheritdoc />
     public Nabto.Edge.Client.ICoapRequest CreateCoapRequest(string method, string path)
     {
         return CoapRequestImpl.Create(_client, this, method, path);

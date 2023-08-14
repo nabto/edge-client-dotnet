@@ -70,7 +70,6 @@ class Program
                 {
                     int localError = connection.GetLocalChannelErrorCode();
                     int remoteError = connection.GetRemoteChannelErrorCode();
-                    int directCandidatesError = connection.GetDirectCandidatesChannelErrorCode();
                     if (remoteError != NabtoClientError.NONE)
                     {
                         Console.WriteLine("Could not connect to the device remotely. The error message is: " + NabtoClientError.GetErrorMessage(remoteError));
@@ -85,10 +84,6 @@ class Program
                         {
                             Console.WriteLine("Could not connect to the device locally. The error message is: " + NabtoClientError.GetErrorMessage(localError));
                         }
-                    }
-                    if (directCandidatesError != NabtoClientError.NONE)
-                    {
-                        Console.WriteLine("Could not connect to the device using the direct candidate, reason: " + NabtoClientError.GetErrorMessage(directCandidatesError));
                     }
                 }
                 return;
