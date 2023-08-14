@@ -66,4 +66,9 @@ public interface TcpTunnel : IDisposable, IAsyncDisposable
      * <exception cref="NabtoException">Thrown with error code `INVALID_STATE`  if the tunnel has not been opened ye..</exception>     
      */
     public ushort GetLocalPort();
+
+    /**
+     * <summary>Stop a tunnel. Stop can be used to cancel async functions like open and close. The tunnel cannot be used after it has been stopped.</summary>
+     */
+    public void Stop();
 }

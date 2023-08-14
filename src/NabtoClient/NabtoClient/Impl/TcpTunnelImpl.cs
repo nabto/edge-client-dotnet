@@ -93,6 +93,10 @@ public class TcpTunnelImpl : Nabto.Edge.Client.TcpTunnel
         return localPort;
     }
 
+    /// <inheritdoc/>
+    public void Stop() {
+        NabtoClientNative.nabto_client_tcp_tunnel_stop(GetHandle());
+    }
 
     /// <inheritdoc/>
     public void Dispose()
@@ -119,6 +123,7 @@ public class TcpTunnelImpl : Nabto.Edge.Client.TcpTunnel
     {
         if (!_disposed)
         {
+            Stop();
             NabtoClientNative.nabto_client_tcp_tunnel_free(_handle);
             _disposed = true;
         }

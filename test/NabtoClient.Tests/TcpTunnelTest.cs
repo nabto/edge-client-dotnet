@@ -77,4 +77,17 @@ public class TcpTunnelTest
         Assert.Throws<ObjectDisposedException>(() => tunnel.GetLocalPort());
     }
 
+    [Fact]
+    public async Task TestStopTunnel()
+    {
+        var connection = await CreateTcpTunnelDeviceConnectionAsync();
+        var tunnel = connection.CreateTcpTunnel();
+        ushort localPort = 0;
+        var task = tunnel.OpenAsync("http", localPort);
+        tunnel.Stop();
+        Exception ex = await Record.ExceptionAsync(async () => await task);
+        Assert.IsType<NabtoException>(ex);
+        Assert.Equal(((NabtoException)ex).ErrorCode, NabtoClientError.STOPPED);
+    }
+
 }
