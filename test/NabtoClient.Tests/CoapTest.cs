@@ -69,5 +69,25 @@ public class CoapTest
         Assert.Equal(((NabtoException)ex).ErrorCode, NabtoClientError.STOPPED);
     }
 
+    [Fact]
+    public async Task StopRequest()
+    {
+        var client = NabtoClient.Create();
+        var connection = client.CreateConnection();
+        var device = TestDevices.GetCoapDevice();
+        connection.SetOptions(device.GetConnectOptions());
+        connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
+        await connection.ConnectAsync();
+
+        using (var coapRequest = connection.CreateCoapRequest("GET", "/hello-world"))
+        {
+            var task = coapRequest.ExecuteAsync();
+            coapRequest.Stop();
+            Exception ex = await Record.ExceptionAsync(async () => await task);
+            Assert.IsType<NabtoException>(ex);
+            Assert.Equal(((NabtoException)ex).ErrorCode, NabtoClientError.STOPPED);
+        }
+    }
+
 
 }

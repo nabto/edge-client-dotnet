@@ -38,4 +38,9 @@ public interface CoapRequest : IDisposable, IAsyncDisposable
      * <exception cref="NabtoException">Thrown with error code `NOT_CONNECTED` if the connection is not established yet.</exception>
      */
     public Task<CoapResponse> ExecuteAsync();
+
+    /**
+     * <summary>Stop this CoAP request.</summary>
+     */
+    public void Stop();
 }

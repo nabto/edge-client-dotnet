@@ -103,6 +103,12 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     }
 
     /// <inheritdoc/>
+    public void Stop() {
+        AssertSelfIsAlive();
+        NabtoClientNative.nabto_client_coap_stop(_handle);
+    }
+
+    /// <inheritdoc/>
     ~CoapRequestImpl()
     {
         Dispose(false);
@@ -113,6 +119,7 @@ public class CoapRequestImpl : Nabto.Edge.Client.CoapRequest
     {
         if (!_disposed)
         {
+            Stop();
             NabtoClientNative.nabto_client_coap_free(_handle);
             _disposed = true;
         }
