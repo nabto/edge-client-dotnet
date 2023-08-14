@@ -58,6 +58,7 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.MdnsScanner
         StartListen();
     }
 
+    /// <inheritdoc/>
     public void Stop()
     {
         if (_stopped)

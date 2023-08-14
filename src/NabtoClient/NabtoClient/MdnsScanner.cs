@@ -88,13 +88,19 @@ public interface MdnsScanner : IDisposable, IAsyncDisposable
      */
     public delegate void ResultHandler(MdnsResult mdnsResult);
 
-
     /**
      * <summary>
      * Start the scan for local devices using mDNS.
      * </summary>
      */
     public void Start();
+
+    /**
+     * <summary>
+     * Stop the scan.
+     * </summary>
+     */
+    public void Stop();
 
     /**
      * <summary>Access result handlers.</summary>
