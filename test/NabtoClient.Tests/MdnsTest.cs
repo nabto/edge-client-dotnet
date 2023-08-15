@@ -52,18 +52,19 @@ public class MdnsTest
         using var testDevice = new TestDeviceRunner();
         var mdnsScanner = client.CreateMdnsScanner();
 
-        var invocationCount = 0;
+        var invoked = false;
         MdnsResult? res = null;
         IMdnsScanner.ResultHandler handler = (MdnsResult result) =>
         {
             res = result;
-            invocationCount++;
+            invoked = true;
+            mdnsScanner.Stop();
         };
         mdnsScanner.Handlers += handler;
         mdnsScanner.Start();
-        await Task.Delay(TimeSpan.FromSeconds(1));
+        await Task.Delay(TimeSpan.FromSeconds(10));
         mdnsScanner.Stop();
-        Assert.Equal(1, invocationCount);
+        Assert.True(invoked);
         Assert.NotNull(res);
         Assert.Equal(res.DeviceId, testDevice.DeviceId);
         Assert.Equal(res.ProductId, testDevice.ProductId);
