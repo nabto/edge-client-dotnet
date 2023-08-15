@@ -7,7 +7,7 @@ public class MdnsTest
 {
 
     [Fact]
-    public void TestMdnsScanner()
+    public void TestMdnsScannerAddHandler()
     {
         var client = Nabto.Edge.Client.INabtoClient.Create();
         var mdnsScanner = client.CreateMdnsScanner();
@@ -52,6 +52,7 @@ public class MdnsTest
         using var testDevice = new TestDeviceRunner();
         var mdnsScanner = client.CreateMdnsScanner();
 
+        var cts = new CancellationTokenSource();
         var invoked = false;
         MdnsResult? res = null;
         IMdnsScanner.ResultHandler handler = (MdnsResult result) =>
@@ -59,10 +60,17 @@ public class MdnsTest
             res = result;
             invoked = true;
             mdnsScanner.Stop();
+            cts.Cancel();
         };
         mdnsScanner.Handlers += handler;
         mdnsScanner.Start();
-        await Task.Delay(TimeSpan.FromSeconds(10));
+        try
+        {
+            await Task.Delay(TimeSpan.FromSeconds(10), cts.Token);
+        }
+        catch (TaskCanceledException)
+        {
+        }
         mdnsScanner.Stop();
         Assert.True(invoked);
         Assert.NotNull(res);
@@ -72,7 +80,4 @@ public class MdnsTest
         Assert.Equal(res.TxtItems["deviceid"], testDevice.DeviceId);
         Assert.Equal(res.TxtItems["fn"], testDevice.FriendlyName);
     }
-
 }
-
-
