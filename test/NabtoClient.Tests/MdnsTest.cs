@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Nabto.Edge.Client.Tests;
 
-public class MdnsTest 
+public class MdnsTest
 {
 
     [Fact]
@@ -45,7 +45,7 @@ public class MdnsTest
         Assert.Throws<ObjectDisposedException>(() => mdnsScanner.Start());
     }
 
-    [Fact] 
+    [Fact]
     public async Task TestMdnsScan()
     {
         var client = Nabto.Edge.Client.INabtoClient.Create();
@@ -54,7 +54,8 @@ public class MdnsTest
 
         var invocationCount = 0;
         MdnsResult? res = null;
-        IMdnsScanner.ResultHandler handler = (MdnsResult result) => {
+        IMdnsScanner.ResultHandler handler = (MdnsResult result) =>
+        {
             res = result;
             invocationCount++;
         };
@@ -62,7 +63,7 @@ public class MdnsTest
         mdnsScanner.Start();
         await Task.Delay(TimeSpan.FromSeconds(1));
         mdnsScanner.Stop();
-        Assert.Equal(invocationCount, 1);
+        Assert.Equal(1, invocationCount);
         Assert.NotNull(res);
         Assert.Equal(res.DeviceId, testDevice.DeviceId);
         Assert.Equal(res.ProductId, testDevice.ProductId);

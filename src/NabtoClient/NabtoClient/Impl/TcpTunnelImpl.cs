@@ -94,7 +94,8 @@ public class TcpTunnelImpl : Nabto.Edge.Client.ITcpTunnel
     }
 
     /// <inheritdoc/>
-    public void Stop() {
+    public void Stop()
+    {
         NabtoClientNative.nabto_client_tcp_tunnel_stop(GetHandle());
     }
 

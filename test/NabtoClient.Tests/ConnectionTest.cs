@@ -242,7 +242,8 @@ public class ConnectionTest
     }
 
     [Fact]
-    public async Task TestStop() {
+    public async Task TestStop()
+    {
         var client = INabtoClient.Create();
         var connection = client.CreateConnection();
         var device = TestDevices.GetCoapDevice();

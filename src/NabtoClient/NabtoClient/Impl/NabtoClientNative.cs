@@ -349,7 +349,9 @@ internal unsafe class NabtoClientNative
         if (txtItems == null)
         {
             return null;
-        } else {
+        }
+        else
+        {
             return constCharPointerToString(txtItems);
         }
     }

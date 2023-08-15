@@ -193,7 +193,8 @@ public class ConnectionImpl : Nabto.Edge.Client.IConnection
 
 
     /// <inheritdoc/>
-    public void Stop() {
+    public void Stop()
+    {
         NabtoClientNative.nabto_client_connection_stop(GetHandle());
     }
 

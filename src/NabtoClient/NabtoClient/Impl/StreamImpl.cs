@@ -214,7 +214,8 @@ public class StreamImpl : Nabto.Edge.Client.IStream
     }
 
     /// <inheritdoc/>
-    public void Stop() {
+    public void Stop()
+    {
         NabtoClientNative.nabto_client_stream_stop(GetHandle());
     }
 

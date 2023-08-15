@@ -235,7 +235,7 @@ public class TestDeviceRunner : IDisposable
 
     public void WriteState(string stateDir)
     {
-        string defaultState = @"{""Version"":1,""FriendlyName"":""" + FriendlyName+ @""", ""OpenPairingPassword"":""rHfMdaw4zpne"",""OpenPairingSct"":""zAsxwgETYzrX"",""LocalOpenPairing"":true,""PasswordOpenPairing"":true,""PasswordInvitePairing"":true,""LocalInitialPairing"":true,""OpenPairingRole"":""Administrator"",""InitialPairingUsername"":""admin"",""Users"": {""Username"": ""admin"", ""role"": ""Administrator""}}";
+        string defaultState = @"{""Version"":1,""FriendlyName"":""" + FriendlyName + @""", ""OpenPairingPassword"":""rHfMdaw4zpne"",""OpenPairingSct"":""zAsxwgETYzrX"",""LocalOpenPairing"":true,""PasswordOpenPairing"":true,""PasswordInvitePairing"":true,""LocalInitialPairing"":true,""OpenPairingRole"":""Administrator"",""InitialPairingUsername"":""admin"",""Users"": {""Username"": ""admin"", ""role"": ""Administrator""}}";
         var sw = new StreamWriter(Path.Combine(stateDir, "tcp_tunnel_device_iam_state.json"));
 
         sw.Write(defaultState);

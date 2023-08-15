@@ -103,7 +103,8 @@ public class CoapRequestImpl : Nabto.Edge.Client.ICoapRequest
     }
 
     /// <inheritdoc/>
-    public void Stop() {
+    public void Stop()
+    {
         AssertSelfIsAlive();
         NabtoClientNative.nabto_client_coap_stop(_handle);
     }

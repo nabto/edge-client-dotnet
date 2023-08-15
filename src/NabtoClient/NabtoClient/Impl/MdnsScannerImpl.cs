@@ -15,7 +15,8 @@ internal class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
         Dictionary<string, string>? txtItems = null;
         try
         {
-            if (txtItemsString != null) {
+            if (txtItemsString != null)
+            {
                 txtItems = JsonSerializer.Deserialize<Dictionary<string, string>>(txtItemsString);
             }
         }
@@ -23,10 +24,11 @@ internal class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
         {
             // txtItems is null
         }
-        return new MdnsResultImpl { 
-            ServiceInstanceName = serviceInstanceName, 
-            ProductId = productId, 
-            DeviceId = deviceId, 
+        return new MdnsResultImpl
+        {
+            ServiceInstanceName = serviceInstanceName,
+            ProductId = productId,
+            DeviceId = deviceId,
             Action = (Client.MdnsResult.MdnsAction)action,
             TxtItems = txtItems
         };
