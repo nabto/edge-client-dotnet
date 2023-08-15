@@ -69,6 +69,14 @@ public class MdnsResult
      * </summary>
      */
     public MdnsAction Action { get; set; }
+
+    /**
+     * <summary>
+     * The txt items of this result.
+     * </summary>
+     */
+    public Dictionary<string, string>? TxtItems { get; set; }
+
 };
 
 /**

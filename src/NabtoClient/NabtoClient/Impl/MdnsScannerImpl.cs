@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 namespace Nabto.Edge.Client.Impl;
 
@@ -10,8 +11,25 @@ internal class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
         string productId = NabtoClientNative.nabto_client_mdns_result_get_product_id(result);
         string deviceId = NabtoClientNative.nabto_client_mdns_result_get_device_id(result);
         int action = NabtoClientNative.nabto_client_mdns_result_get_action(result);
-
-        return new MdnsResultImpl { ServiceInstanceName = serviceInstanceName, ProductId = productId, DeviceId = deviceId, Action = (Client.MdnsResult.MdnsAction)action };
+        string? txtItemsString = NabtoClientNative.nabto_client_mdns_result_get_txt_items(result);
+        Dictionary<string, string>? txtItems = null;
+        try
+        {
+            if (txtItemsString != null) {
+                txtItems = JsonSerializer.Deserialize<Dictionary<string, string>>(txtItemsString);
+            }
+        }
+        catch
+        {
+            // txtItems is null
+        }
+        return new MdnsResultImpl { 
+            ServiceInstanceName = serviceInstanceName, 
+            ProductId = productId, 
+            DeviceId = deviceId, 
+            Action = (Client.MdnsResult.MdnsAction)action,
+            TxtItems = txtItems
+        };
     }
 }
 

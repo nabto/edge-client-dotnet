@@ -340,8 +340,19 @@ internal unsafe class NabtoClientNative
     }
 
 
-    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
-    internal static extern byte* nabto_client_mdns_result_get_txt_items(IntPtr result);
+    [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true, EntryPoint = "nabto_client_mdns_result_get_txt_items")]
+    internal static extern byte* nabto_client_mdns_result_get_txt_items_native(IntPtr result);
+
+    internal static string? nabto_client_mdns_result_get_txt_items(IntPtr result)
+    {
+        var txtItems = nabto_client_mdns_result_get_txt_items_native(result);
+        if (txtItems == null)
+        {
+            return null;
+        } else {
+            return constCharPointerToString(txtItems);
+        }
+    }
 
 
     [DllImport(_dllName, CharSet = CharSet.Ansi, ExactSpelling = true)]
