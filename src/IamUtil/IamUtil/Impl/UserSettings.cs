@@ -5,7 +5,7 @@ using Nabto.Edge.Client;
 
 internal class UserSettings
 {
-    public static async Task UpdateUserSettingAsync(Nabto.Edge.Client.Connection connection, string username, string coapParameterPath, CBORObject value, Action<ushort, Nabto.Edge.Client.CoapResponse>? errorHandler = null)
+    public static async Task UpdateUserSettingAsync(Nabto.Edge.Client.IConnection connection, string username, string coapParameterPath, CBORObject value, Action<ushort, Nabto.Edge.Client.CoapResponse>? errorHandler = null)
     {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/users/{username}/{coapParameterPath}");
 
@@ -30,12 +30,12 @@ internal class UserSettings
 
 
 
-    public static async Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.Connection connection, string username, string displayName)
+    public static async Task UpdateUserDisplayNameAsync(Nabto.Edge.Client.IConnection connection, string username, string displayName)
     {
         await UpdateUserSettingAsync(connection, username, "display-name", CBORObject.FromObject(displayName));
     }
 
-    public static async Task UpdateUserFcmAsync(Nabto.Edge.Client.Connection connection, string username, string fcmProjectId, string fcmToken)
+    public static async Task UpdateUserFcmAsync(Nabto.Edge.Client.IConnection connection, string username, string fcmProjectId, string fcmToken)
     {
         CBORObject o = CBORObject.NewMap();
         o["ProjectId"] = CBORObject.FromObject(fcmProjectId);
@@ -43,13 +43,13 @@ internal class UserSettings
         await UpdateUserSettingAsync(connection, username, "fcm", o);
     }
 
-    public static async Task UpdateUserFingerprintAsync(Nabto.Edge.Client.Connection connection, string username, string fingerprint)
+    public static async Task UpdateUserFingerprintAsync(Nabto.Edge.Client.IConnection connection, string username, string fingerprint)
     {
 
         await UpdateUserSettingAsync(connection, username, "fingerprint", CBORObject.FromObject(fingerprint), (statusCode, response) => { if (statusCode == 409) { throw IamExceptionImpl.Create(IamError.FINGERPRINT_IN_USE, response); } });
     }
 
-    public static async Task UpdateUserNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection, string username, List<string> categories)
+    public static async Task UpdateUserNotificationCategoriesAsync(Nabto.Edge.Client.IConnection connection, string username, List<string> categories)
     {
         var cbor = CBORObject.NewArray();
 
@@ -61,21 +61,21 @@ internal class UserSettings
         await UpdateUserSettingAsync(connection, username, "notification-categories", cbor);
     }
 
-    public static async Task UpdateUserPasswordAsync(Nabto.Edge.Client.Connection connection, string username, string password)
+    public static async Task UpdateUserPasswordAsync(Nabto.Edge.Client.IConnection connection, string username, string password)
     {
         await UpdateUserSettingAsync(connection, username, "password", CBORObject.FromObject(password));
     }
 
-    public static async Task UpdateUserRoleAsync(Nabto.Edge.Client.Connection connection, string username, string role)
+    public static async Task UpdateUserRoleAsync(Nabto.Edge.Client.IConnection connection, string username, string role)
     {
         await UpdateUserSettingAsync(connection, username, "role", CBORObject.FromObject(role), (statusCode, response) => { if (statusCode == 404) { throw IamExceptionImpl.Create(IamError.USER_OR_ROLE_DOES_NOT_EXISTS, response); } });
     }
-    public static async Task UpdateUserSctAsync(Nabto.Edge.Client.Connection connection, string username, string sct)
+    public static async Task UpdateUserSctAsync(Nabto.Edge.Client.IConnection connection, string username, string sct)
     {
         await UpdateUserSettingAsync(connection, username, "sct", CBORObject.FromObject(sct));
     }
 
-    public static async Task UpdateUserUsernameAsync(Nabto.Edge.Client.Connection connection, string username, string newUsername)
+    public static async Task UpdateUserUsernameAsync(Nabto.Edge.Client.IConnection connection, string username, string newUsername)
     {
         await UpdateUserSettingAsync(connection, username, "username", CBORObject.FromObject(newUsername), (statusCode, response) => { if (statusCode == 409) { throw IamExceptionImpl.Create(IamError.USERNAME_EXISTS, response); } });
     }

@@ -49,7 +49,7 @@ internal class IamSettings
         return iamSettings;
     }
 
-    public static async Task<Nabto.Edge.ClientIam.IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.Connection connection)
+    public static async Task<Nabto.Edge.ClientIam.IamSettings> GetIamSettingsAsync(Nabto.Edge.Client.IConnection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/settings");
         var response = await coapRequest.ExecuteAsync();
@@ -61,7 +61,7 @@ internal class IamSettings
         return s;
     }
 
-    public static async Task UpdateIamSettingsAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
+    public static async Task UpdateIamSettingsAsync(Nabto.Edge.Client.IConnection connection, string setting, CBORObject value)
     {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/settings/{setting}");
 
@@ -71,17 +71,17 @@ internal class IamSettings
         IamExceptionImpl.HandleDefaultCoap(response);
     }
 
-    public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
+    public static Task UpdateIamSettingsPasswordOpenPairingAsync(Nabto.Edge.Client.IConnection connection, bool enabled)
     {
         return UpdateIamSettingsAsync(connection, "password-open-pairing", CBORObject.FromObject(enabled));
     }
 
-    public static Task UpdateIamSettingsPasswordInvitePairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
+    public static Task UpdateIamSettingsPasswordInvitePairingAsync(Nabto.Edge.Client.IConnection connection, bool enabled)
     {
         return UpdateIamSettingsAsync(connection, "password-invite-pairing", CBORObject.FromObject(enabled));
     }
 
-    public static Task UpdateIamSettingsLocalOpenPairingAsync(Nabto.Edge.Client.Connection connection, bool enabled)
+    public static Task UpdateIamSettingsLocalOpenPairingAsync(Nabto.Edge.Client.IConnection connection, bool enabled)
     {
         return UpdateIamSettingsAsync(connection, "local-open-pairing", CBORObject.FromObject(enabled));
     }

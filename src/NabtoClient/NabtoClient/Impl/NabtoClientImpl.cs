@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc/>
-public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient
+public class NabtoClientImpl : Nabto.Edge.Client.INabtoClient
 {
     private IntPtr _handle;
     private NabtoClientNative.LogCallbackFunc? _logCallback;
@@ -87,13 +87,13 @@ public class NabtoClientImpl : Nabto.Edge.Client.NabtoClient
     }
 
     /// <inheritdoc/>
-    public Nabto.Edge.Client.Connection CreateConnection()
+    public Nabto.Edge.Client.IConnection CreateConnection()
     {
         return Nabto.Edge.Client.Impl.ConnectionImpl.Create(this);
     }
 
     /// <inheritdoc/>
-    public Nabto.Edge.Client.MdnsScanner CreateMdnsScanner(string subtype = "")
+    public Nabto.Edge.Client.IMdnsScanner CreateMdnsScanner(string subtype = "")
     {
         return Nabto.Edge.Client.Impl.MdnsScannerImpl.Create(this, subtype);
     }

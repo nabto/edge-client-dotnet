@@ -8,9 +8,9 @@ namespace Nabto.Edge.Client.Tests;
 public class TcpTunnelTest
 {
 
-    private static async Task<Nabto.Edge.Client.Connection> CreateTcpTunnelDeviceConnectionAsync()
+    private static async Task<Nabto.Edge.Client.IConnection> CreateTcpTunnelDeviceConnectionAsync()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
         // var logger = loggerFactory.CreateLogger<NabtoClient>();
         // client.SetLogger(logger);
@@ -75,6 +75,19 @@ public class TcpTunnelTest
         await tunnel.OpenAsync("http", localPort);
         await tunnel.DisposeAsync();
         Assert.Throws<ObjectDisposedException>(() => tunnel.GetLocalPort());
+    }
+
+    [Fact]
+    public async Task TestStopTunnel()
+    {
+        var connection = await CreateTcpTunnelDeviceConnectionAsync();
+        var tunnel = connection.CreateTcpTunnel();
+        ushort localPort = 0;
+        var task = tunnel.OpenAsync("http", localPort);
+        tunnel.Stop();
+        Exception ex = await Record.ExceptionAsync(async () => await task);
+        Assert.IsType<NabtoException>(ex);
+        Assert.Equal(((NabtoException)ex).ErrorCode, NabtoClientError.STOPPED);
     }
 
 }

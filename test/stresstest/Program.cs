@@ -31,7 +31,7 @@ class Scanner
 
     }
 
-    public async Task<List<FoundDevice>> GetDevices(NabtoClient client, int timeout)
+    public async Task<List<FoundDevice>> GetDevices(INabtoClient client, int timeout)
     {
         using (var scanner = client.CreateMdnsScanner())
         {
@@ -72,7 +72,7 @@ class Program
 
     public static async Task DoMdnsScanAsync(int taskNumber, int n)
     {
-        using (var client = NabtoClient.Create())
+        using (var client = INabtoClient.Create())
         {
             for (int i = 0; i < n; i++)
             {
@@ -85,7 +85,7 @@ class Program
 
     public static async Task DoConnections(int taskNumber, int n)
     {
-        using (var client = NabtoClient.Create())
+        using (var client = INabtoClient.Create())
         {
             //using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));
             //using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole().AddDebug().SetMinimumLevel(LogLevel.Trace));

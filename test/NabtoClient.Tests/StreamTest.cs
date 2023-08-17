@@ -6,9 +6,9 @@ namespace Nabto.Edge.Client.Tests;
 public class StreamTest
 {
 
-    private static async Task<Nabto.Edge.Client.Connection> CreateStreamDeviceConnectionAsync()
+    private static async Task<Nabto.Edge.Client.IConnection> CreateStreamDeviceConnectionAsync()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         // using var loggerFactory = LoggerFactory.Create (builder => builder.AddConsole());
         // var logger = loggerFactory.CreateLogger<NabtoClient>();
         // client.SetLogger(logger);
@@ -71,5 +71,19 @@ public class StreamTest
         var data = System.Text.UTF8Encoding.UTF8.GetBytes("hello");
         await Assert.ThrowsAsync<ObjectDisposedException>(async () => await stream.WriteAsync(data));
     }
+
+    [Fact]
+    public async Task TestStreamStop()
+    {
+        var connection = await CreateStreamDeviceConnectionAsync();
+        var stream = connection.CreateStream();
+        UInt32 streamPort = 42;
+        await stream.OpenAsync(streamPort);
+        stream.Stop();
+        var data = System.Text.UTF8Encoding.UTF8.GetBytes("hello");
+        var ex = await Assert.ThrowsAsync<NabtoException>(() => stream.WriteAsync(data));
+        Assert.Equal(NabtoClientError.STOPPED, ex.ErrorCode);
+    }
+
 
 }

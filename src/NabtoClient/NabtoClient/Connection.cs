@@ -104,7 +104,7 @@ public class ConnectionOptions
  *
  * </summary>
  */
-public interface Connection : IDisposable, IAsyncDisposable
+public interface IConnection : IDisposable, IAsyncDisposable
 {
     /**
      * <summary>Connection life cycle events.</summary>
@@ -201,6 +201,21 @@ public interface Connection : IDisposable, IAsyncDisposable
      */
     public void SetOptions(ConnectionOptions options);
 
+    /**
+     * <summary>
+     * Get options currently set on a connection, represented as a JSON string.
+     * </summary>
+     * <returns type="string">The connection options as a JSON string.</returns>
+     */
+    public string GetOptionsAsJson();
+
+    /**
+     * <summary>
+     * Get options currently set on a connection.
+     * </summary>
+     * <returns type="ConnectionOptions">The connection options.</returns>
+     */
+    public ConnectionOptions GetOptions();
 
     /**
      * <summary>
@@ -243,6 +258,11 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <returns>Task completed when the close succeeds or fails.</returns>
      */
     public Task CloseAsync();
+
+    /**
+     * <summary>Stop pending connect or close on a connection. After stop has been called the connection should not be used any more. Stop can be used if the user cancels a connect/close request.</summary>
+     */
+    public void Stop();
 
     /**
      * <summary>
@@ -366,39 +386,6 @@ public interface Connection : IDisposable, IAsyncDisposable
 
     /**
      * <summary>
-     * Get the direct channel error code.
-     *
-     * Possible direct channel error code are:
-     *
-     * <list type="bullet">
-     *   <item>
-     *     <description>
-     *       `OK`: if a direct candidate was found.
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NONE`: if direct connection was not enabled (no candidates added).
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `NOT_FOUND`: if no direct candidates resulted in UDP ping responses.
-     *     </description>
-     *   </item>
-     *   <item>
-     *     <description>
-     *       `OPERATION_IN_PROGRESS`: if opening of a direct candidate is in progress.
-     *     </description>
-     *   </item>
-     * </list>
-     * </summary>
-     * <returns>the direct channel error code</returns>
-     */
-    public int GetDirectCandidatesChannelErrorCode();
-
-    /**
-     * <summary>
      * Create a coap request object. The returned CoapRequest object must be kept alive while in use.
      * </summary>
      *
@@ -407,7 +394,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <exception cref="AllocationException"> if the underlying SDK failed to create the request</exception>
      * <returns>the created CoapRequest object.</returns>
      */
-    public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path);
+    public Nabto.Edge.Client.ICoapRequest CreateCoapRequest(string method, string path);
 
     /**
      * <summary>
@@ -416,7 +403,7 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <exception cref="AllocationException"> if the underlying SDK failed to create the stream</exception>     *
      * <returns>The created stream.</returns>
      */
-    public Nabto.Edge.Client.Stream CreateStream();
+    public Nabto.Edge.Client.IStream CreateStream();
 
     /**
      * <summary>
@@ -425,6 +412,6 @@ public interface Connection : IDisposable, IAsyncDisposable
      * <exception cref="AllocationException"> if the underlying SDK failed to create the tunnel</exception>     *
      * <returns>The created TCP tunnel.</returns>
      */
-    public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel();
+    public Nabto.Edge.Client.ITcpTunnel CreateTcpTunnel();
 
 }

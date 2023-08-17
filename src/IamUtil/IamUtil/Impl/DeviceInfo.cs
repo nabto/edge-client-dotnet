@@ -72,7 +72,7 @@ internal class DeviceInfo
         }
         return dd;
     }
-    internal static async Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.Connection connection)
+    internal static async Task<DeviceDetails> GetDeviceDetailsAsync(Nabto.Edge.Client.IConnection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/pairing");
         var response = await coapRequest.ExecuteAsync();
@@ -90,7 +90,7 @@ internal class DeviceInfo
         return dd;
     }
 
-    internal static async Task UpdateDeviceInfoAsync(Nabto.Edge.Client.Connection connection, string setting, CBORObject value)
+    internal static async Task UpdateDeviceInfoAsync(Nabto.Edge.Client.IConnection connection, string setting, CBORObject value)
     {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/device-info/{setting}");
 
@@ -100,12 +100,12 @@ internal class DeviceInfo
         IamExceptionImpl.HandleDefaultCoap(response);
     }
 
-    internal static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.Connection connection, string friendlyName)
+    internal static Task UpdateDeviceFriendlyNameAsync(Nabto.Edge.Client.IConnection connection, string friendlyName)
     {
         return UpdateDeviceInfoAsync(connection, "friendly-name", CBORObject.FromObject(friendlyName));
     }
 
-    internal static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.Connection connection)
+    internal static async Task<List<string>> ListRolesAsync(Nabto.Edge.Client.IConnection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/roles");
         var response = await coapRequest.ExecuteAsync();
@@ -123,7 +123,7 @@ internal class DeviceInfo
 
     }
 
-    internal static async Task<List<string>> GetNotificationCategoriesAsync(Nabto.Edge.Client.Connection connection)
+    internal static async Task<List<string>> GetNotificationCategoriesAsync(Nabto.Edge.Client.IConnection connection)
     {
         var coapRequest = connection.CreateCoapRequest("GET", "/iam/notification-categories");
         var response = await coapRequest.ExecuteAsync();

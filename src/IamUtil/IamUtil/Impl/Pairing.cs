@@ -20,7 +20,7 @@ internal class Pairing
         }
     }
 
-    public static async Task PairLocalInitialAsync(Nabto.Edge.Client.Connection connection)
+    public static async Task PairLocalInitialAsync(Nabto.Edge.Client.IConnection connection)
     {
         var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/local-initial");
         var response = await coapRequest.ExecuteAsync();
@@ -34,7 +34,7 @@ internal class Pairing
         HandlePairingResponse(response);
     }
 
-    public static async Task PairLocalOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername)
+    public static async Task PairLocalOpenAsync(Nabto.Edge.Client.IConnection connection, string desiredUsername)
     {
         var coapRequest = connection.CreateCoapRequest("POST", "/iam/pairing/local-open");
 
@@ -47,7 +47,7 @@ internal class Pairing
         HandlePairingResponse(response);
     }
 
-    public static async Task PairPasswordInviteAsync(Nabto.Edge.Client.Connection connection, string username, string password)
+    public static async Task PairPasswordInviteAsync(Nabto.Edge.Client.IConnection connection, string username, string password)
     {
         try
         {
@@ -67,7 +67,7 @@ internal class Pairing
         HandlePairingResponse(response);
     }
 
-    public static async Task PairPasswordOpenAsync(Nabto.Edge.Client.Connection connection, string desiredUsername, string password)
+    public static async Task PairPasswordOpenAsync(Nabto.Edge.Client.IConnection connection, string desiredUsername, string password)
     {
         try
         {

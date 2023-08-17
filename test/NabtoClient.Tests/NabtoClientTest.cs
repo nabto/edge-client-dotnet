@@ -8,7 +8,7 @@ public class NabtoClientTest
     [Fact]
     public void GetVersion()
     {
-        var client = NabtoClient.Create();
+        var client = INabtoClient.Create();
         var version = client.GetVersion();
         Assert.True(version.Length > 1);
     }
@@ -18,7 +18,7 @@ public class NabtoClientTest
     {
         for (int i = 0; i < 100; i++)
         {
-            var client = NabtoClient.Create();
+            var client = INabtoClient.Create();
         }
     }
 }

@@ -69,6 +69,14 @@ public class MdnsResult
      * </summary>
      */
     public MdnsAction Action { get; set; }
+
+    /**
+     * <summary>
+     * The txt items of this result.
+     * </summary>
+     */
+    public Dictionary<string, string>? TxtItems { get; set; }
+
 };
 
 /**
@@ -76,7 +84,7 @@ public class MdnsResult
  * An MdnsScanner scans for local mDNS enabled devices.
  * </summary>
  */
-public interface MdnsScanner : IDisposable, IAsyncDisposable
+public interface IMdnsScanner : IDisposable, IAsyncDisposable
 {
 
     /**
@@ -88,13 +96,19 @@ public interface MdnsScanner : IDisposable, IAsyncDisposable
      */
     public delegate void ResultHandler(MdnsResult mdnsResult);
 
-
     /**
      * <summary>
      * Start the scan for local devices using mDNS.
      * </summary>
      */
     public void Start();
+
+    /**
+     * <summary>
+     * Stop the scan.
+     * </summary>
+     */
+    public void Stop();
 
     /**
      * <summary>Access result handlers.</summary>

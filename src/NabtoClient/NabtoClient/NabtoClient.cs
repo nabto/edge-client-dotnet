@@ -16,7 +16,7 @@ namespace Nabto.Edge.Client;
  *
  * </summary>
  */
-public interface NabtoClient : IDisposable, IAsyncDisposable
+public interface INabtoClient : IDisposable, IAsyncDisposable
 {
 
     /**
@@ -25,7 +25,7 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      * </summary>
      * <exception cref="AllocationException"> if the underlying SDK failed to create the client</exception>     
      */
-    public static NabtoClient Create()
+    public static INabtoClient Create()
     {
         return Impl.NabtoClientImpl.Create();
     }
@@ -66,7 +66,7 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      * </summary>
      * <exception cref="AllocationException"> if the underlying SDK fails creating a connection object</exception>
      */
-    public Connection CreateConnection();
+    public IConnection CreateConnection();
 
     /**
      * <summary>
@@ -80,7 +80,7 @@ public interface NabtoClient : IDisposable, IAsyncDisposable
      *     The MdnsScanner
      * </returns>
      */
-    public MdnsScanner CreateMdnsScanner(string subtype = "");
+    public IMdnsScanner CreateMdnsScanner(string subtype = "");
 
     /**
      * <summary>

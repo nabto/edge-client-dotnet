@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc />
-public class ConnectionImpl : Nabto.Edge.Client.Connection
+public class ConnectionImpl : Nabto.Edge.Client.IConnection
 {
 
     private IntPtr _handle;
@@ -14,7 +14,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     internal bool _disposed;
 
     /// <inheritdoc/>
-    public Nabto.Edge.Client.Connection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
+    public Nabto.Edge.Client.IConnection.ConnectionEventHandler? ConnectionEventHandlers { get; set; }
 
     private static void AssertClientIsAlive(NabtoClientImpl client)
     {
@@ -57,7 +57,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
     /// <inheritdoc />
-    public void DispatchConnectionEvent(Nabto.Edge.Client.Connection.ConnectionEvent e)
+    public void DispatchConnectionEvent(Nabto.Edge.Client.IConnection.ConnectionEvent e)
     {
         ConnectionEventHandlers?.Invoke(e);
     }
@@ -74,13 +74,45 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         }
     }
 
-
     /// <inheritdoc />
     public void SetOptions(ConnectionOptions options)
     {
         var serializerOptions = new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
         string jsonString = JsonSerializer.Serialize(options, serializerOptions);
         SetOptions(jsonString);
+    }
+
+    /// <inheritdoc />
+    public string GetOptionsAsJson()
+    {
+        AssertSelfIsAlive();
+        string options;
+        int ec = NabtoClientNative.nabto_client_connection_get_options(_handle, out options);
+        if (ec != 0)
+        {
+            throw NabtoExceptionFactory.Create(ec);
+        }
+        return options;
+    }
+
+    /// <inheritdoc />
+    public ConnectionOptions GetOptions()
+    {
+        AssertSelfIsAlive();
+        string json = GetOptionsAsJson();
+        try
+        {
+            var options = JsonSerializer.Deserialize<ConnectionOptions>(json);
+            if (options == null)
+            {
+                throw NabtoExceptionFactory.Create(NabtoClientError.PARSE);
+            }
+            return options;
+        }
+        catch (JsonException)
+        {
+            throw NabtoExceptionFactory.Create(NabtoClientError.PARSE);
+        }
     }
 
 
@@ -160,6 +192,12 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
 
+    /// <inheritdoc/>
+    public void Stop()
+    {
+        NabtoClientNative.nabto_client_connection_stop(GetHandle());
+    }
+
     /// <inheritdoc />
     public async Task PasswordAuthenticateAsync(string username, string password)
     {
@@ -196,32 +234,25 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
     }
 
     /// <inheritdoc />
-    public int GetDirectCandidatesChannelErrorCode()
-    {
-        return NabtoClientNative.nabto_client_connection_get_direct_candidates_channel_error_code(GetHandle());
-    }
-
-
-    /// <inheritdoc />
-    public Nabto.Edge.Client.CoapRequest CreateCoapRequest(string method, string path)
+    public Nabto.Edge.Client.ICoapRequest CreateCoapRequest(string method, string path)
     {
         return CoapRequestImpl.Create(_client, this, method, path);
     }
 
     /// <inheritdoc />
-    public Nabto.Edge.Client.Stream CreateStream()
+    public Nabto.Edge.Client.IStream CreateStream()
     {
         return StreamImpl.Create(_client, this);
     }
 
     /// <inheritdoc />
-    public Nabto.Edge.Client.TcpTunnel CreateTcpTunnel()
+    public Nabto.Edge.Client.ITcpTunnel CreateTcpTunnel()
     {
         return TcpTunnelImpl.Create(_client, this);
     }
 
     /// <inheritdoc />
-    public Connection.ConnectionType GetConnectionType()
+    public IConnection.ConnectionType GetConnectionType()
     {
         int connectionType;
         int ec = NabtoClientNative.nabto_client_connection_get_type(GetHandle(), out connectionType);
@@ -231,8 +262,8 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
         }
         switch ((NabtoClientNative.NabtoClientConnectionType)connectionType)
         {
-            case NabtoClientNative.NabtoClientConnectionType.Direct: return Connection.ConnectionType.Direct;
-            case NabtoClientNative.NabtoClientConnectionType.Relay: return Connection.ConnectionType.Relay;
+            case NabtoClientNative.NabtoClientConnectionType.Direct: return IConnection.ConnectionType.Direct;
+            case NabtoClientNative.NabtoClientConnectionType.Relay: return IConnection.ConnectionType.Relay;
             default: throw NabtoExceptionFactory.Create(NabtoClientNative.NABTO_CLIENT_EC_UNKNOWN_value());
         }
     }
@@ -275,6 +306,7 @@ public class ConnectionImpl : Nabto.Edge.Client.Connection
                 _connectionEventsListener.Stop();
                 _connectionEventsListener.Dispose();
             }
+            Stop();
             NabtoClientNative.nabto_client_connection_free(_handle);
             _disposed = true;
         }

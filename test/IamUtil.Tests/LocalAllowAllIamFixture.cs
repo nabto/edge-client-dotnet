@@ -8,14 +8,14 @@ using Nabto.Edge.Client;
 public class LocalAllowAllIamFixture : IAsyncLifetime, IDisposable
 {
 
-    protected Nabto.Edge.Client.NabtoClient _client;
-    protected Nabto.Edge.Client.Connection _connection;
+    protected Nabto.Edge.Client.INabtoClient _client;
+    protected Nabto.Edge.Client.IConnection _connection;
 
     protected Nabto.Edge.Client.Tests.TestDeviceRunner _testDevice = new TestDeviceRunner();
 
     public LocalAllowAllIamFixture()
     {
-        _client = Nabto.Edge.Client.NabtoClient.Create();
+        _client = Nabto.Edge.Client.INabtoClient.Create();
         _connection = _client.CreateConnection();
         _connection.SetOptions(new ConnectionOptions { ProductId = _testDevice.ProductId, DeviceId = _testDevice.DeviceId, Local = true, Remote = false });
         _connection.SetOptions(new ConnectionOptions { PrivateKey = _client.CreatePrivateKey() });
