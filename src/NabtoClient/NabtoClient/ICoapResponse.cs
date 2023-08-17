@@ -8,7 +8,7 @@ namespace Nabto.Edge.Client;
  * CoAP.
  * </summary>
  */
-public interface CoapResponse
+public interface ICoapResponse
 {
 
     /**

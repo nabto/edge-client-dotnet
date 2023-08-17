@@ -37,7 +37,7 @@ public interface ICoapRequest : IDisposable, IAsyncDisposable
      * <exception cref="NabtoException">Thrown with error code `STOPPED` if the coap request or a parent object is stopped.</exception>
      * <exception cref="NabtoException">Thrown with error code `NOT_CONNECTED` if the connection is not established yet.</exception>
      */
-    public Task<CoapResponse> ExecuteAsync();
+    public Task<ICoapResponse> ExecuteAsync();
 
     /**
      * <summary>Stop this CoAP request.</summary>

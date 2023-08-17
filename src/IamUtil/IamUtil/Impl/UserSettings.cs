@@ -5,7 +5,7 @@ using Nabto.Edge.Client;
 
 internal class UserSettings
 {
-    public static async Task UpdateUserSettingAsync(Nabto.Edge.Client.IConnection connection, string username, string coapParameterPath, CBORObject value, Action<ushort, Nabto.Edge.Client.CoapResponse>? errorHandler = null)
+    public static async Task UpdateUserSettingAsync(Nabto.Edge.Client.IConnection connection, string username, string coapParameterPath, CBORObject value, Action<ushort, Nabto.Edge.Client.ICoapResponse>? errorHandler = null)
     {
         var coapRequest = connection.CreateCoapRequest("PUT", $"/iam/users/{username}/{coapParameterPath}");
 

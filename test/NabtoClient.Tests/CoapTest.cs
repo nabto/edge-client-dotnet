@@ -38,7 +38,7 @@ public class CoapTest
         connection.SetOptions(new ConnectionOptions { PrivateKey = client.CreatePrivateKey() });
         await connection.ConnectAsync();
 
-        CoapResponse response;
+        ICoapResponse response;
         using (var coapRequest = connection.CreateCoapRequest("GET", "/hello-world"))
         {
             response = await coapRequest.ExecuteAsync();

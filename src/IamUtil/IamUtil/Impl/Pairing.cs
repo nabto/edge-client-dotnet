@@ -5,7 +5,7 @@ using Nabto.Edge.Client;
 
 internal class Pairing
 {
-    private static void HandlePairingResponse(Nabto.Edge.Client.CoapResponse response)
+    private static void HandlePairingResponse(Nabto.Edge.Client.ICoapResponse response)
     {
         var statusCode = response.GetResponseStatusCode();
 

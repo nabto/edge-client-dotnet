@@ -62,12 +62,12 @@ public class CoapRequestImpl : Nabto.Edge.Client.ICoapRequest
     }
 
     /// <inheritdoc />
-    public async Task<Nabto.Edge.Client.CoapResponse> ExecuteAsync()
+    public async Task<Nabto.Edge.Client.ICoapResponse> ExecuteAsync()
     {
         AssertClientIsAlive();
         AssertSelfIsAlive();
 
-        TaskCompletionSource<Nabto.Edge.Client.CoapResponse> executeTask = new TaskCompletionSource<Nabto.Edge.Client.CoapResponse>();
+        TaskCompletionSource<Nabto.Edge.Client.ICoapResponse> executeTask = new TaskCompletionSource<Nabto.Edge.Client.ICoapResponse>();
         var task = executeTask.Task;
         await using (FutureImpl future = FutureImpl.Create(_client))
         {

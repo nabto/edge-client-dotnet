@@ -1,7 +1,7 @@
 namespace Nabto.Edge.Client.Impl;
 
 /// <inheritdoc />
-public class CoapResponseImpl : Nabto.Edge.Client.CoapResponse
+public class CoapResponseImpl : Nabto.Edge.Client.ICoapResponse
 {
     private CoapRequestImpl _request;
 

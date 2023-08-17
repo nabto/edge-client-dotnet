@@ -5,7 +5,7 @@ using System.Text;
 
 internal class IamExceptionImpl
 {
-    private static string GetMessage(IamError e, Nabto.Edge.Client.CoapResponse r)
+    private static string GetMessage(IamError e, Nabto.Edge.Client.ICoapResponse r)
     {
         ushort? contentFormat = null;
         try
@@ -43,17 +43,17 @@ internal class IamExceptionImpl
         return new IamException(e.ToString(), e);
     }
 
-    public static IamException Create(IamError e, Nabto.Edge.Client.CoapResponse r)
+    public static IamException Create(IamError e, Nabto.Edge.Client.ICoapResponse r)
     {
         return new IamException(GetMessage(e, r), e);
     }
 
-    public static IamException Create(IamError e, Nabto.Edge.Client.CoapResponse r, ushort statusCode)
+    public static IamException Create(IamError e, Nabto.Edge.Client.ICoapResponse r, ushort statusCode)
     {
         return new IamException($"StatusCode {statusCode} is unhandled by the code. " + GetMessage(e, r), e);
     }
 
-    public static void HandleDefaultCoap(Nabto.Edge.Client.CoapResponse r)
+    public static void HandleDefaultCoap(Nabto.Edge.Client.ICoapResponse r)
     {
         ushort statusCode = r.GetResponseStatusCode();
         if (statusCode >= 200 && statusCode < 300)
@@ -70,7 +70,7 @@ internal class IamExceptionImpl
         }
     }
 
-    public static byte[] HandleDefaultCoapCborPayload(Nabto.Edge.Client.CoapResponse r)
+    public static byte[] HandleDefaultCoapCborPayload(Nabto.Edge.Client.ICoapResponse r)
     {
         HandleDefaultCoap(r);
         try
