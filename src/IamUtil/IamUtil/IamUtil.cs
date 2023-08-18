@@ -10,13 +10,13 @@ using Nabto.Edge.ClientIam.Impl;
  * <para>For instance, it is made simple to invoke the different pairing endpoints - just invoke a simple high level
  * pairing function to pair the client with the connected device and don't worry about CBOR encoding and decoding.</para>
  *
- * <para>Read more about the important concept of pairing in the <see href="https://docs.nabto.com/developer/guides/concepts/iam/pairing.html">Nabto Edge IAM Pairing</see> guide.</para>
+ * <para>Read more about the important concept of pairing in the <see href="https://docs.nabto.com/developer/guides/iam/pairing.html">Nabto Edge IAM Pairing</see> guide.</para>
  *
  * <para>All the most popular IAM device endpoints are wrapped to also allow management of the user profile on the device
  * (own or other users' if client is in admin role).</para>
  *
  * <para>Note that the device's IAM configuration must allow invocation of the different functions and the pairing modes must
- * be enabled at runtime. Read more about that in the <see href="https://docs.nabto.com/developer/guides/concepts/iam/intro.html">general Nabto Edge IAM intro</see>.</para>
+ * be enabled at runtime. Read more about that in the <see href="/developer/guides/iam/intro.html">general Nabto Edge IAM intro</see>.</para>
  * </summary>
  */
 public class IamUtil
