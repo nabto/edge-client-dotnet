@@ -318,7 +318,7 @@ public class ConnectionImpl : Nabto.Edge.Client.IConnection
  * <summary>This is used to hold a connection event such that we can pin the object, in turn such
  * that garbage collection does not change the address of the ConnectionEvent.</summary>
  */
-internal class ConnectionEventHolder
+internal class ConnectionEventHolderImpl
 {
     internal int ConnectionEvent;
 }

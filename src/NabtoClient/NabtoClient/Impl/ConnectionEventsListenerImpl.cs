@@ -3,6 +3,24 @@ using System.Runtime.InteropServices;
 namespace Nabto.Edge.Client.Impl;
 
 
+internal class ConnectionEventHolder
+{
+    internal ConnectionEventHolderImpl Impl;
+    internal GCHandle GcHandle;
+    public ConnectionEventHolder() {
+        Impl = new ConnectionEventHolderImpl();
+        GcHandle = GCHandle.Alloc(Impl, GCHandleType.Pinned);
+    }
+    ~ConnectionEventHolder() {
+        GcHandle.Free();
+    }
+
+}
+
+internal class ConnectionEventHolderImpl {
+    internal int ConnectionEvent;
+}
+
 internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
 {
     private System.WeakReference<ConnectionImpl> _connection;
@@ -63,7 +81,7 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     public async Task startListenEvents()
     {
         // Allocate the connectionEvent on the heap such that we can pin it such that the garbage collector is not moving around with the underlying address of the event.
-        var connectionEventHolder = new ConnectionEventHolder();
+        var connectionEventHolder = new ConnectionEventHolderImpl();
 
         GCHandle handle = GCHandle.Alloc(connectionEventHolder, GCHandleType.Pinned);
         while (true)
