@@ -3,6 +3,18 @@ using System.Text.Json;
 
 namespace Nabto.Edge.Client.Impl;
 
+internal class PinnedMdnsResultPtr {
+    internal IntPtr Impl;
+    internal GCHandle GcHandle;
+    internal PinnedMdnsResultPtr() {
+        Impl = new IntPtr();
+        GcHandle = GCHandle.Alloc(Impl, GCHandleType.Pinned);
+    }
+    ~PinnedMdnsResultPtr() {
+        GcHandle.Free();
+    }
+}
+
 internal class MdnsResultImpl : Nabto.Edge.Client.MdnsResult
 {
     public static MdnsResultImpl Create(IntPtr result)
@@ -92,18 +104,18 @@ internal class MdnsScannerImpl : Nabto.Edge.Client.IMdnsScanner
     private async void StartListen()
     {
         // make sure the underlying pointer of the mdnsResult stay the same.
-        IntPtr mdnsResult = new IntPtr();
-        GCHandle handle = GCHandle.Alloc(mdnsResult, GCHandleType.Pinned);
+        PinnedMdnsResultPtr mdnsResult = new PinnedMdnsResultPtr();
+
         while (true)
         {
-            NabtoClientNative.nabto_client_listener_new_mdns_result(_listener.GetHandle(), _future.GetHandle(), out mdnsResult);
+            NabtoClientNative.nabto_client_listener_new_mdns_result(_listener.GetHandle(), _future.GetHandle(), out mdnsResult.Impl);
             var ec = await _future.WaitAsync();
 
             if (ec == 0)
             {
-                MdnsResultImpl r = MdnsResultImpl.Create(mdnsResult);
+                MdnsResultImpl r = MdnsResultImpl.Create(mdnsResult.Impl);
                 Handlers?.Invoke(r);
-                NabtoClientNative.nabto_client_mdns_result_free(mdnsResult);
+                NabtoClientNative.nabto_client_mdns_result_free(mdnsResult.Impl);
             }
             else if (ec == NabtoClientError.STOPPED)
             {

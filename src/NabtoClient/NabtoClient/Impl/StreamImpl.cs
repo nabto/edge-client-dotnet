@@ -4,29 +4,58 @@ namespace Nabto.Edge.Client.Impl;
 
 internal class ReadOperation
 {
+    // Wrapper class such that the underlying data object can be pinned.
+    internal ReadOperationImpl Impl { get;  }
+    internal GCHandle GcHandle;
+    internal ReadOperation(int bufferSize)
+    {
+        Impl = new ReadOperationImpl(bufferSize);
+        GcHandle = GCHandle.Alloc(Impl, GCHandleType.Pinned);
+    }
+    ~ReadOperation() {
+        GcHandle.Free();
+    }
+}
+
+internal class ReadOperationImpl
+{
 
     internal IntPtr Buffer { get; }
     internal UIntPtr ReadLength;
     internal UIntPtr BufferLength;
 
-    internal ReadOperation(int bufferSize)
+    internal ReadOperationImpl(int bufferSize)
     {
         Buffer = Marshal.AllocHGlobal(bufferSize);
         BufferLength = (UIntPtr)bufferSize;
     }
 
-    ~ReadOperation()
+    ~ReadOperationImpl()
     {
         Marshal.FreeHGlobal(Buffer);
     }
 }
 
-internal class WriteOperation
+internal class WriteOperation {
+    // Wrapper class such that the underlying data object can be pinned.
+    internal WriteOperationImpl Impl { get;  }
+    internal GCHandle GcHandle;
+    internal WriteOperation(byte[] data)
+    {
+        Impl = new WriteOperationImpl(data);
+        GcHandle = GCHandle.Alloc(Impl, GCHandleType.Pinned);
+    }
+    ~WriteOperation() {
+        GcHandle.Free();
+    }
+}
+
+internal class WriteOperationImpl
 {
 
     internal IntPtr Buffer { get; }
     internal UIntPtr BufferLength { get; }
-    internal WriteOperation(byte[] data)
+    internal WriteOperationImpl(byte[] data)
     {
         BufferLength = (UIntPtr)data.Length;
         Buffer = Marshal.AllocHGlobal(data.Length);
@@ -108,19 +137,18 @@ public class StreamImpl : Nabto.Edge.Client.IStream
         var future = FutureImpl.Create(_client);
 
         var op = new ReadOperation(max);
-        var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
 
-        NabtoClientNative.nabto_client_stream_read_some(GetHandle(), future.GetHandle(), op.Buffer, op.BufferLength, out op.ReadLength);
+        NabtoClientNative.nabto_client_stream_read_some(GetHandle(), future.GetHandle(), op.Impl.Buffer, op.Impl.BufferLength, out op.Impl.ReadLength);
 
         var ec = await future.WaitAsync();
 
         if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
         {
-            var data = new byte[op.ReadLength];
+            var data = new byte[op.Impl.ReadLength];
             unsafe
             {
-                byte* b = (byte*)op.Buffer;
-                for (uint i = 0; i < (uint)op.ReadLength; i++)
+                byte* b = (byte*)op.Impl.Buffer;
+                for (uint i = 0; i < (uint)op.Impl.ReadLength; i++)
                 {
                     data[i] = b[i];
                 }
@@ -142,18 +170,17 @@ public class StreamImpl : Nabto.Edge.Client.IStream
         var future = FutureImpl.Create(_client);
 
         var op = new ReadOperation(bytes);
-        var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
 
-        NabtoClientNative.nabto_client_stream_read_all(GetHandle(), future.GetHandle(), op.Buffer, op.BufferLength, out op.ReadLength);
+        NabtoClientNative.nabto_client_stream_read_all(GetHandle(), future.GetHandle(), op.Impl.Buffer, op.Impl.BufferLength, out op.Impl.ReadLength);
 
         var ec = await future.WaitAsync();
         if (ec == NabtoClientNative.NABTO_CLIENT_EC_OK_value())
         {
-            var data = new byte[op.ReadLength];
+            var data = new byte[op.Impl.ReadLength];
             unsafe
             {
-                byte* b = (byte*)op.Buffer;
-                for (uint i = 0; i < (uint)op.ReadLength; i++)
+                byte* b = (byte*)op.Impl.Buffer;
+                for (uint i = 0; i < (uint)op.Impl.ReadLength; i++)
                 {
                     data[i] = b[i];
                 }
@@ -175,9 +202,8 @@ public class StreamImpl : Nabto.Edge.Client.IStream
         var future = FutureImpl.Create(_client);
 
         var op = new WriteOperation(data);
-        var gcHandle = GCHandle.Alloc(op, GCHandleType.Pinned);
 
-        NabtoClientNative.nabto_client_stream_write(GetHandle(), future.GetHandle(), op.Buffer, op.BufferLength);
+        NabtoClientNative.nabto_client_stream_write(GetHandle(), future.GetHandle(), op.Impl.Buffer, op.Impl.BufferLength);
 
         var ec = await future.WaitAsync();
 
