@@ -81,17 +81,16 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
     public async Task startListenEvents()
     {
         // Allocate the connectionEvent on the heap such that we can pin it such that the garbage collector is not moving around with the underlying address of the event.
-        var connectionEventHolder = new ConnectionEventHolderImpl();
+        var connectionEventHolder = new ConnectionEventHolder();
 
-        GCHandle handle = GCHandle.Alloc(connectionEventHolder, GCHandleType.Pinned);
         while (true)
         {
             AssertListenerIsAlive();
-            NabtoClientNative.nabto_client_listener_connection_event(_listener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.ConnectionEvent);
+            NabtoClientNative.nabto_client_listener_connection_event(_listener.GetHandle(), _connectionEventsFuture.GetHandle(), out connectionEventHolder.Impl.ConnectionEvent);
             var ec = await _connectionEventsFuture.WaitAsync();
             if (ec == 0)
             {
-                var connectionEvent = connectionEventHolder.ConnectionEvent;
+                var connectionEvent = connectionEventHolder.Impl.ConnectionEvent;
                 ConnectionImpl? connection;
                 if (!_connection.TryGetTarget(out connection))
                 {
@@ -118,7 +117,6 @@ internal class ConnectionEventsListenerImpl : IDisposable, IAsyncDisposable
             {
                 _listener.Dispose();
                 _connectionEventsFuture.Dispose();
-                handle.Free();
                 return;
             }
         }
