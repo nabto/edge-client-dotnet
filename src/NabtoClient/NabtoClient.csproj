@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RuntimeIdentifierOS Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier.Substring(0, $(RuntimeIdentifier.IndexOf('-'))))</RuntimeIdentifierOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,19 +14,34 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'" Include="..\..\native_libraries\lib\linux-x86_64\libnabto_client.so">
+    <Content
+      Condition="'$(RuntimeIdentifier)' == 'linux-x64'"
+      Include="..\..\native_libraries\lib\linux-x86_64\libnabto_client.so"
+    >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm'" Include="..\..\native_libraries\lib\linux-armhf\libnabto_client.so">
+    <Content
+      Condition="'$(RuntimeIdentifier)' == 'linux-arm'"
+      Include="..\..\native_libraries\lib\linux-armhf\libnabto_client.so"
+    >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'" Include="..\..\native_libraries\lib\linux-arm64\libnabto_client.so">
+    <Content
+      Condition="'$(RuntimeIdentifier)' == 'linux-arm64'"
+      Include="..\..\native_libraries\lib\linux-arm64\libnabto_client.so"
+    >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Condition="$([MSBuild]::IsOSPlatform('Windows'))" Include="..\..\native_libraries\lib\windows-x86_64\nabto_client.dll">
+    <Content
+      Condition="'$(RuntimeIdentifierOS)' == 'win'"
+      Include="..\..\native_libraries\lib\windows-x86_64\nabto_client.dll"
+    >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="..\..\native_libraries\lib\macos-universal\libnabto_client.dylib">
+    <Content
+      Condition="'$(RuntimeIdentifierOS)' == 'osx'"
+      Include="..\..\native_libraries\lib\macos-universal\libnabto_client.dylib"
+    >
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
