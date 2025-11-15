@@ -16,7 +16,7 @@ using Nabto.Edge.ClientIam.Impl;
  * (own or other users' if client is in admin role).</para>
  *
  * <para>Note that the device's IAM configuration must allow invocation of the different functions and the pairing modes must
- * be enabled at runtime. Read more about that in the <see href="/developer/guides/iam/intro.html">general Nabto Edge IAM intro</see>.</para>
+ * be enabled at runtime. Read more about that in the <see href="/docs/developer/guides/iam/intro.html">general Nabto Edge IAM intro</see>.</para>
  * </summary>
  */
 public class IamUtil
